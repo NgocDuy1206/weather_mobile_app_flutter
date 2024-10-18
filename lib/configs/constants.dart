@@ -1,0 +1,1 @@
+// this file contain const variable
