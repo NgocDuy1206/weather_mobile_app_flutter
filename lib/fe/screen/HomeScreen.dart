@@ -24,6 +24,10 @@ class HomeScreen extends StatelessWidget {
                 value: '/screen2',
                 child: Text('Screen 2'),
               ),
+              const PopupMenuItem<String>(
+                value: '/main_screen',
+                child: Text('main_screen'),
+              ),
             ]
         )
       ),
