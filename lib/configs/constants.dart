@@ -10,5 +10,6 @@ class MyColors {
   static const Color YELLOW = Color(0xFFECD128);
   static const Color GREEN = Color(0xFF33DA21);
   static const Color RED = Color(0xFFF31818);
+  static const Color WHITE = Color(0xFFFFFFFF);
 
 }
