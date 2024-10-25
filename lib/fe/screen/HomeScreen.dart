@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:weather_mobile_app_flutter/configs/constants.dart';
 
 class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    InforDevice.WIDTH = MediaQuery.of(context).size.width;
+    InforDevice.HEIGHT = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Screen'),

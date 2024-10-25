@@ -32,10 +32,18 @@ class _TodayState extends State<Today> {
               ),
             ),
             floating: true,
-            pinned: false,
+            pinned: true,
             backgroundColor: Colors.transparent,
             snap: true,
-            expandedHeight: 200,
+            expandedHeight: 100,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Column(
+                children: [
+                  SizedBox(height: 90),
+                  ListDestination(),
+                ],
+              ),
+            ),
             actions: [
               IconButton(
                   onPressed: () {},
@@ -49,24 +57,29 @@ class _TodayState extends State<Today> {
           SliverToBoxAdapter(
             child: Column(
               children: [
-                ListDestination(),
 
                 WeatherNow(),
 
                 Container(
+                  width: InforDevice.WIDTH,
+                  padding: EdgeInsets.only(top: 25, bottom: 10),
+                  decoration: const BoxDecoration(
+                    color: MyColors.WHITE,
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
                   child: Column(
                     children: [
-                      Text('Hourly Forecast'),
+                      const Text('Hourly Forecast', style: TextStyle(fontSize: 20),),
                       HourlyForecastTable(),
-                      Text('Current Detail'),
+                      const Text('Current Detail', style: TextStyle(fontSize: 20),),
                       CurrentDetailTable(),
-                      Text('Daily Forecast'),
+                      const Text('Daily Forecast', style: TextStyle(fontSize: 20),),
                       DailyForecastTable(),
-                      Text('Air Quality'),
+                      const Text('Air Quality', style: TextStyle(fontSize: 20),),
                       AirQualityTable(),
-                      Text('Allergy Outlook'),
-                      AlleryOutlookTable(),
-                      Text('Sun & Moon'),
+                      const Text('Allergy Outlook', style: TextStyle(fontSize: 20),),
+                      AllergyOutlookTable(),
+                      const Text('Sun & Moon', style: TextStyle(fontSize: 20),),
                       SunMoonTable(),
                     ],
                   ),

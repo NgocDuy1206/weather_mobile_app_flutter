@@ -6,12 +6,13 @@ import 'package:flutter/material.dart';
 import '../../configs/constants.dart';
 
 class Destination extends StatelessWidget {
-  String? destination = 'add location';
+  String? destination;
 
   Destination({super.key, this.destination});
 
   @override
   Widget build(BuildContext context) {
+
     return
         Container(
           child: InkWell(
@@ -19,7 +20,7 @@ class Destination extends StatelessWidget {
               // xu ly su kien tap
             },
             child: Container(
-              margin: EdgeInsets.only(left: 20),
+              margin: EdgeInsets.only(left: 3, right:  3),
               padding: EdgeInsets.all(10),
 
               decoration: const BoxDecoration(
@@ -31,7 +32,7 @@ class Destination extends StatelessWidget {
                 children: [
                   Image.asset('assets/icon/location_add.png'),
                   SizedBox(width: 5),
-                  Text('add location'),
+                  Text(destination!),
                 ],
               ),
             ),
@@ -49,9 +50,12 @@ class ListDestination extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal, // theo chiều ngang
         children: [
-          Destination(),    //
-          Destination(destination: 'ha noi',),
-          Destination(destination: 'nam dinh'),
+          Destination(destination: 'add location',),    //
+          Destination(destination: 'hà nội',),
+          Destination(destination: 'nam định'),
+          Destination(destination: 'thái bình'),
+          Destination(destination: 'hải dương'),
+          Destination(destination: 'quảng ninh'),
         ],
       ),
 
