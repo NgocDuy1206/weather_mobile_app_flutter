@@ -32,7 +32,7 @@ class _TodayState extends State<Today> {
               ),
             ),
             floating: true,
-            pinned: true,
+            pinned: false,
             backgroundColor: Colors.transparent,
             snap: true,
             expandedHeight: 100,
