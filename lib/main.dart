@@ -23,7 +23,7 @@ class WeatherApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MainScreen(),
+      home: HomeScreen(),
       routes: {
         '/screen1': (context) => Screen1(),
         '/screen2': (context) => Screen2(),

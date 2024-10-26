@@ -4,37 +4,47 @@ import 'package:weather_mobile_app_flutter/configs/constants.dart';
 import 'package:weather_mobile_app_flutter/fe/components/destination.dart';
 import 'package:weather_mobile_app_flutter/fe/screen/display/today_screen.dart';
 
+import '../../components/daily_tab.dart';
+import '../../components/hourly_tab.dart';
+
 class Forecast extends StatefulWidget {
   @override
   State<Forecast> createState() => _Forecast();
 }
 
 class _Forecast extends State<Forecast> {
-  bool tab = true;
-
-  void goTo() {
-    setState(() {
-      tab = !tab;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    return const DefaultTabController(
+    return DefaultTabController(
       length: 2,
       child: CustomScrollView(
         slivers: [
-          SliverAppBar(
+          const SliverAppBar(
             toolbarHeight: 0,
             pinned: true,
             floating: true,
             expandedHeight: 110,
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(20),
+              preferredSize: Size.fromHeight(100),
               child: CustomAppBar(),
             ),
           ),
-          SliverToBoxAdapter()
+          SliverToBoxAdapter(
+
+            child: Container(
+              height: 700,
+              child: IntrinsicHeight(
+                child: TabBarView(
+                    children: [
+                
+                      HourlyTab(),
+                      DailyTab(),
+                    ]
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );

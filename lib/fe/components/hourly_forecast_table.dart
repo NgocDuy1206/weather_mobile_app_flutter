@@ -5,6 +5,9 @@ import 'package:weather_mobile_app_flutter/fe/components/display_degrees.dart';
 import 'package:weather_mobile_app_flutter/fe/components/display_percentage.dart';
 
 class HourlyForecastTable extends StatelessWidget {
+  bool? showSeeMoreDetail;
+
+  HourlyForecastTable({this.showSeeMoreDetail = true});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,7 +22,7 @@ class HourlyForecastTable extends StatelessWidget {
           child: Column(
         children: [
           HourlyTable(),
-          SeeMoreDetail(),
+          if(showSeeMoreDetail! == true) SeeMoreDetail(),
         ],
       )),
     );
