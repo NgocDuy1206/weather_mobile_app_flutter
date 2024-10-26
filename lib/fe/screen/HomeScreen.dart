@@ -5,10 +5,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    InforDevice.WIDTH = MediaQuery.of(context).size.width;
-    InforDevice.HEIGHT = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Home Screen'),
         backgroundColor: Colors.blue,
       ),

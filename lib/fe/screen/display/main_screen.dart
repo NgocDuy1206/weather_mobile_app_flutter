@@ -24,7 +24,11 @@ class _MainScreenState extends State<MainScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    InforDevice.WIDTH = MediaQuery.of(context).size.width;
+    InforDevice.HEIGHT = MediaQuery.of(context).size.height;
+
     return Scaffold(
+
       body: tabBottomNavigation[_selectedTab],
       bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem> [

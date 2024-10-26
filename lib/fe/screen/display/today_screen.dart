@@ -35,7 +35,7 @@ class _TodayState extends State<Today> {
             pinned: false,
             backgroundColor: Colors.transparent,
             snap: true,
-            expandedHeight: 100,
+            expandedHeight: 110,
             flexibleSpace: FlexibleSpaceBar(
               background: Column(
                 children: [

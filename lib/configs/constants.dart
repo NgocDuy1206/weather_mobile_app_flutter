@@ -17,6 +17,7 @@ class MyColors {
   static const Color RED = Color(0xFFE34242);
   static const Color RED1 = Color(0xFFE06A6A);
   static const Color WHITE = Color(0xFFFFFFFF);
+  static const Color BLACK = Color(0xFF1A1717);
 }
 class InforDevice {
   static double WIDTH = 0.0;
