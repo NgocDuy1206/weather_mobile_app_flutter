@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_mobile_app_flutter/be/data/weather_by_day.dart';
+import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
 import 'package:weather_mobile_app_flutter/fe/components/button_see_more.dart';
-import 'package:weather_mobile_app_flutter/fe/components/display_degrees.dart';
-import 'package:weather_mobile_app_flutter/fe/components/display_percentage.dart';
+
 
 class DailyForecastTable extends StatelessWidget {
-  bool? showSeeMoreDetail;
+  bool showSeeMoreDetail;
   DailyForecastTable({this.showSeeMoreDetail = true});
   @override
   Widget build(BuildContext context) {
@@ -21,8 +23,8 @@ class DailyForecastTable extends StatelessWidget {
       child: Center(
           child: Column(
             children: [
-              DailyTable(),
-              if (showSeeMoreDetail! == true) SeeMoreDetail(),
+              DailyTable(showSeeMoreDetail: showSeeMoreDetail),
+              if (showSeeMoreDetail == true) SeeMoreDetail(),
             ],
           )),
     );
@@ -30,8 +32,9 @@ class DailyForecastTable extends StatelessWidget {
 }
 
 class DailyTable extends StatelessWidget {
-  List<int> date = [25, 26, 27, 28];
-  List<String> week = ['Tod', 'Sat', 'Sun', 'Mon'];
+  bool showSeeMoreDetail;
+  DailyTable({this.showSeeMoreDetail = true});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,9 +42,12 @@ class DailyTable extends StatelessWidget {
       height: 250,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 4,
+        itemCount: showSeeMoreDetail? 4: 8,
         itemBuilder: (BuildContext context, int index) {
-          return ColumnDailyForecast(date: date[index], dayOfWeek: week[index],);
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12),
+            child: ColumnDailyForecast(index: index,),
+          );
         },
       ),
     );
@@ -49,29 +55,33 @@ class DailyTable extends StatelessWidget {
 }
 
 class ColumnDailyForecast extends StatelessWidget {
-  int? date = 1;
-  String? dayOfWeek = 'Mon';
-  ColumnDailyForecast({required this.date, required this.dayOfWeek});
+  int index;
+  ColumnDailyForecast({this.index = 0});
+
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<WeatherManager>(context);
+    WeatherByDay daily = provider.weatherLocation!.dayList[index];
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          date!.toString(),
+          daily.time.day.toString(),
           style: TextStyle(fontSize: 20),
         ),
         Text(
-          dayOfWeek!,
+          convert(daily.time.weekday),
           style: TextStyle(fontSize: 20),
         ),
         Image.asset('assets/icon/sunny_and_cloud.png'),
-        Degrees(degree: 30, size: 20),
+        Text(daily.temperatureMax.toString() + '${Constants.DEGREES}',
+          style: TextStyle(fontSize: 20),),
         const SizedBox(
           height: 35,
         ),
-        Degrees(degree: 24, size: 20),
+        Text(daily.temperatureMin.toString() + '${Constants.DEGREES}',
+          style: TextStyle(fontSize: 20),),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -82,10 +92,24 @@ class ColumnDailyForecast extends StatelessWidget {
             const SizedBox(
               width: 4,
             ),
-            Percentage(percent: 0, size: 15),
+            Text(daily.precipitationProbability.toString() + '%',
+              style: TextStyle(fontSize: 15),),
           ],
         ),
       ],
     );
+  }
+}
+
+String convert(dynamic x) {
+  switch(x) {
+    case 1: return 'Mon';
+    case 2: return 'Tue';
+    case 3: return 'Wed';
+    case 4: return 'Thu';
+    case 5: return 'Fri';
+    case 6: return 'Sat';
+    case 7: return 'Sun';
+    default: return 'Mon';
   }
 }

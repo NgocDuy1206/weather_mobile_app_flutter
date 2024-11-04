@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_mobile_app_flutter/be/data/weather_by_day.dart';
+import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
 import 'package:weather_mobile_app_flutter/fe/components/button_see_more.dart';
 
 import '../../configs/constants.dart';
@@ -40,17 +43,29 @@ class RiseAndSet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<WeatherManager>(context);
+    WeatherByDay daily = provider.weatherLocation!.dayList[0];
+    String timeRise = daily.sunrise.hour.toString() + ':'
+              + daily.sunrise.minute.toString();
+    String timeSet = daily.sunset.hour.toString() + ':'
+              + daily.sunset.minute.toString();
     if (object != 'SUN') {
       object = 'MOON';
+      timeRise = daily.moonrise.hour.toString() + ':'
+                + daily.moonrise.minute.toString();
+      timeSet = daily.moonset.hour.toString() + ':'
+                + daily.moonset.minute.toString();
       icon = 'assets/icon/moon.png';
     }
+
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(flex: 1, child: Container(height: 50,child: Image.asset(icon, scale: 1.15,))),
-        Expanded(flex: 1, child: Time(name: object, kind: 'RISE', time: '5:55')),
-        Expanded(flex: 1, child: Time(name: object, kind: 'SET', time: '5:45')),
+        Expanded(flex: 1, child: Time(name: object, kind: 'RISE', time: timeRise)),
+        Expanded(flex: 1, child: Time(name: object, kind: 'SET', time: timeSet)),
       ],
     );
   }
@@ -76,7 +91,7 @@ class Time extends StatelessWidget {
           ),
         ),
         Text(
-          kind == 'RISE' ? time! + ' AM' : time! + 'PM',
+          kind == 'RISE' ? time! + ' AM' : time! + ' PM',
           style: const TextStyle(
             fontSize: 15
           ),

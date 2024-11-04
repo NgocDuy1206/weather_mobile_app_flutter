@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 
 class Constants {
   static const String NAME_APP = "1WEATHER";
+  static const String DEGREES = '\u00B0';
 }
 class MyColors {
   static const Color GRAY = Color(0x9B795151);

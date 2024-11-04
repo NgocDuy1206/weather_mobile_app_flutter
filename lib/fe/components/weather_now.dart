@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_mobile_app_flutter/be/data/weather_current.dart';
+import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
 
-import 'display_degrees.dart';
 
 class WeatherNow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<WeatherManager>(context);
+    WeatherCurrent now = provider.weatherLocation!.current;
     return Container(
       width: InforDevice.WIDTH,
       height: 200,
@@ -16,8 +20,18 @@ class WeatherNow extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Degrees(degree: 50, size: 50,),
-            const Text('Mostly cloud'),
+            Text(now.temperature.toString() + '${Constants.DEGREES}',
+              style: TextStyle(fontSize: 50),),
+            Text(now.weatherCode, style: TextStyle(fontSize: 20),),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Feel like ', style: TextStyle(fontSize: 15),),
+                Text(now.temperatureApparent.toString() + '${Constants.DEGREES}',
+                  style: TextStyle(fontSize: 15),)
+              ],
+            )
+
           ],
         ),
       ),

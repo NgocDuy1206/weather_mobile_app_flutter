@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_mobile_app_flutter/be/data/weather_by_hour.dart';
+import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
 import 'package:weather_mobile_app_flutter/fe/components/button_see_more.dart';
-import 'package:weather_mobile_app_flutter/fe/components/display_degrees.dart';
-import 'package:weather_mobile_app_flutter/fe/components/display_percentage.dart';
+
 
 class HourlyForecastTable extends StatelessWidget {
-  bool? showSeeMoreDetail;
+  bool showSeeMoreDetail;
 
   HourlyForecastTable({this.showSeeMoreDetail = true});
   @override
@@ -21,8 +23,8 @@ class HourlyForecastTable extends StatelessWidget {
       child: Center(
           child: Column(
         children: [
-          HourlyTable(),
-          if(showSeeMoreDetail! == true) SeeMoreDetail(),
+          HourlyTable(showSeeMoreDetail: showSeeMoreDetail),
+          if(showSeeMoreDetail == true) SeeMoreDetail(),
         ],
       )),
     );
@@ -30,6 +32,8 @@ class HourlyForecastTable extends StatelessWidget {
 }
 
 class HourlyTable extends StatelessWidget {
+  bool showSeeMoreDetail;
+  HourlyTable({this.showSeeMoreDetail = true});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,9 +41,12 @@ class HourlyTable extends StatelessWidget {
       height: 200,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 4,
+        itemCount: showSeeMoreDetail? 4: 24,
         itemBuilder: (BuildContext context, int index) {
-          return ColumnHourlyForecast();
+          return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: ColumnHourlyForecast(index: index)
+          );
         },
       ),
     );
@@ -47,21 +54,25 @@ class HourlyTable extends StatelessWidget {
 }
 
 class ColumnHourlyForecast extends StatelessWidget {
+  int index;
+  ColumnHourlyForecast({this.index = 0});
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<WeatherManager>(context);
+    WeatherByHour hourWeather = provider.weatherLocation!.hourList[index];
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Text(
-          '15:00',
+        Text(
+          hourWeather.time.hour.toString() + ":00",
           style: TextStyle(fontSize: 20),
         ),
         Image.asset('assets/icon/sunny_and_cloud.png'),
         const SizedBox(
           height: 35,
         ),
-        Degrees(degree: 24, size: 20),
+        Text(hourWeather.temperature.toString()+'${Constants.DEGREES}', style: TextStyle(fontSize: 20),),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -72,7 +83,8 @@ class ColumnHourlyForecast extends StatelessWidget {
             const SizedBox(
               width: 4,
             ),
-            Percentage(percent: 0, size: 15),
+            Text(hourWeather.precipitationProbability.toString() +'%',
+              style: TextStyle(fontSize: 15),),
           ],
         ),
       ],

@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
-import 'package:weather_mobile_app_flutter/fe/components/display_degrees.dart';
-import 'package:weather_mobile_app_flutter/fe/components/display_percentage.dart';
+
 
 class WeatherCard extends StatelessWidget {
   @override
@@ -35,9 +34,9 @@ class WeatherCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Degrees(degree: 32, size: 15),
+                    Text('32', style: TextStyle(fontSize: 15),),
                     Text('/'),
-                    Degrees(degree: 28, size: 13),
+                    Text('28', style: TextStyle(fontSize: 15),),
                   ],
                 ),
                 Text('Mostly cloudy'),
@@ -69,7 +68,7 @@ class WeatherCard extends StatelessWidget {
                     SizedBox(
                       width: 10,
                     ),
-                    Percentage(percent: 67, size: 13),
+                    Text('67', style: TextStyle(fontSize: 13),),
                   ],
                 )
               ],
