@@ -26,7 +26,7 @@ class GetApi extends Api{
     final url = 'http://api.weatherbit.io/v2.0/forecast/hourly?'
         '&lat=$lat&lon=$lon'
         '&key=$apiKey'
-        '&hours=24';
+        '&hours=48';
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);

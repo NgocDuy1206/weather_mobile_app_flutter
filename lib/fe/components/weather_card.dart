@@ -1,78 +1,40 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
-
+import 'package:weather_mobile_app_flutter/configs/utils.dart';
 
 class WeatherCard extends StatelessWidget {
+  int index;
+  String kind;
+
+  WeatherCard({this.kind = 'hourly', this.index = 0});
+
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<WeatherManager>(context);
+    dynamic card = (kind == 'hourly')
+        ? provider.weatherLocation!.hourList[index]
+        : provider.weatherLocation!.dayList[index];
+
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10), // Góc bo tròn
       ),
       child: Container(
+        height: 70,
         padding: EdgeInsets.all(3),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // date
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('oct 26'),
-                Text('sat'),
-              ],
-            ),
-            Image.asset(
-              'assets/icon/cloud.png',
-              scale: 2.0,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Text('32', style: TextStyle(fontSize: 15),),
-                    Text('/'),
-                    Text('28', style: TextStyle(fontSize: 15),),
-                  ],
-                ),
-                Text('Mostly cloudy'),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ImageIcon(
-                      AssetImage('assets/icon/wind.png'),
-                      size: 15,
-                    ),
-                    Text('NNE'),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text('17 km/h'),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Image.asset(
-                      'assets/icon/rainy_small.png',
-                      scale: 4.0,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text('67', style: TextStyle(fontSize: 13),),
-                  ],
-                )
-              ],
-            )
+            Expanded(flex: 2,child: Column1(kind: kind, card: card,)),
+            Expanded(flex: 1,child: Column2(card: card,)),
+            Expanded(flex: 3,child: Column3(kind: kind,card: card,)),
+            Expanded(flex: 3,child: Column4(card: card,)),
           ],
         ),
       ),
@@ -80,24 +42,123 @@ class WeatherCard extends StatelessWidget {
   }
 }
 
-class ListWeatherCard extends StatelessWidget {
-  int? cardCount;
+class Column1 extends StatelessWidget {
+  String kind;
+  dynamic card;
 
-  ListWeatherCard({this.cardCount = 1});
-
+  Column1({this.kind = 'hourly', this.card});
   @override
   Widget build(BuildContext context) {
-    double line = cardCount! * 50;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        (kind == 'hourly')
+            ? Text(Utils.getHourMinute(card.time))
+            : Text(Utils.getMonthDay(card.time)),
+        (kind == 'hourly')
+            ? Text(Utils.getMonthDay(card.time))
+            : Text(Utils.getWeekDay(card.time)),
+      ],
+    );
+  }
+}
 
-    return Container(
-      width: InforDevice.WIDTH - 20,
-      height: line,
-      child: ListView.builder(
-        itemCount: cardCount!,
-        itemBuilder: (BuildContext context, int index) {
-          return WeatherCard();
-        },
-      ),
+class Column2 extends StatelessWidget {
+  dynamic card;
+  Column2({this.card});
+  @override
+  Widget build(BuildContext context) {
+    return
+      Image.asset(
+        MyIconWeather.getIconWeather(card.icon, card.time),
+        scale: 3.0,
+      );
+  }
+}
+
+class Column3 extends StatelessWidget {
+  String kind;
+  dynamic card;
+
+  Column3({this.kind = 'hourly', this.card});
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Row(
+          children: [
+            (kind == 'hourly')
+                ? Text(
+              card.temperature.toString() +
+                  '${Constants.DEGREES}',
+              style: TextStyle(fontSize: 15),
+            )
+                : Text(
+              card.temperatureMax.toString() +
+                  '${Constants.DEGREES}',
+              style: TextStyle(fontSize: 15),
+            ),
+            (kind == 'hourly') ? Text(' Feel like ',style: TextStyle(fontSize: 10),)
+                : Text(' / ', style: TextStyle(fontSize: 10),),
+            (kind == 'hourly')
+                ? Text(
+              card.temperatureApparent.toString() +
+                  '${Constants.DEGREES}',
+              style: TextStyle(fontSize: 10),
+            )
+                : Text(
+              card.temperatureMin.toString() +
+                  '${Constants.DEGREES}',
+              style: TextStyle(fontSize: 10),
+            ),
+          ],
+        ),
+        Text(card.weatherCode, style: TextStyle(fontSize: 13),),
+      ],
+    );
+  }
+}
+
+class Column4 extends StatelessWidget {
+  dynamic card;
+  Column4({this.card});
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ImageIcon(
+              AssetImage('assets/icon/wind.png'),
+              size: 15,
+            ),
+            Text(card.windDirection, style: TextStyle(fontSize: 12),),
+            SizedBox(
+              width: 10,
+            ),
+            Text(card.windSpeed.toString() + ' m/s', style: TextStyle(fontSize: 12),),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Image.asset(
+              'assets/icon/rainy_small.png',
+              scale: 4.0,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              card.precipitationProbability.toString() + '%',
+              style: TextStyle(fontSize: 13),
+            ),
+          ],
+        )
+      ],
     );
   }
 }

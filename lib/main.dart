@@ -13,9 +13,12 @@ import 'fe/screen/Screen2.dart';
 void main() {
 
   runApp(
-    ChangeNotifierProvider(
-        create: (_) => WeatherManager(),
-        child: const WeatherApp(),
+    MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => WeatherManager()),
+          ChangeNotifierProvider(create: (context) => BottomNagivation())
+        ],
+      child: WeatherApp(),
     )
   );
 }

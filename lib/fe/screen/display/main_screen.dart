@@ -1,11 +1,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
 import 'package:weather_mobile_app_flutter/fe/components/destination.dart';
 import 'package:weather_mobile_app_flutter/fe/screen/display/forecast_screen.dart';
 import 'package:weather_mobile_app_flutter/fe/screen/display/radar_screen.dart';
 import 'package:weather_mobile_app_flutter/fe/screen/display/today_screen.dart';
+import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
 
 class MainScreen extends StatefulWidget {
 
@@ -14,22 +16,17 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedTab = 0;
+
   List<Widget> tabBottomNavigation = [Today(), Forecast(), Radar()];
 
-  void onSelectedTab(int index) {
-    setState(() {
-      _selectedTab = index;
-    });
-  }
   @override
   Widget build(BuildContext context) {
     InforDevice.WIDTH = MediaQuery.of(context).size.width;
     InforDevice.HEIGHT = MediaQuery.of(context).size.height;
-
+    var tab = Provider.of<BottomNagivation>(context);
     return Scaffold(
 
-      body: tabBottomNavigation[_selectedTab],
+      body: tabBottomNavigation[tab.selectedTab],
       bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem> [
             BottomNavigationBarItem(
@@ -46,11 +43,11 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ],
         onTap: (int index){
-            onSelectedTab(index);
+            tab.updateTab(index);
         },
 
         showSelectedLabels: true,
-        currentIndex: _selectedTab,
+        currentIndex: tab.selectedTab,
         selectedItemColor: MyColors.BLUE,
         unselectedItemColor: MyColors.GRAY,
         unselectedIconTheme: const IconThemeData(

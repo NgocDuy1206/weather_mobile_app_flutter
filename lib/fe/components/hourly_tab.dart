@@ -7,7 +7,7 @@ class HourlyTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 24 * 80 + 300,
+      height: 24 * 70 + 300,
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
@@ -18,14 +18,17 @@ class HourlyTab extends StatelessWidget {
                   (BuildContext context, int index) {
                 return Column(
                   children: [
-                    WeatherCard(),
+                    WeatherCard(index: index,),
                     SizedBox(height: 10,),
                   ],
                 );
               },
-              childCount: 24 + 2, // Số lượng phần tử
+              childCount: 24, // Số lượng phần tử
             ),
           ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 150,),
+          )
         ],
       ),
     );

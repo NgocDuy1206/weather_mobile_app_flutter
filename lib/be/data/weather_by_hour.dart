@@ -4,6 +4,7 @@ class WeatherByHour {
   final dynamic temperature;
   final dynamic temperatureApparent;
   final dynamic weatherCode;
+  final dynamic icon;
   final dynamic windDirection;
   final dynamic windSpeed;
   final dynamic precipitationProbability;
@@ -13,6 +14,7 @@ class WeatherByHour {
     required this.temperature,
     required this.temperatureApparent,
     required this.weatherCode,
+    required this.icon,
     required this.windDirection,
     required this.windSpeed,
     required this.precipitationProbability,
@@ -24,7 +26,8 @@ class WeatherByHour {
       temperature: json['temp'],
       temperatureApparent: json['app_temp'],
       weatherCode: json['weather']['description'],
-      windDirection: json['wind_dir'],
+      icon: json['weather']['code'],
+      windDirection: json['wind_cdir'],
       windSpeed: json['wind_spd'],
       precipitationProbability: json['pop'],
     );

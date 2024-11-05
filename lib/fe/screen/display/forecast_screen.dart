@@ -37,7 +37,6 @@ class _Forecast extends State<Forecast> {
               child: IntrinsicHeight(
                 child: TabBarView(
                     children: [
-                
                       HourlyTab(),
                       DailyTab(),
                     ]
@@ -75,6 +74,7 @@ class CustomAppBar extends StatelessWidget {
 class ForecastTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     return Container(
       width: InforDevice.WIDTH - 100,
       height: 30,

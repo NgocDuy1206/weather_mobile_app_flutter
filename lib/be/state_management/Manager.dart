@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:weather_mobile_app_flutter/be/api/api.dart';
 import 'package:weather_mobile_app_flutter/be/data/weather_location.dart';
 
@@ -22,3 +23,14 @@ class WeatherManager with ChangeNotifier {
     notifyListeners();
   }
 }
+
+class BottomNagivation with ChangeNotifier {
+  int selectedTab;
+  BottomNagivation({this.selectedTab = 0});
+
+  void updateTab(int index) {
+    selectedTab = index;
+    notifyListeners();
+  }
+}
+

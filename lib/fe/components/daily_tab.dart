@@ -18,15 +18,17 @@ class DailyTab extends StatelessWidget {
                   (BuildContext context, int index) {
                 return Column(
                   children: [
-                    WeatherCard(),
+                    WeatherCard(kind: 'daily',index: index,),
                     SizedBox(height: 10,),
-
                   ],
                 );
               },
               childCount: 10 + 2, // Số lượng phần tử
             ),
           ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 150,),
+          )
         ],
       ),
     );

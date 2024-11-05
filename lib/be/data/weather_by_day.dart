@@ -4,6 +4,7 @@ class WeatherByDay {
   final dynamic temperatureMax;
   final dynamic temperatureMin;
   final dynamic weatherCode;
+  final dynamic icon;
   final dynamic windDirection;
   final dynamic windSpeed;
   final dynamic precipitationProbability;
@@ -17,6 +18,7 @@ class WeatherByDay {
     required this.temperatureMax,
     required this.temperatureMin,
     required this.weatherCode,
+    required this.icon,
     required this.windDirection,
     required this.windSpeed,
     required this.precipitationProbability,
@@ -32,7 +34,8 @@ class WeatherByDay {
       temperatureMax: json['max_temp'],
       temperatureMin: json['min_temp'],
       weatherCode: json['weather']['description'],
-      windDirection: json['wind_dir'],
+      icon: json['weather']['code'],
+      windDirection: json['wind_cdir'],
       windSpeed: json['wind_spd'],
       precipitationProbability: json['pop'],
       sunrise: DateTime.fromMillisecondsSinceEpoch(json['sunrise_ts'] * 1000),

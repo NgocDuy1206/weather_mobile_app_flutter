@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:weather_mobile_app_flutter/be/data/weather_by_day.dart';
 import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
+import 'package:weather_mobile_app_flutter/configs/utils.dart';
 import 'package:weather_mobile_app_flutter/fe/components/button_see_more.dart';
 
 
@@ -67,14 +68,14 @@ class ColumnDailyForecast extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          daily.time.day.toString(),
+          Utils.getDay(daily.time),
           style: TextStyle(fontSize: 20),
         ),
         Text(
-          convert(daily.time.weekday),
+          Utils.getWeekDay(daily.time),
           style: TextStyle(fontSize: 20),
         ),
-        Image.asset('assets/icon/sunny_and_cloud.png'),
+        Image.asset(MyIconWeather.getIconWeather(daily.icon, daily.time),scale: 2.75,),
         Text(daily.temperatureMax.toString() + '${Constants.DEGREES}',
           style: TextStyle(fontSize: 20),),
         const SizedBox(
@@ -101,15 +102,3 @@ class ColumnDailyForecast extends StatelessWidget {
   }
 }
 
-String convert(dynamic x) {
-  switch(x) {
-    case 1: return 'Mon';
-    case 2: return 'Tue';
-    case 3: return 'Wed';
-    case 4: return 'Thu';
-    case 5: return 'Fri';
-    case 6: return 'Sat';
-    case 7: return 'Sun';
-    default: return 'Mon';
-  }
-}

@@ -2,6 +2,7 @@ class WeatherCurrent {
   final dynamic temperature;
   final dynamic temperatureApparent;
   final dynamic weatherCode;
+  final dynamic icon;
   final dynamic precipitation;
   final dynamic windSpeed;
   final dynamic humidity;
@@ -14,6 +15,7 @@ class WeatherCurrent {
     required this.temperature,
     required this.temperatureApparent,
     required this.weatherCode,
+    required this.icon,
     required this.precipitation,
     required this.windSpeed,
     required this.humidity,
@@ -28,6 +30,7 @@ class WeatherCurrent {
         temperature: json['temp'],
         temperatureApparent: json['app_temp'],
         weatherCode: json['weather']['description'],
+        icon: json['weather']['code'],
         precipitation: json['precip'],
         windSpeed: json['wind_spd'],
         humidity: json['rh'],
