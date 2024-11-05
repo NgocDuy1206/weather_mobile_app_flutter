@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../screen/Screen2.dart';
+import '../screen/display_search_manageLocation/manage_location_screen.dart';
 
 //Phần header Saved Location và Manage
 class SavedLocationsHeader extends StatelessWidget {

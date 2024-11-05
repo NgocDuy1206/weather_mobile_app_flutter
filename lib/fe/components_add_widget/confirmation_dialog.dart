@@ -25,44 +25,49 @@ class ConfirmationDialog extends StatelessWidget {
           style: TextStyle(color: Colors.white),
         ),
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Center(
-            child: Text(
-              'Chạm và giữ tiện ích để di chuyển tiện ích đó xung quanh màn hình chính.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-          SizedBox(height: 5), // Giảm khoảng cách giữa text và hình ảnh
-          Container(
-            height: actualHeight * 0.2,
-            width: actualWidth * 0.2,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                imagePath,
-                fit: BoxFit.cover,
+      content: Container(
+        height: 160, // Điều chỉnh chiều cao của Container này để giảm chiều cao tổng thể
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Center(
+              child: Text(
+                'Chạm và giữ tiện ích để di chuyển tiện ích đó xung quanh màn hình chính.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
             ),
-          ),
-          SizedBox(height: 5), // Giảm khoảng cách giữa hình ảnh và text
-          Text(
-            'Weather',
-            style: TextStyle(color: Colors.white, fontSize: 16),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            '4x1',
-            style: TextStyle(color: Colors.white, fontSize: 16),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 5), // Giảm khoảng cách giữa text và action
-        ],
+            SizedBox(height: 15), // Giảm khoảng cách giữa text và hình ảnh
+            Container(
+              height: actualHeight * 0.2,
+              width: actualWidth * 0.2,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  imagePath,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            SizedBox(height: 10), // Giảm khoảng cách giữa hình ảnh và text
+            Text(
+              'Weather',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              '4x1',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 5), // Giảm khoảng cách giữa text và action
+            // Thêm SizedBox nhỏ để giảm khoảng cách trước các nút
+
+          ],
+        ),
       ),
       actions: <Widget>[
         Padding(

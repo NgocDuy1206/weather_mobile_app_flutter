@@ -42,12 +42,14 @@ class ManageScreen extends StatelessWidget {
           ),
           SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.only(left: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0), // Cách đều mép hai bên
             child: Text(
               'Click, hold and move the lever to change the position of your locations.',
+              textAlign: TextAlign.left, // Căn trái cho văn bản
               style: TextStyle(color: Colors.white54, fontSize: 14),
             ),
           ),
+
           SizedBox(height: 10),
           LocationItemManage(
             label: 'Hoi An Corner Coffee',
