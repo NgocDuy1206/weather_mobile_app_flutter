@@ -1,13 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_mobile_app_flutter/be/data/weather_current.dart';
+import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
 import 'package:weather_mobile_app_flutter/fe/components/button_see_more.dart';
 
 import '../../configs/constants.dart';
+import '../../configs/utils.dart';
 
 class AirQualityTable extends StatelessWidget {
-  String? airQuality;
 
-  AirQualityTable({ this.airQuality = '90'});
+
+  AirQualityTable();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +28,7 @@ class AirQualityTable extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          DisplayAirQuality(airQuality: airQuality),
+          DisplayAirQuality(),
           SizedBox(height: 5,),
           Divider(thickness: 2, color: MyColors.WHITE,),
           SizedBox(height: 10,),
@@ -41,6 +45,8 @@ class AirQualityBar extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<WeatherManager>(context);
+    WeatherCurrent now = provider.weatherLocation!.current;
     return Column(
       children: [
         const Row(
@@ -55,16 +61,33 @@ class AirQualityBar extends StatelessWidget{
             Expanded(flex: 1, child: Text('500', style: TextStyle(fontSize: 9),)),
           ],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+        Stack(
           children: [
-            Expanded(flex: 1, child: Container(height: 2, color: MyColors.GREEN,)),
-            Expanded(flex: 1, child: Container(height: 2, color: MyColors.GREEN1,)),
-            Expanded(flex: 1, child: Container(height: 2, color: MyColors.YELLOW1,)),
-            Expanded(flex: 1, child: Container(height: 2, color: MyColors.YELLOW,)),
-            Expanded(flex: 2, child: Container(height: 2, color: MyColors.RED1,)),
-            Expanded(flex: 4, child: Container(height: 2, color: MyColors.RED,)),
-          ],
+            Container(
+              height: 10,
+              padding: EdgeInsets.all(1),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(flex: 1, child: Container(height: 2, color: MyColors.GREEN,)),
+                  Expanded(flex: 1, child: Container(height: 2, color: MyColors.GREEN1,)),
+                  Expanded(flex: 1, child: Container(height: 2, color: MyColors.YELLOW1,)),
+                  Expanded(flex: 1, child: Container(height: 2, color: MyColors.YELLOW,)),
+                  Expanded(flex: 2, child: Container(height: 2, color: MyColors.RED1,)),
+                  Expanded(flex: 4, child: Container(height: 2, color: MyColors.RED,)),
+                ],
+              ),
+            ),
+            Positioned(
+                top: 1,
+                left: (InforDevice.WIDTH - 60) / 500 * now.aqi,
+                child: Container(
+                  color: MyColors.BLACK,
+                  height: 10,
+                  width: 2,
+                )
+            )
+          ]
         ),
         const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,31 +103,33 @@ class AirQualityBar extends StatelessWidget{
 }
 
 class DisplayAirQuality extends StatelessWidget{
-  String? airQuality;
 
-  DisplayAirQuality({required this.airQuality});
+  DisplayAirQuality();
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<WeatherManager>(context);
+    WeatherCurrent now = provider.weatherLocation!.current;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
+
       children: [
         Expanded(
-          flex: 1,
-          child: Text(airQuality!,
-            style: TextStyle(fontSize: 50),),
+          flex: 2,
+          child: Text(now.aqi.toString(),
+            style: TextStyle(fontSize: 42),),
         ),
-        const Expanded(
-          flex: 3,
+        Expanded(
+          flex: 5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Moderate',
+                Utils.getEvaluateAirQ(now.aqi),
                 style: TextStyle(
                   fontSize:20,
                 ),
               ),
-              Text(
+              const Text(
                   'Air quality between 51 and 100 is not ideal, so keep an eye on it',
                 style: TextStyle(
                   fontSize: 15
@@ -113,7 +138,6 @@ class DisplayAirQuality extends StatelessWidget{
             ],
           ),
         ),
-
       ],
     );
   }

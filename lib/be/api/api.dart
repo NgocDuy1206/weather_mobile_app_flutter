@@ -9,6 +9,7 @@ abstract class Api {
   Future<Map<String, dynamic>> getWeatherCurrent(double lat, double lon);
   Future<Map<String, dynamic>> getWeather24H(double lat, double lon);
   Future<Map<String, dynamic>> getWeather7Day(double lat, double lon);
+  Future<Map<String, dynamic>> getAirQuality(double lat, double lon);
 }
 class GetApi extends Api{
   Future<Map<String, dynamic>> getWeatherCurrent(double lat, double lon) async {
@@ -47,11 +48,24 @@ class GetApi extends Api{
     }
   }
 
+  Future<Map<String, dynamic>> getAirQuality(double lat, double lon) async {
+    final url = 'https://api.weatherbit.io/v2.0/forecast/airquality?'
+        '&lat=$lat&lon=$lon'
+        '&key=$apiKey';
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('không tải được dữ liệu 7Day');
+    }
+  }
+
   Future<WeatherLocation> getWeatherData(double lat, double lon) async {
     Map<String, dynamic> current = await getWeatherCurrent(lat, lon);
     Map<String, dynamic> hourly = await getWeather24H(lat, lon);
     Map<String, dynamic> daily = await getWeather7Day(lat, lon);
+    Map<String, dynamic> airQ = await getAirQuality(lat, lon);
 
-    return WeatherLocation.fromJson(lat, lon, apiKey, current['data'][0], hourly, daily);
+    return WeatherLocation.fromJson(lat, lon, apiKey, current['data'][0], hourly, daily, airQ);
   }
 }

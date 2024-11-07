@@ -10,6 +10,7 @@ class WeatherCurrent {
   final dynamic visibility;
   final dynamic dewPoint;
   final dynamic pressure;
+  final dynamic aqi;
 
   WeatherCurrent({
     required this.temperature,
@@ -23,6 +24,7 @@ class WeatherCurrent {
     required this.visibility,
     required this.dewPoint,
     required this.pressure,
+    required this.aqi,
   });
 
   factory WeatherCurrent.fromJson(Map<String, dynamic> json) {
@@ -37,7 +39,8 @@ class WeatherCurrent {
         uvIndex: json['uv'],
         visibility: json['vis'],
         dewPoint: json['dewpt'],
-        pressure: json['pres']
+        pressure: json['pres'],
+        aqi: json['aqi'],
     );
   }
 }

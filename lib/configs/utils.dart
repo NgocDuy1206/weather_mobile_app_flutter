@@ -71,51 +71,38 @@ class Utils {
         : time.hour.toString() + ':00';
   }
 
+  static String getHour12H(DateTime time) {
+    int t = time.hour;
+    String x = (time.hour % 12).toString() + ':' + getMinute(time.minute);
+    if (t >= 12) return x + ' PM';
+    return x + ' AM';
+  }
+  
+  static String getMinute(int minute) {
+    return (minute < 10)? '0' + minute.toString(): minute.toString();
+  }
+
   static String getDay(DateTime time) {
     if (time.day < 10)
       return '0' + time.day.toString();
     else
       return time.day.toString();
   }
+
+  static String getEvaluateAirQ(dynamic x) {
+    if (x >= 0 && x < 50) {
+      return 'Good';
+    } else if (x >= 50 && x < 100) {
+      return 'Moderate';
+    } else if (x >= 100 && x < 150) {
+      return 'Unhealthy for Sensitive Groups';
+    } else if (x >= 150 && x < 200) {
+      return 'Unhealthy';
+    } else if (x >= 200 && x < 300) {
+      return 'Very Unhealthy';
+    } else if (x > 300) {
+      return 'Hazardous';
+    } else return 'nhỏ hơn 0';
+  }
 }
-// switch(code) {
-//   case 200: return 'assets/icon/icon_weather/'
-//   case 201: return 'assets/icon/icon_weather/'
-//   case 202: return 'assets/icon/icon_weather/'
-//   case 230: return 'assets/icon/icon_weather/'
-//   case 231: return 'assets/icon/icon_weather/'
-//   case 232: return 'assets/icon/icon_weather/'
-//   case 233: return 'assets/icon/icon_weather/'
-//   case 300: return 'assets/icon/icon_weather/'
-//   case 301: return 'assets/icon/icon_weather/'
-//   case 302: return 'assets/icon/icon_weather/'
-//   case 500: return 'assets/icon/icon_weather/'
-//   case 501: return 'assets/icon/icon_weather/'
-//   case 502: return 'assets/icon/icon_weather/'
-//   case 511: return 'assets/icon/icon_weather/'
-//   case 520: return 'assets/icon/icon_weather/'
-//   case 521: return 'assets/icon/icon_weather/'
-//   case 522: return 'assets/icon/icon_weather/'
-//   case 600: return 'assets/icon/icon_weather/'
-//   case 601: return 'assets/icon/icon_weather/'
-//   case 602: return 'assets/icon/icon_weather/'
-//   case 610: return 'assets/icon/icon_weather/'
-//   case 611: return 'assets/icon/icon_weather/'
-//   case 612: return 'assets/icon/icon_weather/'
-//   case 621: return 'assets/icon/icon_weather/'
-//   case 622: return 'assets/icon/icon_weather/'
-//   case 623: return 'assets/icon/icon_weather/'
-//   case 700: return 'assets/icon/icon_weather/'
-//   case 711: return 'assets/icon/icon_weather/'
-//   case 721: return 'assets/icon/icon_weather/'
-//   case 731: return 'assets/icon/icon_weather/'
-//   case 741: return 'assets/icon/icon_weather/'
-//   case 751: return 'assets/icon/icon_weather/'
-//   case 800: return 'assets/icon/icon_weather/'
-//   case 801: return 'assets/icon/icon_weather/'
-//   case 802: return 'assets/icon/icon_weather/'
-//   case 803: return 'assets/icon/icon_weather/'
-//   case 804: return 'assets/icon/icon_weather/'
-//   case 900: return 'assets/icon/icon_weather/'
-//
-// }
+

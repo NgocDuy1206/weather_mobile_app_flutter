@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_mobile_app_flutter/be/data/weather_by_day.dart';
 import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
+import 'package:weather_mobile_app_flutter/configs/utils.dart';
 import 'package:weather_mobile_app_flutter/fe/components/button_see_more.dart';
 
 import '../../configs/constants.dart';
@@ -36,25 +37,21 @@ class SunMoonTable extends StatelessWidget {
 }
 
 class RiseAndSet extends StatelessWidget {
-  String? object = 'SUN';
+  String object ;
   String icon = 'assets/icon/sun.png';
 
-  RiseAndSet({super.key, this.object});
+  RiseAndSet({super.key, this.object = 'SUN'});
 
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<WeatherManager>(context);
     WeatherByDay daily = provider.weatherLocation!.dayList[0];
-    String timeRise = daily.sunrise.hour.toString() + ':'
-              + daily.sunrise.minute.toString();
-    String timeSet = daily.sunset.hour.toString() + ':'
-              + daily.sunset.minute.toString();
+    String timeRise = Utils.getHour12H(daily.sunrise);
+    String timeSet = Utils.getHour12H(daily.sunset);
     if (object != 'SUN') {
       object = 'MOON';
-      timeRise = daily.moonrise.hour.toString() + ':'
-                + daily.moonrise.minute.toString();
-      timeSet = daily.moonset.hour.toString() + ':'
-                + daily.moonset.minute.toString();
+      timeRise = Utils.getHour12H(daily.moonrise);
+      timeSet = Utils.getHour12H(daily.moonset);
       icon = 'assets/icon/moon.png';
     }
 
@@ -72,11 +69,11 @@ class RiseAndSet extends StatelessWidget {
 }
 
 class Time extends StatelessWidget {
-  String? name = 'SUN';
-  String? time = '0:00';
-  String? kind = 'RISE';
+  String name;
+  String time;
+  String kind;
 
-  Time({required this.name, required this.time, required this.kind});
+  Time({this.name = 'SUN',  this.time = '0:00',  this.kind = 'RISE'});
 
   @override
   Widget build(BuildContext context) {
@@ -85,13 +82,13 @@ class Time extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          name! + kind!,
+          name + kind,
           style: const TextStyle(
             fontSize: 15
           ),
         ),
         Text(
-          kind == 'RISE' ? time! + ' AM' : time! + ' PM',
+          time,
           style: const TextStyle(
             fontSize: 15
           ),
