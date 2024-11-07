@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../components_add_widget/widget_item.dart';
+import '../../../components_add_widget/widget_item.dart';
+
 
 // Màn hình cho chức năng add widget
 class AddWidgetScreen extends StatelessWidget {

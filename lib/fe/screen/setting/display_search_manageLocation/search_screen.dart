@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../components_search/dashed_line_separator.dart';
-import '../../components_search/location_tile.dart';
-import '../../components_search/saved_locations_header.dart';
-import '../../components_search/search_text_field.dart';
+import '../../../components_search/dashed_line_separator.dart';
+import '../../../components_search/location_tile.dart';
+import '../../../components_search/saved_locations_header.dart';
+import '../../../components_search/search_text_field.dart';
+
 
 
 class SearchScreenModal extends StatelessWidget {
