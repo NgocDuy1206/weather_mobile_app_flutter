@@ -10,6 +10,7 @@ import '../../components/destination.dart';
 import '../../components/hourly_forecast_table.dart';
 import '../../components/sun_moon_table.dart';
 import '../../components/weather_now.dart';
+import '../display_search_manageLocation/search_screen.dart';
 
 class Today extends StatefulWidget {
   const Today({super.key});
@@ -48,7 +49,8 @@ class _TodayState extends State<Today> {
             actions: [
               IconButton(
                   onPressed: () {
-
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SearchScreenModal()));
                   },
                   icon: Image.asset('assets/icon/search.png')),
               IconButton(
