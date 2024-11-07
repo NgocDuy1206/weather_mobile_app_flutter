@@ -3,9 +3,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:weather_mobile_app_flutter/be/data/weather_location.dart';
+import 'package:weather_mobile_app_flutter/configs/constants.dart';
 
 abstract class Api {
-  final apiKey = '959741e13fc243c1830c92dafe286db9';
+  final String apiKey = Constants.apiKeyWeatherBit;
   Future<Map<String, dynamic>> getWeatherCurrent(double lat, double lon);
   Future<Map<String, dynamic>> getWeather24H(double lat, double lon);
   Future<Map<String, dynamic>> getWeather7Day(double lat, double lon);

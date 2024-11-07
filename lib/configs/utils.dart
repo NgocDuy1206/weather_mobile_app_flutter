@@ -104,5 +104,17 @@ class Utils {
       return 'Hazardous';
     } else return 'nhỏ hơn 0';
   }
+
+  static String getNameMap(String type) {
+    switch(type) {
+      case 'clouds_new': return 'Cloud Map';
+      case 'precipitation_new': return 'Precipitation Map';
+      case 'wind_new': return 'Wind Map';
+      case 'pressure_new': return 'Pressure Map';
+      case 'temp_new': return 'Temperature Map';
+      default: return 'Cloud Map';
+    }
+  }
+
 }
 

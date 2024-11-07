@@ -34,3 +34,11 @@ class BottomNagivation with ChangeNotifier {
   }
 }
 
+class MapManager with ChangeNotifier {
+  String type = 'clouds_new';
+
+  void updateMap(String type_new) {
+    type = type_new;
+    notifyListeners();
+  }
+}

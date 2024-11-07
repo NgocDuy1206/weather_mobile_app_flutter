@@ -16,7 +16,8 @@ void main() {
     MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => WeatherManager()),
-          ChangeNotifierProvider(create: (context) => BottomNagivation())
+          ChangeNotifierProvider(create: (context) => BottomNagivation()),
+          ChangeNotifierProvider(create: (context) => MapManager()),
         ],
       child: WeatherApp(),
     )
