@@ -31,7 +31,6 @@ class WeatherNow extends StatelessWidget {
                   style: TextStyle(fontSize: 15),)
               ],
             )
-
           ],
         ),
       ),

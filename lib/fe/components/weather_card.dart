@@ -131,12 +131,12 @@ class Column4 extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ImageIcon(
+            const ImageIcon(
               AssetImage('assets/icon/wind.png'),
               size: 15,
             ),
             Text(card.windDirection, style: TextStyle(fontSize: 12),),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Text(card.windSpeed.toString() + ' m/s', style: TextStyle(fontSize: 12),),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_mobile_app_flutter/fe/screen/setting/DaoScreen/setting_screen.dart';
 
 import '../../../configs/constants.dart';
 import '../../components/air_quality_table.dart';
@@ -46,10 +47,15 @@ class _TodayState extends State<Today> {
             ),
             actions: [
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+
+                  },
                   icon: Image.asset('assets/icon/search.png')),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SettingScreen()));
+                },
                 icon: Image.asset('assets/icon/menu.png'),
               ),
             ],
