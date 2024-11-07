@@ -55,7 +55,38 @@ class WeatherLocation {
         hourList: listByHour,
         dayList: listByDay,
         airQualityList: listAir,
-
     );
+  }
+
+  double getTempMaxByHour() {
+    double tempMax = 0;
+    for (var x in hourList) {
+      tempMax = (tempMax > x.temperature)? tempMax:  x.temperature.toDouble();
+    }
+    return tempMax;
+  }
+
+  double getTempMinByHour() {
+    double tempMin = 100;
+    for (var x in hourList) {
+      tempMin = (tempMin < x.temperature)? tempMin: x.temperature.toDouble();
+    }
+    return tempMin;
+  }
+
+  double getTempMaxByDay() {
+    double temMax = 0;
+    for (var x in dayList) {
+      temMax = (temMax > x.temperatureMax) ? temMax: x.temperatureMax.toDouble();
+    }
+    return temMax;
+  }
+
+  double getTempMinByDay() {
+    double tempMin = 100;
+    for (var x in dayList) {
+      tempMin = (tempMin < x.temperatureMin) ? tempMin: x.temperatureMin.toDouble();
+    }
+    return tempMin;
   }
 }

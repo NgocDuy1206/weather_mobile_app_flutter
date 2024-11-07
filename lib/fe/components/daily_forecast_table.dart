@@ -6,48 +6,55 @@ import 'package:weather_mobile_app_flutter/configs/constants.dart';
 import 'package:weather_mobile_app_flutter/configs/utils.dart';
 import 'package:weather_mobile_app_flutter/fe/components/button_see_more.dart';
 
-
 class DailyForecastTable extends StatelessWidget {
   bool showSeeMoreDetail;
+
   DailyForecastTable({this.showSeeMoreDetail = true});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: (InforDevice.WIDTH - 40),
-
-      margin: EdgeInsets.only(top: 10, bottom: 25),
-      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.only(top: 10, bottom: 25, left: 10, right: 10),
+      padding: EdgeInsets.only(top: 10, bottom: 10, left: 2, right: 2),
       decoration: const BoxDecoration(
         color: MyColors.GRAY,
         borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
       child: Center(
           child: Column(
-            children: [
-              DailyTable(showSeeMoreDetail: showSeeMoreDetail),
-              if (showSeeMoreDetail == true) SeeMoreDetail(),
-            ],
-          )),
+        children: [
+          DailyTable(showSeeMoreDetail: showSeeMoreDetail),
+          if (showSeeMoreDetail == true) SeeMoreDetail(),
+        ],
+      )),
     );
   }
 }
 
 class DailyTable extends StatelessWidget {
   bool showSeeMoreDetail;
+
   DailyTable({this.showSeeMoreDetail = true});
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<WeatherManager>(context);
+    int tempMax = provider.weatherLocation!.getTempMaxByDay().round();
+    int tempMin = provider.weatherLocation!.getTempMinByDay().round();
+    int distance = tempMax - tempMin;
+
     return Container(
       width: InforDevice.WIDTH - 80,
-      height: 250,
+      height: 300,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: showSeeMoreDetail? 4: 8,
+        itemCount: showSeeMoreDetail ? 4 : 8,
         itemBuilder: (BuildContext context, int index) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 12),
-            child: ColumnDailyForecast(index: index,),
+            child: ColumnDailyForecast(
+                index: index, min: tempMin, distance: distance),
           );
         },
       ),
@@ -57,7 +64,10 @@ class DailyTable extends StatelessWidget {
 
 class ColumnDailyForecast extends StatelessWidget {
   int index;
-  ColumnDailyForecast({this.index = 0});
+  int min;
+  int distance;
+
+  ColumnDailyForecast({this.index = 0, this.min = 0, this.distance = 10});
 
   @override
   Widget build(BuildContext context) {
@@ -75,14 +85,14 @@ class ColumnDailyForecast extends StatelessWidget {
           Utils.getWeekDay(daily.time),
           style: TextStyle(fontSize: 20),
         ),
-        Image.asset(MyIconWeather.getIconWeather(daily.icon, daily.time),scale: 2.75,),
-        Text(daily.temperatureMax.toString() + '${Constants.DEGREES}',
-          style: TextStyle(fontSize: 20),),
-        const SizedBox(
-          height: 35,
+        Image.asset(
+          MyIconWeather.getIconWeather(daily.icon, daily.time),
+          scale: 2.75,
         ),
-        Text(daily.temperatureMin.toString() + '${Constants.DEGREES}',
-          style: TextStyle(fontSize: 20),),
+        DrawTemp(index: index, min: min, distance: distance),
+        SizedBox(
+          height: 3,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -93,8 +103,10 @@ class ColumnDailyForecast extends StatelessWidget {
             const SizedBox(
               width: 4,
             ),
-            Text(daily.precipitationProbability.toString() + '%',
-              style: TextStyle(fontSize: 15),),
+            Text(
+              daily.precipitationProbability.toString() + '%',
+              style: TextStyle(fontSize: 15),
+            ),
           ],
         ),
       ],
@@ -102,3 +114,42 @@ class ColumnDailyForecast extends StatelessWidget {
   }
 }
 
+class DrawTemp extends StatelessWidget {
+  int index;
+  int min;
+  int distance;
+
+  DrawTemp({this.index = 0, this.min = 0, this.distance = 10});
+
+  @override
+  Widget build(BuildContext context) {
+    var provider = Provider.of<WeatherManager>(context);
+    WeatherByDay daily = provider.weatherLocation!.dayList[index];
+    return Container(
+      color: MyColors.GREEN,
+      height: 150,
+      width: 40,
+      child: Stack(
+        children: [
+          Positioned(
+              left: 0,
+              bottom: (daily.temperatureMin - min) / distance * 100,
+              child: Column(children: [
+                Text(daily.temperatureMax.toString() + '${Constants.DEGREES}'),
+                Container(
+                  width: 10,
+                  height: (daily.temperatureMax - daily.temperatureMin) /
+                      distance *
+                      100,
+                  child: Text('.'),
+                  decoration: BoxDecoration(
+                      color: MyColors.BLACK,
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+                Text(daily.temperatureMin.toString() + '${Constants.DEGREES}'),
+              ])),
+        ],
+      ),
+    );
+  }
+}
