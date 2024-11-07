@@ -49,8 +49,17 @@ class _TodayState extends State<Today> {
             actions: [
               IconButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SearchScreenModal()));
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Color(0xFF1A0A1A),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                      ),
+                      builder: (BuildContext context) {
+                        return SearchScreenModal();
+                      },
+                    );
                   },
                   icon: Image.asset('assets/icon/search.png')),
               IconButton(

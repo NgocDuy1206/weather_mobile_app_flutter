@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:weather_mobile_app_flutter/fe/screen/setting/DaoScreen/settings_screen.dart';
 
+import '../../display_search_manageLocation/add_widget_screen.dart';
+import '../../display_search_manageLocation/manage_location_screen.dart';
 import 'notification_screen.dart';
 
 
@@ -22,13 +24,23 @@ class SettingScreen extends StatelessWidget {
               leading: Icon(Icons.location_on, color: Colors.white),
               title: Text('Manage locations', style: TextStyle(color: Colors.white)),
               trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey),
-              onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ManageScreen()),
+                  );
+                },
             ),
             ListTile(
               leading: Icon(Icons.widgets, color: Colors.white),
               title: Text('Add Widgets', style: TextStyle(color: Colors.white)),
               trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey),
-              onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AddWidgetScreen()),
+                  );
+                },
             ),
             ListTile(
               leading: Icon(Icons.notifications, color: Colors.white),
