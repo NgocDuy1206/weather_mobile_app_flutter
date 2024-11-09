@@ -1,4 +1,7 @@
 // apiKey = 959741e13fc243c1830c92dafe286db9
+//https://api.weatherapi.com/v1/forecast.json?key=7c087e009aa9405791065629241206&q=Ha%20noi&days=7
+//key=7c087e009aa9405791065629241206
+
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -12,6 +15,7 @@ abstract class Api {
   Future<Map<String, dynamic>> getWeather7Day(double lat, double lon);
   Future<Map<String, dynamic>> getAirQuality(double lat, double lon);
 }
+
 class GetApi extends Api{
   Future<Map<String, dynamic>> getWeatherCurrent(double lat, double lon) async {
     final url = 'https://api.weatherbit.io/v2.0/current?'
