@@ -46,14 +46,14 @@ class _SearchTextFieldState extends State<SearchTextField> {
     }).join('');
   }
 
-  void _fetchWeather(String cityName) {
-    // Normalize city name by removing diacritical marks
-    final normalizedCityName = removeDiacritics(cityName);
-    final weatherApi = WeatherApi();
-    setState(() {
-      _weatherData = weatherApi.getWeatherCurrent(normalizedCityName);
-    });
-  }
+  // void _fetchWeather(String cityName) {
+  //   // Normalize city name by removing diacritical marks
+  //   final normalizedCityName = removeDiacritics(cityName);
+  //   final weatherApi = WeatherApi();
+  //   setState(() {
+  //     _weatherData = weatherApi.getWeatherCurrent(normalizedCityName);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -72,9 +72,9 @@ class _SearchTextFieldState extends State<SearchTextField> {
               borderSide: BorderSide.none,
             ),
           ),
-          onSubmitted: (value) {
-            _fetchWeather(value);
-          },
+          // onSubmitted: (value) {
+          //   _fetchWeather(value);
+          // },
         ),
         SizedBox(height: 20),
         _weatherData == null
