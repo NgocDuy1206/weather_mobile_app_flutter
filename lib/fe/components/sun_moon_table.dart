@@ -29,7 +29,7 @@ class SunMoonTable extends StatelessWidget {
           SizedBox(height: 5,),
           RiseAndSet(object: 'MOON'),
           SizedBox(height: 5,),
-          SeeMoreDetail(),
+          SeeMoreDetail(direction: 'sun_moon',),
         ],
       ),
     );

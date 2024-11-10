@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_mobile_app_flutter/be/state_management/setting_manager.dart';
 import 'package:weather_mobile_app_flutter/fe/screen/setting/DaoScreen/warnings_alerts_screen.dart';
 
+import '../../../../configs/utils.dart';
 import 'language_and_units_screen.dart';
 
 
@@ -22,7 +25,7 @@ class _SettingScreenState extends State<SettingsScreen> {
     // Đặt màu chữ dựa trên chủ đề
     Color textColor = selectedTheme == "Dark" ? Colors.white : Colors.black;
     Color subtitleColor = selectedTheme == "Dark" ? Colors.grey : Colors.black54;
-
+    var provider = Provider.of<SettingManager>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings', style: TextStyle(color: Colors.white)),
@@ -50,7 +53,7 @@ class _SettingScreenState extends State<SettingsScreen> {
             Divider(color: subtitleColor),
             ListTile(
               leading: Icon(Icons.language, color: textColor),
-              title: Text('Language and Units', style: TextStyle(color: textColor)),
+              title: Text(Utils.getText('language_unit'), style: TextStyle(color: textColor)),
               trailing: Icon(Icons.arrow_forward_ios, color: textColor),
               onTap: () {
                 // Navigate to Language and Units screen

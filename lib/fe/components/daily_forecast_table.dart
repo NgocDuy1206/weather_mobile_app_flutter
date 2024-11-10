@@ -25,7 +25,7 @@ class DailyForecastTable extends StatelessWidget {
           child: Column(
         children: [
           DailyTable(showSeeMoreDetail: showSeeMoreDetail),
-          if (showSeeMoreDetail == true) SeeMoreDetail(),
+          if (showSeeMoreDetail == true) SeeMoreDetail(direction: 'daily_tab',),
         ],
       )),
     );
@@ -49,7 +49,7 @@ class DailyTable extends StatelessWidget {
       height: 300,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: showSeeMoreDetail ? 4 : 8,
+        itemCount: showSeeMoreDetail ? ((InforDevice.WIDTH - 20)/ 80).toInt() : 8,
         itemBuilder: (BuildContext context, int index) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 12),

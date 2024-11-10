@@ -34,7 +34,7 @@ class _Forecast extends State<Forecast> {
           SliverToBoxAdapter(
 
             child: Container(
-              height: 700,
+              height: InforDevice.HEIGHT - 140,
               child: IntrinsicHeight(
                 child: TabBarView(
                     children: [

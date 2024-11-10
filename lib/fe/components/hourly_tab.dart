@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:weather_mobile_app_flutter/configs/constants.dart';
 import 'package:weather_mobile_app_flutter/fe/components/hourly_forecast_table.dart';
 import 'package:weather_mobile_app_flutter/fe/components/weather_card.dart';
 
@@ -7,7 +8,8 @@ class HourlyTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 24 * 70 + 300,
+      padding: EdgeInsets.all(5),
+      height: InforDevice.HEIGHT,
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
@@ -26,9 +28,7 @@ class HourlyTab extends StatelessWidget {
               childCount: 24, // Số lượng phần tử
             ),
           ),
-          SliverToBoxAdapter(
-            child: SizedBox(height: 150,),
-          )
+          
         ],
       ),
     );
