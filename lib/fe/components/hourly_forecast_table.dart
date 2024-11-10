@@ -26,7 +26,7 @@ class HourlyForecastTable extends StatelessWidget {
           child: Column(
         children: [
           HourlyTable(showSeeMoreDetail: showSeeMoreDetail),
-          if (showSeeMoreDetail == true) SeeMoreDetail(),
+          if (showSeeMoreDetail == true) SeeMoreDetail(direction: 'hourly_tab',),
         ],
       )),
     );
@@ -49,7 +49,7 @@ class HourlyTable extends StatelessWidget {
       height: 250,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: showSeeMoreDetail ? 4 : 24,
+        itemCount: showSeeMoreDetail ? ((InforDevice.WIDTH - 20)/ 80).toInt() : 24,
         itemBuilder: (BuildContext context, int index) {
           return Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),

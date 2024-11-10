@@ -8,6 +8,10 @@ import 'package:weather_mobile_app_flutter/fe/screen/display/forecast_screen.dar
 import 'package:weather_mobile_app_flutter/fe/screen/display/radar_screen.dart';
 import 'package:weather_mobile_app_flutter/fe/screen/display/today_screen.dart';
 import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
+import 'package:weather_mobile_app_flutter/configs/utils.dart';
+import 'package:weather_mobile_app_flutter/configs/utils.dart';
+
+import '../../../configs/utils.dart';
 
 class MainScreen extends StatefulWidget {
 
@@ -27,37 +31,40 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
 
       body: tabBottomNavigation[tab.selectedTab],
-      bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem> [
-            BottomNavigationBarItem(
-                icon: ImageIcon(AssetImage('assets/icon/today.png')),
-              label: 'TODAY',
-            ),
-            BottomNavigationBarItem(
-              icon: ImageIcon(AssetImage('assets/icon/forecast.png')),
-              label: 'FORECAST',
-            ),
-            BottomNavigationBarItem(
-              icon: ImageIcon(AssetImage('assets/icon/radar.png')),
-              label: 'RADAR',
-            ),
-          ],
-        onTap: (int index){
-            tab.updateTab(index);
-        },
+      bottomNavigationBar: Container(
+        height: 120,
+        child: BottomNavigationBar(
+            items: <BottomNavigationBarItem> [
+              BottomNavigationBarItem(
+                  icon: ImageIcon(AssetImage('assets/icon/today.png')),
+                label: 'T',
+              ),
+              BottomNavigationBarItem(
+                icon: ImageIcon(AssetImage('assets/icon/forecast.png')),
+                label: 'FORECAST',
+              ),
+              BottomNavigationBarItem(
+                icon: ImageIcon(AssetImage('assets/icon/radar.png')),
+                label: 'RADAR',
+              ),
+            ],
+          onTap: (int index){
+              tab.updateTab(index);
+          },
 
-        showSelectedLabels: true,
-        currentIndex: tab.selectedTab,
-        selectedItemColor: MyColors.BLUE,
-        unselectedItemColor: MyColors.GRAY,
-        unselectedIconTheme: const IconThemeData(
-          color: Colors.grey,
-          size: 50
-        ),
-        selectedIconTheme: const IconThemeData(
-          size: 50,
-        ),
+          showSelectedLabels: true,
+          currentIndex: tab.selectedTab,
+          selectedItemColor: MyColors.BLUE,
+          unselectedItemColor: MyColors.GRAY,
+          unselectedIconTheme: const IconThemeData(
+            color: Colors.grey,
+            size: 50
+          ),
+          selectedIconTheme: const IconThemeData(
+            size: 50,
+          ),
 
+        ),
       ),
     );
   }

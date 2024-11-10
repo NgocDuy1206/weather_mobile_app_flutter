@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../components_manage_location/dashed_separator.dart';
-import '../../components_manage_location/instruction_text.dart';
-import '../../components_manage_location/location_item_manage.dart';
+
+import '../../../components_manage_location/dashed_separator.dart';
+import '../../../components_manage_location/instruction_text.dart';
+import '../../../components_manage_location/location_item_manage.dart';
+
 
 //Màn quản lý vị trí - Manage Location
 class ManageScreen extends StatelessWidget {

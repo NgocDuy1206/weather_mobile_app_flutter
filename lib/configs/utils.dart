@@ -1,3 +1,6 @@
+import '../be/state_management/setting_manager.dart';
+import 'language.dart';
+
 class MyIconWeather {
   static String getIconWeather(dynamic code, DateTime time) {
     String tail = '_am';
@@ -116,5 +119,13 @@ class Utils {
     }
   }
 
+
+  static String getText(String codeName) {
+    if (SettingManager.language == 'english') {
+      return Language.english[codeName];
+    } else if (SettingManager.language == 'vietnam') {
+      return Language.vietnam[codeName];
+    } else throw Exception('app không hỗ trợ ngôn ngữ này');
+  }
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_mobile_app_flutter/configs/utils.dart';
 import 'package:weather_mobile_app_flutter/fe/screen/setting/DaoScreen/setting_screen.dart';
 
 import '../../../configs/constants.dart';
@@ -10,7 +11,8 @@ import '../../components/destination.dart';
 import '../../components/hourly_forecast_table.dart';
 import '../../components/sun_moon_table.dart';
 import '../../components/weather_now.dart';
-import '../display_search_manageLocation/search_screen.dart';
+
+import '../setting/display_search_manageLocation/search_screen.dart';
 
 class Today extends StatefulWidget {
   const Today({super.key});
@@ -37,7 +39,7 @@ class _TodayState extends State<Today> {
             pinned: false,
             backgroundColor: Colors.transparent,
             snap: true,
-            expandedHeight: 110,
+            expandedHeight: 150,
             flexibleSpace: FlexibleSpaceBar(
               background: Column(
                 children: [
@@ -86,17 +88,17 @@ class _TodayState extends State<Today> {
                   ),
                   child: Column(
                     children: [
-                      const Text('Hourly Forecast', style: TextStyle(fontSize: 20),),
+                      Text(Utils.getText('hourly_forecast'), style: TextStyle(fontSize: 20),),
                       HourlyForecastTable(),
-                      const Text('Current Detail', style: TextStyle(fontSize: 20),),
+                      Text(Utils.getText('current_details'), style: TextStyle(fontSize: 20),),
                       CurrentDetailTable(),
-                      const Text('Daily Forecast', style: TextStyle(fontSize: 20),),
+                      Text(Utils.getText('daily_forecast'), style: TextStyle(fontSize: 20),),
                       DailyForecastTable(),
-                      const Text('Air Quality', style: TextStyle(fontSize: 20),),
+                      Text(Utils.getText('air_quality'), style: TextStyle(fontSize: 20),),
                       AirQualityTable(),
-                      const Text('Allergy Outlook', style: TextStyle(fontSize: 20),),
+                      Text(Utils.getText('allergy_outlook'), style: TextStyle(fontSize: 20),),
                       AllergyOutlookTable(),
-                      const Text('Sun & Moon', style: TextStyle(fontSize: 20),),
+                      Text(Utils.getText('sun_moon'), style: TextStyle(fontSize: 20),),
                       SunMoonTable(),
                     ],
                   ),

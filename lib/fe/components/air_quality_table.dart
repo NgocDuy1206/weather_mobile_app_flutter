@@ -34,7 +34,7 @@ class AirQualityTable extends StatelessWidget {
           SizedBox(height: 10,),
           AirQualityBar(),
           SizedBox(height: 10,),
-          SeeMoreDetail(),
+          SeeMoreDetail(direction: 'health_center',),
         ],
       ),
     );
