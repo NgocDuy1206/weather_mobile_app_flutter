@@ -15,7 +15,7 @@ abstract class Api {
   Future<Map<String, dynamic>> getWeather7Day(double lat, double lon);
   Future<Map<String, dynamic>> getAirQuality(double lat, double lon);
 }
-
+// Gọi api của Duy
 class GetApi extends Api{
   Future<Map<String, dynamic>> getWeatherCurrent(double lat, double lon) async {
     final url = 'https://api.weatherbit.io/v2.0/current?'
@@ -74,3 +74,13 @@ class GetApi extends Api{
     return WeatherLocation.fromJson(lat, lon, apiKey, current['data'][0], hourly, daily, airQ);
   }
 }
+
+// class WeatherApi {
+//   String apiKey = '7c087e009aa9405791065629241206';
+//   final String baseUrl = 'https://api.weatherapi.com/v1/current.json';
+//   Future<Map<String, dynamic>> getWeatherCurrent(String location) async {
+//     final url = '$baseUrl?key=$apiKey&q=$location';
+//     final response = await http.get(Uri.parse(url));
+//     if (response.statusCode == 200) { return jsonDecode(response.body); }
+//     else { throw Exception('Không tải được dữ liệu thời tiết.'); } }
+// }
