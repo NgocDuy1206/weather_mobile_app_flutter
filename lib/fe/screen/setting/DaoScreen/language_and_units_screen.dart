@@ -25,7 +25,7 @@ class _LanguageAndUnitsScreenState extends State<LanguageAndUnitsScreen> {
   ];
   @override
   Widget build(BuildContext context) {
-    var langProvider =  Provider.of<SettingManager>(context);
+    var set =  Provider.of<SettingManager>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Language and Units', style: TextStyle(color: Colors.white)),
@@ -44,7 +44,7 @@ class _LanguageAndUnitsScreenState extends State<LanguageAndUnitsScreen> {
                   SettingManager.language == 'english'? languages[0]: languages[1],
                   style: TextStyle(color: Colors.grey)),
               onTap: () {
-                _showLanguageSelection(langProvider);
+                _showLanguageSelection(set);
               },
             ),
             Divider(color: Colors.grey),
@@ -53,24 +53,20 @@ class _LanguageAndUnitsScreenState extends State<LanguageAndUnitsScreen> {
             RadioListTile(
               title: Text('Imperial (°F)', style: TextStyle(color: Colors.white)),
               subtitle: Text('Fahrenheit, Miles, In (")', style: TextStyle(color: Colors.grey)),
-              value: 'Imperial (°F)',
-              groupValue: selectedUnits,
+              value: 'F',
+              groupValue: set.tempUnit,
               onChanged: (value) {
-                setState(() {
-                  selectedUnits = value.toString();
-                });
+                set.updateTempUnit('F');
               },
             ),
             Divider(color: Colors.grey),
             RadioListTile(
               title: Text('Metric (°C)', style: TextStyle(color: Colors.white)),
               subtitle: Text('Celsius, Kilometres, kPa', style: TextStyle(color: Colors.grey)),
-              value: 'Metric (°C)',
-              groupValue: selectedUnits,
+              value: 'C',
+              groupValue: set.tempUnit,
               onChanged: (value) {
-                setState(() {
-                  selectedUnits = value.toString();
-                });
+                set.updateTempUnit('C');
               },
             ),
             Divider(color: Colors.grey),
@@ -135,9 +131,5 @@ class _LanguageAndUnitsScreenState extends State<LanguageAndUnitsScreen> {
         );
       },
     );
-  }
-
-  void authorizeConvertLanguage() {
-
   }
 }

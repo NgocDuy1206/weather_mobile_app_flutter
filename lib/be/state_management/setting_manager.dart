@@ -5,6 +5,7 @@ class SettingManager with ChangeNotifier {
     String tempUnit = 'C';
     String spdUnit = 'mph';
     String distanceUnit = 'm';
+    String pressUnit = 'kPa';
 
     void updateLanguage(String newLanguage) {
       if (language != newLanguage) {
@@ -30,6 +31,13 @@ class SettingManager with ChangeNotifier {
     void updateDistanceUnit(String newDisUnit) {
       if (distanceUnit != newDisUnit) {
         distanceUnit = newDisUnit;
+        notifyListeners();
+      }
+    }
+
+    void updatePressUnit(String newPressUnit) {
+      if (pressUnit != newPressUnit) {
+        pressUnit = newPressUnit;
         notifyListeners();
       }
     }

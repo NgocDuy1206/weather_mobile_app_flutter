@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_mobile_app_flutter/be/data/weather_current.dart';
 import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
+import 'package:weather_mobile_app_flutter/be/state_management/setting_manager.dart';
 
 
 import '../../configs/constants.dart';
@@ -13,6 +14,7 @@ class CurrentDetailTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<WeatherManager>(context);
+    var set = Provider.of<SettingManager>(context);
     WeatherCurrent now = provider.weatherLocation!.current;
     return Container(
       width: (InforDevice.WIDTH - 40),
@@ -32,7 +34,7 @@ class CurrentDetailTable extends StatelessWidget {
           Divider(thickness: 1, color: MyColors.WHITE,),
           RowComponent(
               title: Utils.getText('wind'),
-              information: now.windSpeed.toString() + 'm/s'
+              information: Utils.getSpeed(now.windSpeed, set.spdUnit)
           ),
           Divider(thickness: 1, color: MyColors.WHITE,),
           RowComponent(
@@ -42,17 +44,17 @@ class CurrentDetailTable extends StatelessWidget {
           Divider(thickness: 1, color: MyColors.WHITE,),
           RowComponent(
               title: Utils.getText('visi'),
-              information: now.visibility.toString() + 'km'
+              information: Utils.getDistance(now.visibility, set.distanceUnit)
           ),
           Divider(thickness: 1, color: MyColors.WHITE,),
           RowComponent(
               title: Utils.getText('dew'),
-              information: now.dewPoint.toString() + '${Constants.DEGREES}'
+              information: Utils.getTemp(now.dewPoint, set.tempUnit)
           ),
           Divider(thickness: 1, color: MyColors.WHITE,),
           RowComponent(
               title: Utils.getText('press'),
-              information: now.pressure.toString() + 'kPa'
+              information: Utils.getPress(now.pressure, set.pressUnit)
           ),
         ],
       )

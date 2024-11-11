@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_mobile_app_flutter/be/data/weather_by_day.dart';
 import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
+import 'package:weather_mobile_app_flutter/be/state_management/setting_manager.dart';
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
 import 'package:weather_mobile_app_flutter/configs/utils.dart';
 import 'package:weather_mobile_app_flutter/fe/components/button_see_more.dart';
@@ -124,6 +125,7 @@ class DrawTemp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<WeatherManager>(context);
+    var set = Provider.of<SettingManager>(context);
     WeatherByDay daily = provider.weatherLocation!.dayList[index];
     return Container(
       color: MyColors.GREEN,
@@ -135,7 +137,7 @@ class DrawTemp extends StatelessWidget {
               left: 0,
               bottom: (daily.temperatureMin - min) / distance * 100,
               child: Column(children: [
-                Text(daily.temperatureMax.toString() + '${Constants.DEGREES}'),
+                Text(Utils.getTemp(daily.temperatureMax, set.tempUnit)),
                 Container(
                   width: 10,
                   height: (daily.temperatureMax - daily.temperatureMin) /
@@ -146,7 +148,7 @@ class DrawTemp extends StatelessWidget {
                       color: MyColors.BLACK,
                       borderRadius: BorderRadius.circular(10)),
                 ),
-                Text(daily.temperatureMin.toString() + '${Constants.DEGREES}'),
+                Text(Utils.getTemp(daily.temperatureMin, set.tempUnit)),
               ])),
         ],
       ),

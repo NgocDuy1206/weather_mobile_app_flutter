@@ -134,23 +134,30 @@ class Utils {
     number = number.toDouble();
     if (unit == 'C') {
       return number.toString() + ' ${Constants.DEGREES}';
-    } return (number * 9 / 5 + 32).toString() + ' ${Constants.DEGREES}';
+    } return (number * 9 / 5 + 32).toStringAsFixed(1) + ' ${Constants.DEGREES}';
   }
 
   static String getSpeed(dynamic number, String unit) {
     number = number.toDouble();
     if (unit == 'mph') {
-      return (number * 2.23694).toString() + ' mph';
+      return (number * 2.23694).toStringAsFixed(1)+ ' mph';
     } else if (unit == 'km/h') {
-      return (number * 3.6) + ' km/h';
-    } else return number.toString() + ' m/s';
+      return (number * 3.6).toStringAsFixed(1) + ' km/h';
+    } else return number.toStringAsFixed(1) + ' m/s';
   }
 
   static String getDistance(dynamic number, String unit) {
     number = number.toDouble();
     if (unit == 'm') {
-      return number.toString() + ' m';
-    } return (number/1000).toString() + ' km';
+      return (number * 1000 ).toString() + ' m';
+    } return (number).toStringAsFixed(1) + ' km';
+  }
+
+  static String getPress(dynamic number, String unit) {
+    number = number.toDouble();
+    if (unit == 'kPa') {
+      return (number / 10 ).toStringAsFixed(1) + ' kPa';
+    } return (number / 101.325 / 10).toStringAsFixed(1) + ' atm';
   }
 }
 
