@@ -7,6 +7,7 @@ import 'package:weather_mobile_app_flutter/fe/screen/display/expand/health_cente
 import 'package:weather_mobile_app_flutter/fe/screen/display/forecast_screen.dart';
 import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
 
+import '../../configs/utils.dart';
 import '../screen/display/expand/sun_moon.dart';
 
 class SeeMoreDetail extends StatelessWidget {
@@ -31,8 +32,8 @@ class SeeMoreDetail extends StatelessWidget {
         backgroundColor: MyColors.BLUE,
         minimumSize: Size(InforDevice.WIDTH - 90, 50),
       ),
-      child: const Text(
-        'See More Detail',
+      child: Text(
+        Utils.getText('bt_see_more'),
         style: TextStyle(
           fontSize: 20,
           color: MyColors.WHITE,

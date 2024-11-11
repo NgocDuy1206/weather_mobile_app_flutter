@@ -22,7 +22,6 @@ class SunMoonTable extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-
           RiseAndSet(object: 'SUN'),
           SizedBox(height: 5,),
           Divider(thickness: 1,color: MyColors.WHITE,),

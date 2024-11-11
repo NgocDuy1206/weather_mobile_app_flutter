@@ -99,7 +99,7 @@ class Column3 extends StatelessWidget {
                   '${Constants.DEGREES}',
               style: TextStyle(fontSize: 15),
             ),
-            (kind == 'hourly') ? Text(' Feel like ',style: TextStyle(fontSize: 10),)
+            (kind == 'hourly') ? Text(Utils.getText('feel_like'),style: TextStyle(fontSize: 10),)
                 : Text(' / ', style: TextStyle(fontSize: 10),),
             (kind == 'hourly')
                 ? Text(
@@ -114,7 +114,7 @@ class Column3 extends StatelessWidget {
             ),
           ],
         ),
-        Text(card.weatherCode, style: TextStyle(fontSize: 13),),
+        Text(Utils.getText(card.weatherCode), style: TextStyle(fontSize: 13),),
       ],
     );
   }
