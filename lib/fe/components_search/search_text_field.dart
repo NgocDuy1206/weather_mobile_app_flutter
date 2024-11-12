@@ -1,18 +1,27 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../../be/api/api.dart';
 
 class SearchTextField extends StatefulWidget {
+  final ValueNotifier<bool> showResultsNotifier; // Add this notifier
+
+  SearchTextField({required this.showResultsNotifier});
+
   @override
   _SearchTextFieldState createState() => _SearchTextFieldState();
 }
 
 class _SearchTextFieldState extends State<SearchTextField> {
   final TextEditingController _controller = TextEditingController();
-  Future<Map<String, dynamic>>? _weatherData;
+  final GetApi api = GetApi(); // Instantiate GetApi
+  List<Map<String, String>> _suggestions = [];
+  Timer? _debounce; // For debouncing
 
   // Helper function to remove diacritical marks from Vietnamese characters
   String removeDiacritics(String text) {
     const vietnameseDiacriticsMap = {
+      // Vietnamese diacritic mappings (as in your code)
       'á': 'a', 'à': 'a', 'ả': 'a', 'ã': 'a', 'ạ': 'a',
       'ă': 'a', 'ắ': 'a', 'ằ': 'a', 'ẳ': 'a', 'ẵ': 'a', 'ặ': 'a',
       'â': 'a', 'ấ': 'a', 'ầ': 'a', 'ẩ': 'a', 'ẫ': 'a', 'ậ': 'a',
@@ -46,14 +55,18 @@ class _SearchTextFieldState extends State<SearchTextField> {
     }).join('');
   }
 
-  // void _fetchWeather(String cityName) {
-  //   // Normalize city name by removing diacritical marks
-  //   final normalizedCityName = removeDiacritics(cityName);
-  //   final weatherApi = WeatherApi();
-  //   setState(() {
-  //     _weatherData = weatherApi.getWeatherCurrent(normalizedCityName);
-  //   });
-  // }
+  // Fetch location suggestions based on input text
+  Future<void> _fetchSuggestions(String query) async {
+    try {
+      List<Map<String, String>> suggestions = await api.searchLocation(query);
+      setState(() {
+        _suggestions = suggestions;
+      });
+      widget.showResultsNotifier.value = _suggestions.isNotEmpty;
+    } catch (e) {
+      print('Error fetching suggestions: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,41 +85,108 @@ class _SearchTextFieldState extends State<SearchTextField> {
               borderSide: BorderSide.none,
             ),
           ),
-          // onSubmitted: (value) {
-          //   _fetchWeather(value);
-          // },
-        ),
-        SizedBox(height: 20),
-        _weatherData == null
-            ? Container()
-            : FutureBuilder<Map<String, dynamic>>(
-          future: _weatherData,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text('Lỗi: ${snapshot.error}');
-            } else {
-              final data = snapshot.data;
-              final tempC = data?['current']['temp_c'];
-              final humidity = data?['current']['humidity'];
+          onChanged: (value) {
+            if (_debounce?.isActive ?? false) {
+              _debounce?.cancel();
+            }
 
-              return Column(
-                children: [
-                  Text(
-                    'Nhiệt độ: $tempC°C',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  Text(
-                    'Độ ẩm: $humidity%',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
-              );
+            if (value.isNotEmpty) { // Only call API if input has 1 or more characters
+              _debounce = Timer(const Duration(milliseconds: 1000), () {
+                _fetchSuggestions(removeDiacritics(value));
+              });
+            } else {
+              setState(() {
+                _suggestions = [];
+              });
+              widget.showResultsNotifier.value = false;
             }
           },
         ),
+        SizedBox(height: 10),
+        ..._suggestions.map((suggestion) => Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 13.0), // Space from left edge
+              child: Row(
+                children: [
+                  // Circle icon container
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[800], // Dark gray background
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.location_on,
+                      color: Colors.white70, // Light gray icon color
+                    ),
+                  ),
+                  SizedBox(width: 15), // Reduced space between icon and text
+                  // ListTile for suggestion text
+                  Expanded(
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero, // Remove inner padding of ListTile
+                      title: Text(
+                        suggestion['name'] ?? '',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      subtitle: Text(
+                        '${suggestion['region']?.isNotEmpty == true ? '${suggestion['region']}, ' : ''}${suggestion['country'] ?? ''}',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      onTap: () {
+                        _controller.text = suggestion['name'] ?? '';
+                        setState(() {
+                          _suggestions = [];
+                        });
+                        widget.showResultsNotifier.value = false;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: DashedDivider(),
+            ),
+          ],
+        )).toList(),
       ],
+    );
+  }
+
+
+
+  @override
+  void dispose() {
+    _debounce?.cancel(); // Cancel timer when widget is disposed
+    super.dispose();
+  }
+}
+
+// Custom dashed line widget
+class DashedDivider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        const dashWidth = 4.0;
+        const dashSpace = 2.0;
+        final dashCount = (constraints.constrainWidth() / (dashWidth + dashSpace)).floor();
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(dashCount, (_) {
+            return Container(
+              width: dashWidth,
+              height: 1,
+              color: Colors.grey,
+            );
+          }),
+        );
+      },
     );
   }
 }

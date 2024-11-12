@@ -39,6 +39,7 @@ dependencies:
   http: ^0.13.5
   flutter_map: ^4.0.0
   latlong2: ^0.8.1
+  shared_preferences: ^2.3.3
 
 dev_dependencies:
   flutter_test:

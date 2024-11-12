@@ -7,6 +7,9 @@ import '../../../components_search/search_text_field.dart';
 
 
 class SearchScreenModal extends StatelessWidget {
+  final ValueNotifier<bool> showResultsNotifier = ValueNotifier(false);
+
+
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -21,35 +24,46 @@ class SearchScreenModal extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                SearchTextField(),
-                SizedBox(height: 10),
-                LocationTile(
-                  name: 'Tên Địa Chỉ',
-                  address: 'Địa chỉ chi tiết',
-                  temperature: '25°C',
-                  circleColor: Colors.blue,
-                  icon: Icons.navigation,
-                  iconAngle: 30,
+                SearchTextField(showResultsNotifier: showResultsNotifier),
+                ValueListenableBuilder<bool>(
+                  valueListenable: showResultsNotifier,
+                  builder: (context, showResults, child) {
+                    return Visibility(
+                      visible: !showResults,
+                      child: Column(
+                        children: [
+                          LocationTile(
+                            name: 'Tên Địa Chỉ',
+                            address: 'Địa chỉ chi tiết',
+                            temperature: '25°C',
+                            circleColor: Colors.blue,
+                            icon: Icons.navigation,
+                            iconAngle: 30,
+                          ),
+                          SavedLocationsHeader(),
+                          SizedBox(height: 1),
+                          LocationTile(
+                            name: 'Địa điểm 2',
+                            address: 'Địa chỉ chi tiết 2',
+                            temperature: '22°C',
+                            circleColor: Colors.grey,
+                            icon: Icons.place,
+                          ),
+                          DashedLineSeparator(),
+                          LocationTile(
+                            name: 'Địa điểm 3',
+                            address: 'Địa chỉ chi tiết 3',
+                            temperature: '20°C',
+                            circleColor: Colors.grey,
+                            icon: Icons.place,
+                          ),
+                          DashedLineSeparator(),
+                          SizedBox(height: 10),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-                SavedLocationsHeader(),
-                SizedBox(height: 1),
-                LocationTile(
-                  name: 'Địa điểm 2',
-                  address: 'Địa chỉ chi tiết 2',
-                  temperature: '22°C',
-                  circleColor: Colors.grey,
-                  icon: Icons.place,
-                ),
-                DashedLineSeparator(),
-                LocationTile(
-                  name: 'Địa điểm 3',
-                  address: 'Địa chỉ chi tiết 3',
-                  temperature: '20°C',
-                  circleColor: Colors.grey,
-                  icon: Icons.place,
-                ),
-                DashedLineSeparator(),
-                SizedBox(height: 10),
               ],
             ),
           ),
