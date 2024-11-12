@@ -1,3 +1,5 @@
+import 'package:weather_mobile_app_flutter/configs/constants.dart';
+
 import '../be/state_management/setting_manager.dart';
 import 'language.dart';
 
@@ -126,6 +128,36 @@ class Utils {
     } else if (SettingManager.language == 'vietnam') {
       return Language.vietnam[codeName];
     } else throw Exception('app không hỗ trợ ngôn ngữ này');
+  }
+
+  static String getTemp(dynamic number, String unit) {
+    number = number.toDouble();
+    if (unit == 'C') {
+      return number.toString() + ' ${Constants.DEGREES}';
+    } return (number * 9 / 5 + 32).toStringAsFixed(1) + ' ${Constants.DEGREES}';
+  }
+
+  static String getSpeed(dynamic number, String unit) {
+    number = number.toDouble();
+    if (unit == 'mph') {
+      return (number * 2.23694).toStringAsFixed(1)+ ' mph';
+    } else if (unit == 'km/h') {
+      return (number * 3.6).toStringAsFixed(1) + ' km/h';
+    } else return number.toStringAsFixed(1) + ' m/s';
+  }
+
+  static String getDistance(dynamic number, String unit) {
+    number = number.toDouble();
+    if (unit == 'm') {
+      return (number * 1000 ).toString() + ' m';
+    } return (number).toStringAsFixed(1) + ' km';
+  }
+
+  static String getPress(dynamic number, String unit) {
+    number = number.toDouble();
+    if (unit == 'kPa') {
+      return (number / 10 ).toStringAsFixed(1) + ' kPa';
+    } return (number / 101.325 / 10).toStringAsFixed(1) + ' atm';
   }
 }
 

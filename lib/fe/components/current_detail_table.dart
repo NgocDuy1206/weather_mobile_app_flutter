@@ -1,20 +1,24 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_mobile_app_flutter/be/data/weather_current.dart';
 import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
+import 'package:weather_mobile_app_flutter/be/state_management/setting_manager.dart';
 
 
 import '../../configs/constants.dart';
+import '../../configs/utils.dart';
 
 class CurrentDetailTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<WeatherManager>(context);
+    var set = Provider.of<SettingManager>(context);
     WeatherCurrent now = provider.weatherLocation!.current;
     return Container(
       width: (InforDevice.WIDTH - 40),
-      height: 220,
+      height: 284,
       margin: EdgeInsets.only(top: 10, bottom: 25),
       padding: EdgeInsets.all(15),
       decoration: const BoxDecoration(
@@ -24,28 +28,33 @@ class CurrentDetailTable extends StatelessWidget {
       child: Column(
         children: [
           RowComponent(
-            title: 'Precipitation',
+            title: Utils.getText('prep'),
             information: now.precipitation.toString() + '%'
           ),
+          Divider(thickness: 1, color: MyColors.WHITE,),
           RowComponent(
-              title: 'Wind',
-              information: now.windSpeed.toString() + 'm/s'
+              title: Utils.getText('wind'),
+              information: Utils.getSpeed(now.windSpeed, set.spdUnit)
           ),
+          Divider(thickness: 1, color: MyColors.WHITE,),
           RowComponent(
-              title: 'Humidity',
+              title: Utils.getText('humi'),
               information: now.humidity.toString() + '%'
           ),
+          Divider(thickness: 1, color: MyColors.WHITE,),
           RowComponent(
-              title: 'Visibility',
-              information: now.visibility.toString() + 'km'
+              title: Utils.getText('visi'),
+              information: Utils.getDistance(now.visibility, set.distanceUnit)
           ),
+          Divider(thickness: 1, color: MyColors.WHITE,),
           RowComponent(
-              title: 'Dew point',
-              information: now.dewPoint.toString() + '${Constants.DEGREES}'
+              title: Utils.getText('dew'),
+              information: Utils.getTemp(now.dewPoint, set.tempUnit)
           ),
+          Divider(thickness: 1, color: MyColors.WHITE,),
           RowComponent(
-              title: 'Pressure',
-              information: now.pressure.toString() + 'kPa'
+              title: Utils.getText('press'),
+              information: Utils.getPress(now.pressure, set.pressUnit)
           ),
         ],
       )

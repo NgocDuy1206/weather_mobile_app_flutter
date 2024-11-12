@@ -129,8 +129,8 @@ class DisplayAirQuality extends StatelessWidget{
                   fontSize:20,
                 ),
               ),
-              const Text(
-                  'Air quality between 51 and 100 is not ideal, so keep an eye on it',
+              Text(
+                  Utils.getText('advice'),
                 style: TextStyle(
                   fontSize: 15
                 ),

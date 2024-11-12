@@ -4,6 +4,7 @@ import 'package:weather_mobile_app_flutter/configs/constants.dart';
 import 'package:weather_mobile_app_flutter/fe/components/destination.dart';
 import 'package:weather_mobile_app_flutter/fe/screen/display/today_screen.dart';
 
+import '../../../configs/utils.dart';
 import '../../components/daily_tab.dart';
 import '../../components/hourly_tab.dart';
 
@@ -94,12 +95,12 @@ class ForecastTab extends StatelessWidget {
           labelColor: MyColors.WHITE,
           unselectedLabelColor: MyColors.BLACK,
           indicatorSize: TabBarIndicatorSize.tab,
-          tabs: const [
+          tabs: [
             Tab(
-              text: 'Hourly',
+              text: Utils.getText('hourly'),
             ),
             Tab(
-              text: 'Daily',
+              text: Utils.getText('daily'),
             ),
           ]),
     );

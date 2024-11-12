@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:weather_mobile_app_flutter/configs/utils.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../be/state_management/setting_manager.dart';
 
 class CustomizeUnitsScreen extends StatefulWidget {
   @override
@@ -7,73 +9,33 @@ class CustomizeUnitsScreen extends StatefulWidget {
 }
 
 class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
-  String selectedTemperatureUnit = "°C";
-  String selectedWindUnit = "km/h";
-  String selectedDistanceUnit = "km";
-  String selectedPressureUnit = "kPa"; // Đổi mặc định thành kPa
-  String currentSelection = Utils.getText('Current Selection');
+  // Đổi mặc định thành kPa
 
   void _selectPressureUnit(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        var set = Provider.of<SettingManager>(context);
         return AlertDialog(
-          title: Text(Utils.getText('Select Pressure Unit')),
+          title: Text("Select Pressure Unit"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               RadioListTile(
-                title: Text('Inches of mercury (")'),
-                value: '"',
-                groupValue: selectedPressureUnit,
-                onChanged: (value) {
-                  setState(() {
-                    selectedPressureUnit = value.toString();
-                  });
-                  Navigator.of(context).pop(); // Đóng dialog
-                },
-              ),
-              RadioListTile(
-                title: Text('Millibars (mb)'),
-                value: 'mb',
-                groupValue: selectedPressureUnit,
-                onChanged: (value) {
-                  setState(() {
-                    selectedPressureUnit = value.toString();
-                  });
-                  Navigator.of(context).pop(); // Đóng dialog
-                },
-              ),
-              RadioListTile(
-                title: Text('Millimeters of mercury (mm)'),
-                value: 'mm',
-                groupValue: selectedPressureUnit,
-                onChanged: (value) {
-                  setState(() {
-                    selectedPressureUnit = value.toString();
-                  });
-                  Navigator.of(context).pop(); // Đóng dialog
-                },
-              ),
-              RadioListTile(
                 title: Text('Atmosphere (atm)'),
                 value: 'atm',
-                groupValue: selectedPressureUnit,
+                groupValue: set.pressUnit,
                 onChanged: (value) {
-                  setState(() {
-                    selectedPressureUnit = value.toString();
-                  });
+                  set.updatePressUnit('atm');
                   Navigator.of(context).pop(); // Đóng dialog
                 },
               ),
               RadioListTile(
                 title: Text('Kilopascal (kPa)'),
                 value: 'kPa',
-                groupValue: selectedPressureUnit,
+                groupValue: set.pressUnit,
                 onChanged: (value) {
-                  setState(() {
-                    selectedPressureUnit = value.toString();
-                  });
+                  set.updatePressUnit('kPa');
                   Navigator.of(context).pop(); // Đóng dialog
                 },
               ),
@@ -86,9 +48,10 @@ class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var set = Provider.of<SettingManager>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(Utils.getText('Customize Units'), style: TextStyle(color: Colors.white)),
+        title: Text('Customize Units', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: Colors.white),
       ),
@@ -99,96 +62,83 @@ class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              title: Text(Utils.getText('Temperature'), style: TextStyle(color: Colors.white)),
+              title: Text("Temperature", style: TextStyle(color: Colors.white)),
               subtitle: Text("°C or °F", style: TextStyle(color: Colors.grey)),
             ),
             RadioListTile(
               title: Text("°C", style: TextStyle(color: Colors.white)),
-              value: "°C",
-              groupValue: selectedTemperatureUnit,
+              value: "C",
+              groupValue: set.tempUnit,
               onChanged: (value) {
-                setState(() {
-                  selectedTemperatureUnit = value.toString();
-                });
+                set.updateTempUnit('C');
               },
             ),
             RadioListTile(
               title: Text("°F", style: TextStyle(color: Colors.white)),
-              value: "°F",
-              groupValue: selectedTemperatureUnit,
+              value: "F",
+              groupValue: set.tempUnit,
               onChanged: (value) {
-                setState(() {
-                  selectedTemperatureUnit = value.toString();
-                });
+                set.updateTempUnit('F');
               },
             ),
             Divider(color: Colors.grey),
             ListTile(
-              title: Text(Utils.getText('Wind Units'), style: TextStyle(color: Colors.white)),
-              subtitle: Text(Utils.getText('Select wind'), style: TextStyle(color: Colors.grey)),
+              title: Text("Wind Units", style: TextStyle(color: Colors.white)),
+              subtitle: Text("Select your preferred wind speed unit", style: TextStyle(color: Colors.grey)),
             ),
             RadioListTile(
               title: Text("mph", style: TextStyle(color: Colors.white)),
               value: "mph",
-              groupValue: selectedWindUnit,
+              groupValue: set.spdUnit,
               onChanged: (value) {
-                setState(() {
-                  selectedWindUnit = value.toString();
-                });
+                set.updateSpdUnit('mph');
+
               },
             ),
             RadioListTile(
               title: Text("km/h", style: TextStyle(color: Colors.white)),
               value: "km/h",
-              groupValue: selectedWindUnit,
+              groupValue: set.spdUnit,
               onChanged: (value) {
-                setState(() {
-                  selectedWindUnit = value.toString();
-                });
+                set.updateSpdUnit('km/h');
               },
             ),
             RadioListTile(
               title: Text("m/s", style: TextStyle(color: Colors.white)),
               value: "m/s",
-              groupValue: selectedWindUnit,
+              groupValue: set.spdUnit,
               onChanged: (value) {
-                setState(() {
-                  selectedWindUnit = value.toString();
-                });
+                set.updateSpdUnit('m/s');
               },
             ),
             Divider(color: Colors.grey),
             ListTile(
-              title: Text(Utils.getText('Distance'), style: TextStyle(color: Colors.white)),
-              subtitle: Text(Utils.getText('Select distance'), style: TextStyle(color: Colors.grey)),
+              title: Text("Distance", style: TextStyle(color: Colors.white)),
+              subtitle: Text("Select your preferred distance unit", style: TextStyle(color: Colors.grey)),
             ),
             RadioListTile(
               title: Text("Miles (mi)", style: TextStyle(color: Colors.white)),
-              value: "mi",
-              groupValue: selectedDistanceUnit,
+              value: "m",
+              groupValue: set.distanceUnit,
               onChanged: (value) {
-                setState(() {
-                  selectedDistanceUnit = value.toString();
-                });
+                set.updateDistanceUnit('m');
               },
             ),
             RadioListTile(
               title: Text("Kilometers (km)", style: TextStyle(color: Colors.white)),
               value: "km",
-              groupValue: selectedDistanceUnit,
+              groupValue: set.distanceUnit,
               onChanged: (value) {
-                setState(() {
-                  selectedDistanceUnit = value.toString();
-                });
+                set.updateDistanceUnit('km');
               },
             ),
             Divider(color: Colors.grey),
             ListTile(
-              title: Text(Utils.getText('Pressure Units'), style: TextStyle(color: Colors.white)),
-              subtitle: Text(Utils.getText('Select pressure'), style: TextStyle(color: Colors.grey)),
+              title: Text("Pressure Units", style: TextStyle(color: Colors.white)),
+              subtitle: Text("Select your preferred pressure unit", style: TextStyle(color: Colors.grey)),
               onTap: () => _selectPressureUnit(context), // Gọi hàm chọn đơn vị áp suất
             ),
-            Text("$currentSelection: $selectedPressureUnit", style: TextStyle(color: Colors.white)), // Hiển thị đơn vị đã chọn
+            Text("Current Selection: ${set.pressUnit}", style: TextStyle(color: Colors.white)), // Hiển thị đơn vị đã chọn
           ],
         ),
       ),

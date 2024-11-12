@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_mobile_app_flutter/be/data/weather_by_hour.dart';
 import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
+import 'package:weather_mobile_app_flutter/be/state_management/setting_manager.dart';
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
 import 'package:weather_mobile_app_flutter/configs/utils.dart';
 import 'package:weather_mobile_app_flutter/fe/components/button_see_more.dart';
@@ -126,6 +127,7 @@ class DrawTemp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<WeatherManager>(context);
+    var set = Provider.of<SettingManager>(context);
     WeatherByHour hourly = provider.weatherLocation!.hourList[index];
     return Container(
       color: MyColors.GREEN,
@@ -137,7 +139,7 @@ class DrawTemp extends StatelessWidget {
               left: 0,
               bottom: (hourly.temperature - min) / distance * 90,
               child: Column(children: [
-                Text(hourly.temperature.toString() + '${Constants.DEGREES}'),
+                Text(Utils.getTemp(hourly.temperature, set.tempUnit)),
                 Center(
                   child: Container(
                     height: 10,
