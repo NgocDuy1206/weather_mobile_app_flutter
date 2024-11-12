@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_mobile_app_flutter/configs/utils.dart';
 
 class CustomizeUnitsScreen extends StatefulWidget {
   @override
@@ -10,13 +11,14 @@ class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
   String selectedWindUnit = "km/h";
   String selectedDistanceUnit = "km";
   String selectedPressureUnit = "kPa"; // Đổi mặc định thành kPa
+  String currentSelection = Utils.getText('Current Selection');
 
   void _selectPressureUnit(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Select Pressure Unit"),
+          title: Text(Utils.getText('Select Pressure Unit')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -86,7 +88,7 @@ class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Customize Units', style: TextStyle(color: Colors.white)),
+        title: Text(Utils.getText('Customize Units'), style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: Colors.white),
       ),
@@ -97,7 +99,7 @@ class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              title: Text("Temperature", style: TextStyle(color: Colors.white)),
+              title: Text(Utils.getText('Temperature'), style: TextStyle(color: Colors.white)),
               subtitle: Text("°C or °F", style: TextStyle(color: Colors.grey)),
             ),
             RadioListTile(
@@ -122,8 +124,8 @@ class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
             ),
             Divider(color: Colors.grey),
             ListTile(
-              title: Text("Wind Units", style: TextStyle(color: Colors.white)),
-              subtitle: Text("Select your preferred wind speed unit", style: TextStyle(color: Colors.grey)),
+              title: Text(Utils.getText('Wind Units'), style: TextStyle(color: Colors.white)),
+              subtitle: Text(Utils.getText('Select wind'), style: TextStyle(color: Colors.grey)),
             ),
             RadioListTile(
               title: Text("mph", style: TextStyle(color: Colors.white)),
@@ -157,8 +159,8 @@ class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
             ),
             Divider(color: Colors.grey),
             ListTile(
-              title: Text("Distance", style: TextStyle(color: Colors.white)),
-              subtitle: Text("Select your preferred distance unit", style: TextStyle(color: Colors.grey)),
+              title: Text(Utils.getText('Distance'), style: TextStyle(color: Colors.white)),
+              subtitle: Text(Utils.getText('Select distance'), style: TextStyle(color: Colors.grey)),
             ),
             RadioListTile(
               title: Text("Miles (mi)", style: TextStyle(color: Colors.white)),
@@ -182,11 +184,11 @@ class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
             ),
             Divider(color: Colors.grey),
             ListTile(
-              title: Text("Pressure Units", style: TextStyle(color: Colors.white)),
-              subtitle: Text("Select your preferred pressure unit", style: TextStyle(color: Colors.grey)),
+              title: Text(Utils.getText('Pressure Units'), style: TextStyle(color: Colors.white)),
+              subtitle: Text(Utils.getText('Select pressure'), style: TextStyle(color: Colors.grey)),
               onTap: () => _selectPressureUnit(context), // Gọi hàm chọn đơn vị áp suất
             ),
-            Text("Current Selection: $selectedPressureUnit", style: TextStyle(color: Colors.white)), // Hiển thị đơn vị đã chọn
+            Text("$currentSelection: $selectedPressureUnit", style: TextStyle(color: Colors.white)), // Hiển thị đơn vị đã chọn
           ],
         ),
       ),

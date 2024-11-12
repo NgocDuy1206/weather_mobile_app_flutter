@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_mobile_app_flutter/configs/utils.dart';
 
 class WarningsAlertsScreen extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Warnings & Alerts', style: TextStyle(color: Colors.white)),
+        title: Text(Utils.getText('Alerts'), style: TextStyle(color: Colors.white)),
         iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: Colors.black,
       ),
@@ -32,11 +33,11 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
             // Sticky Notifications Toggle
             SwitchListTile(
               title: Text(
-                'Sticky Notifications',
+                Utils.getText('Sticky Notifications'),
                 style: TextStyle(color: Colors.white),
               ),
               subtitle: Text(
-                'Weather alerts from the National Weather Service',
+                Utils.getText('Weather alerts'),
                 style: TextStyle(color: Colors.white70),
               ),
               value: isStickyNotificationsEnabled,
@@ -60,7 +61,7 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
 
             // Types of Content Section Title
             Text(
-              'Types of Content',
+              Utils.getText('Types of Content'),
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
@@ -72,11 +73,11 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
             // Weather Highlights Toggle
             SwitchListTile(
               title: Text(
-                'Weather Highlights',
+                Utils.getText('Weather Highlights'),
                 style: TextStyle(color: Colors.white),
               ),
               subtitle: Text(
-                'Get forecasts and alerts in your area',
+                Utils.getText('Get forecasts'),
                 style: TextStyle(color: Colors.white70),
               ),
               value: isWeatherHighlightsEnabled,
@@ -95,11 +96,11 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
             // NWS Alerts Toggle
             SwitchListTile(
               title: Text(
-                'NWS Alerts',
+                Utils.getText('NWS Alerts'),
                 style: TextStyle(color: Colors.white),
               ),
               subtitle: Text(
-                'Get weather alerts from the National Weather Service',
+                Utils.getText('Get weather alerts'),
                 style: TextStyle(color: Colors.white70),
               ),
               value: isNWSAlertsEnabled,
@@ -118,11 +119,11 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
             // Weather News Toggle
             SwitchListTile(
               title: Text(
-                'Weather News',
+                Utils.getText('Weather News'),
                 style: TextStyle(color: Colors.white),
               ),
               subtitle: Text(
-                'Get weather news & videos',
+                Utils.getText('Get weather news & videos'),
                 style: TextStyle(color: Colors.white70),
               ),
               value: isWeatherNewsEnabled,
@@ -141,7 +142,7 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
             // Location Setting
             ListTile(
               title: Text(
-                'Location',
+                Utils.getText('Location'),
                 style: TextStyle(color: Colors.white),
               ),
               subtitle: Text(
@@ -157,14 +158,14 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
                     return AlertDialog(
                       backgroundColor: Colors.white,
                       title: Text(
-                        'Current Location',
+                        Utils.getText('Current Location'),
                         style: TextStyle(color: Colors.black),
                       ),
                       content: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Use Current Location',
+                            Utils.getText('Use Current Location'),
                             style: TextStyle(color: Colors.black),
                           ),
                           Checkbox(

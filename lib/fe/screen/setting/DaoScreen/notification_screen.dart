@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_mobile_app_flutter/configs/utils.dart';
 
 
 class NotificationScreen extends StatefulWidget {
@@ -9,6 +10,7 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   bool isNotificationEnabled = true;
   bool showInfoMessage = false; // Trạng thái hiển thị thông báo
+  String Select_time = Utils.getText('Select time');
   TimeOfDay selectedTime = TimeOfDay(hour: 5, minute: 30);
 
   Future<void> _selectTime(BuildContext context) async {
@@ -27,7 +29,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Daily summary notification', style: TextStyle(color: Colors.white)),
+        title: Text(Utils.getText('Daily Summary Notification'), style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
@@ -62,7 +64,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   children: [
                     Expanded(
                       child: Text(
-                        'Get a daily brief of your day at a time of your choosing',
+                        Utils.getText('Get a daily'),
                         style: TextStyle(color: Colors.white, fontSize: 14.0),
                       ),
                     ),
@@ -82,7 +84,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Use Current Location (Nam Từ Liêm)',
+                  Utils.getText('Use Current Location'),
                   style: TextStyle(color: Colors.white, fontSize: 16.0),
                 ),
                 Switch(

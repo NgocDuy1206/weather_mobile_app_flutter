@@ -28,7 +28,7 @@ class _LanguageAndUnitsScreenState extends State<LanguageAndUnitsScreen> {
     var langProvider =  Provider.of<SettingManager>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Language and Units', style: TextStyle(color: Colors.white)),
+        title: Text(Utils.getText('language_unit'), style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: Colors.white),
       ),
@@ -49,7 +49,7 @@ class _LanguageAndUnitsScreenState extends State<LanguageAndUnitsScreen> {
             ),
             Divider(color: Colors.grey),
             SizedBox(height: 10),
-            Text('Units', style: TextStyle(color: Colors.grey)),
+            Text(Utils.getText('Units'), style: TextStyle(color: Colors.grey)),
             RadioListTile(
               title: Text('Imperial (°F)', style: TextStyle(color: Colors.white)),
               subtitle: Text('Fahrenheit, Miles, In (")', style: TextStyle(color: Colors.grey)),
@@ -75,8 +75,8 @@ class _LanguageAndUnitsScreenState extends State<LanguageAndUnitsScreen> {
             ),
             Divider(color: Colors.grey),
             ListTile(
-              title: Text('Customize', style: TextStyle(color: Colors.white)),
-              subtitle: Text('Off', style: TextStyle(color: Colors.grey)),
+              title: Text(Utils.getText('Customize'), style: TextStyle(color: Colors.white)),
+              subtitle: Text(Utils.getText('Off'), style: TextStyle(color: Colors.grey)),
               onTap: () {
                 Navigator.push(
                   context,
