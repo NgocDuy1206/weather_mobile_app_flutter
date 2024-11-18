@@ -1,15 +1,21 @@
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesHelper {
-  // Lưu danh sách vị trí tìm kiếm vào SharedPreferences
-  static Future<void> saveSearchHistory(List<String> history) async {
+  // Save search history as a list of maps (converted to JSON)
+  static Future<void> saveSearchHistory(List<Map<String, String>> history) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setStringList('search_history', history);
+    List<String> jsonHistory = history.map((item) => jsonEncode(item)).toList();
+    await prefs.setStringList('search_history', jsonHistory);
   }
 
-  // Đọc danh sách vị trí tìm kiếm từ SharedPreferences
-  static Future<List<String>> getSearchHistory() async {
+  // Get search history as a list of maps
+  static Future<List<Map<String, String>>> getSearchHistory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getStringList('search_history') ?? [];
+    List<String> jsonHistory = prefs.getStringList('search_history') ?? [];
+    List<Map<String, String>> history = jsonHistory
+        .map((item) => Map<String, String>.from(jsonDecode(item)))
+        .toList();
+    return history;
   }
 }

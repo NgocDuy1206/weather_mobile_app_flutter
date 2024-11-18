@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:convert';  // Đảm bảo có thư viện này để mã hóa/giải mã JSON
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Đảm bảo bạn đã cài package này
 import '../../be/api/api.dart';
+import 'history_search.dart';
 
 class SearchTextField extends StatefulWidget {
-  final ValueNotifier<bool> showResultsNotifier; // Add this notifier
+  final ValueNotifier<bool> showResultsNotifier;
 
   SearchTextField({required this.showResultsNotifier});
 
@@ -14,14 +17,43 @@ class SearchTextField extends StatefulWidget {
 
 class _SearchTextFieldState extends State<SearchTextField> {
   final TextEditingController _controller = TextEditingController();
-  final GetApi api = GetApi(); // Instantiate GetApi
-  List<Map<String, String>> _suggestions = [];
-  Timer? _debounce; // For debouncing
+  final GetApi api = GetApi();
+  List<Map<String, String>> _suggestions = []; // Ensure this is initialized as an empty list
+  List<Map<String, String>> _searchHistory = []; // Ensure this is initialized as an empty list
+  Timer? _debounce;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSearchHistory(); // Tải lịch sử tìm kiếm khi mở ứng dụng
+  }
+
+  // Hàm tải lịch sử tìm kiếm từ SharedPreferences
+  Future<void> _loadSearchHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String>? historyList = prefs.getStringList('searchHistory');
+    if (historyList != null) {
+      setState(() {
+        _searchHistory = historyList
+            .map((e) => Map<String, String>.from(
+            jsonDecode(e) as Map<String, dynamic>))
+            .toList();
+      });
+    }
+  }
+
+  // Hàm lưu lịch sử tìm kiếm vào SharedPreferences
+  Future<void> _saveSearchHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> historyList = _searchHistory
+        .map((e) => jsonEncode(e)) // Chuyển đối tượng thành chuỗi JSON
+        .toList();
+    await prefs.setStringList('searchHistory', historyList);
+  }
 
   // Helper function to remove diacritical marks from Vietnamese characters
   String removeDiacritics(String text) {
     const vietnameseDiacriticsMap = {
-      // Vietnamese diacritic mappings (as in your code)
       'á': 'a', 'à': 'a', 'ả': 'a', 'ã': 'a', 'ạ': 'a',
       'ă': 'a', 'ắ': 'a', 'ằ': 'a', 'ẳ': 'a', 'ẵ': 'a', 'ặ': 'a',
       'â': 'a', 'ấ': 'a', 'ầ': 'a', 'ẩ': 'a', 'ẫ': 'a', 'ậ': 'a',
@@ -68,10 +100,50 @@ class _SearchTextFieldState extends State<SearchTextField> {
     }
   }
 
+  // Thêm vị trí đã chọn vào lịch sử
+  void _addToHistory(Map<String, String> suggestion) async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> historyList = prefs.getStringList('searchHistory') ?? [];
+
+    // Convert the string list from SharedPreferences into a list of Maps
+    List<Map<String, String>> currentHistory = historyList
+        .map((e) {
+      // Decode each item in historyList and convert it into Map<String, String>
+      var decoded = jsonDecode(e);
+      if (decoded is Map<String, dynamic>) {
+        return Map<String, String>.from(decoded);
+      }
+      return <String, String>{}; // If it's not a valid map, return an empty map
+    })
+        .toList();
+
+    // Check and add the new suggestion to history if it doesn't already exist
+    if (!currentHistory.any((item) => item['name'] == suggestion['name'])) {
+      currentHistory.insert(0, suggestion); // Add the suggestion to the front of the list
+      // Limit the history list to the most recent 10 items
+      if (currentHistory.length > 10) {
+        currentHistory = currentHistory.sublist(0, 10); // Limit history to 10 items max
+      }
+
+      // Save the updated history list back to SharedPreferences
+      final encodedHistory = currentHistory.map((e) => jsonEncode(e)).toList();
+      await prefs.setStringList('searchHistory', encodedHistory);
+    }
+
+    // Update the UI with the new history list
+    setState(() {
+      _searchHistory = currentHistory;
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // TextField for search input
         TextField(
           controller: _controller,
           decoration: InputDecoration(
@@ -90,103 +162,73 @@ class _SearchTextFieldState extends State<SearchTextField> {
               _debounce?.cancel();
             }
 
-            if (value.isNotEmpty) { // Only call API if input has 1 or more characters
+            if (value.isNotEmpty) {
               _debounce = Timer(const Duration(milliseconds: 1000), () {
                 _fetchSuggestions(removeDiacritics(value));
               });
             } else {
               setState(() {
                 _suggestions = [];
+                widget.showResultsNotifier.value = false;
               });
-              widget.showResultsNotifier.value = false;
             }
           },
         ),
-        SizedBox(height: 10),
-        ..._suggestions.map((suggestion) => Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 13.0), // Space from left edge
-              child: Row(
-                children: [
-                  // Circle icon container
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[800], // Dark gray background
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.location_on,
-                      color: Colors.white70, // Light gray icon color
-                    ),
-                  ),
-                  SizedBox(width: 15), // Reduced space between icon and text
-                  // ListTile for suggestion text
-                  Expanded(
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero, // Remove inner padding of ListTile
-                      title: Text(
-                        suggestion['name'] ?? '',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      subtitle: Text(
-                        '${suggestion['region']?.isNotEmpty == true ? '${suggestion['region']}, ' : ''}${suggestion['country'] ?? ''}',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      onTap: () {
-                        _controller.text = suggestion['name'] ?? '';
-                        setState(() {
-                          _suggestions = [];
-                        });
-                        widget.showResultsNotifier.value = false;
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: DashedDivider(),
-            ),
-          ],
-        )).toList(),
+
+        // Gợi ý tìm kiếm
+        if (_suggestions.isNotEmpty) ...[
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: _suggestions.length,
+            itemBuilder: (context, index) {
+              final suggestion = _suggestions[index];
+              return ListTile(
+                title: Text(
+                  suggestion['name']!,
+                  style: TextStyle(color: Colors.white),
+                ),
+                subtitle: Text(
+                  '${suggestion['region']} - ${suggestion['country']}',
+                  style: TextStyle(color: Colors.white70),
+                ),
+                onTap: () {
+                  _addToHistory(suggestion); // Add to history
+                  widget.showResultsNotifier.value = false;
+                },
+              );
+            },
+          ),
+        ],
+
+        // Lịch sử tìm kiếm
+        // if (_searchHistory.isNotEmpty) ...[
+        //   Padding(
+        //     padding: const EdgeInsets.only(top: 8.0),
+        //     child: Text(
+        //       'Lịch sử tìm kiếm',
+        //       style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        //     ),
+        //   ),
+        //   Column(
+        //     children: _searchHistory.map((historyItem) {
+        //       return ListTile(
+        //         title: Text(
+        //           historyItem['name']!,
+        //           style: TextStyle(color: Colors.white),
+        //         ),
+        //         subtitle: Text(
+        //           '${historyItem['region']} - ${historyItem['country']}',
+        //           style: TextStyle(color: Colors.white70),
+        //         ),
+        //         onTap: () {
+        //           _controller.text = historyItem['name']!;
+        //           widget.showResultsNotifier.value = false; // Hide search results
+        //         },
+        //       );
+        //     }).toList(),
+        //   ),
+        // ],
       ],
-    );
-  }
-
-
-
-  @override
-  void dispose() {
-    _debounce?.cancel(); // Cancel timer when widget is disposed
-    super.dispose();
-  }
-}
-
-// Custom dashed line widget
-class DashedDivider extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        const dashWidth = 4.0;
-        const dashSpace = 2.0;
-        final dashCount = (constraints.constrainWidth() / (dashWidth + dashSpace)).floor();
-
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List.generate(dashCount, (_) {
-            return Container(
-              width: dashWidth,
-              height: 1,
-              color: Colors.grey,
-            );
-          }),
-        );
-      },
     );
   }
 }
