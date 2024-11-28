@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:weather_mobile_app_flutter/be/data/air_quality.dart';
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
 
 import '../be/state_management/setting_manager.dart';
@@ -159,5 +162,48 @@ class Utils {
       return (number / 10 ).toStringAsFixed(1) + ' kPa';
     } return (number / 101.325 / 10).toStringAsFixed(1) + ' atm';
   }
+
+  static dynamic getValueAQI(String name, AirQuality aqi) {
+    name = name.toLowerCase();
+    switch (name) {
+      case 'pm10': return aqi.pm10;
+      case 'pm2.5': return aqi.pm25;
+      case 'co': return aqi.pm10 * 24.45 / 28.01;
+      case 'so2': return aqi.pm25 * 24.45 / 64.07;
+      case 'o3': return aqi.pm10 * 24.45 / 48;
+      case 'no2': return aqi.pm25 * 24.45 / 46.01;
+      default : return aqi.airQuality;
+    }
+  }
+
+  static String getUnitAQI(String name) {
+    name = name.toLowerCase();
+    switch (name) {
+      case 'pm10': return 'µg/m³';
+      case 'pm2.5': return 'µg/m³';
+      case 'co': return 'ppb';
+      case 'so2': return 'ppb';
+      case 'o3': return 'ppb';
+      case 'no2': return 'ppb';
+      default : return 'ppb';
+    }
+  }
+
+  static Color getColorAQI(dynamic x) {
+    if (x >= 0 && x < 50) {
+      return MyColors.Good;
+    } else if (x >= 50 && x < 100) {
+      return MyColors.Moderate;
+    } else if (x >= 100 && x < 150) {
+      return MyColors.Unhealthy_fsg;
+    } else if (x >= 150 && x < 200) {
+      return MyColors.Unhealthy;
+    } else if (x >= 200 && x < 300) {
+      return MyColors.Very_unhealthy;
+    } else if (x > 300) {
+      return MyColors.Hazardous;
+    } else return MyColors.Good;
+  }
+
 }
 

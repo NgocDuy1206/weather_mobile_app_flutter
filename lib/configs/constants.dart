@@ -21,6 +21,15 @@ class MyColors {
   static const Color RED1 = Color(0xFFE06A6A);
   static const Color WHITE = Color(0xFFFFFFFF);
   static const Color BLACK = Color(0xFF1A1717);
+
+
+  // màu sắc cho tình trạng không khí
+  static const Color Good = Color(0xFF1BDC09);
+  static const Color Moderate = Color(0xFF7AC96E);
+  static const Color Unhealthy_fsg = Color(0xFFE3CB74);
+  static const Color Unhealthy = Color(0xFFECCD07);
+  static const Color Very_unhealthy = Color(0xFFE06A6A);
+  static const Color Hazardous = Color(0xFFE34242);
 }
 class InforDevice {
   static double WIDTH = 0.0;

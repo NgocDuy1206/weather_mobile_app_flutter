@@ -77,7 +77,13 @@ class Language  {
     'Overcast clouds' : 'Overcast clouds',
 
     'Unknown Precipitation' : 'Unknown Precipitation',
-
+    // Text trong polutant
+    'information_pollutants': 'pm25: Particulate Matter < 2.5 micrometers\n'
+                              'pm10: Particulate Matter < 10 micrometers\n'
+                              'o3: Ozone\n'
+                              'no2: Nitrogen Dioxide\n'
+                              'co: Carbon Monoxide ppm\n'
+                              'so2: sulfur Dioxide',
     //text button
     'bt_see_more': 'See More Details',
     // Text của đạo
@@ -162,6 +168,13 @@ class Language  {
     'Overcast clouds' : 'Mây u ám',
 
     'Unknown Precipitation' : 'Hiện tượng mưa không xác định',
+    // text trong pollutant
+    'information_pollutants': 'pm25: Particulate Matter < 2.5 micrometers\n'
+                              'pm10: Particulate Matter < 10 micrometers\n'
+                              'o3: Ozone\n'
+                              'no2: Nitrogen Dioxide\n'
+                              'co: Carbon Monoxide ppm\n'
+                              'so2: sulfur Dioxide',
     //text button
     'bt_see_more': 'XEM THÊM',
     // Text của đạo

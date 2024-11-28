@@ -23,8 +23,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    InforDevice.WIDTH = MediaQuery.of(context).size.width;
-    InforDevice.HEIGHT = MediaQuery.of(context).size.height;
     var tab = Provider.of<BottomNagivation>(context);
     return Scaffold(
       body: tabBottomNavigation[tab.selectedTab],
