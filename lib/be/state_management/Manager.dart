@@ -11,6 +11,7 @@ class WeatherManager with ChangeNotifier {
   double lat = 21.0285;
   double lon = 105.8542;
 
+
   WeatherManager() {
     loadingData();
   }
@@ -22,6 +23,8 @@ class WeatherManager with ChangeNotifier {
     loading = false;
     notifyListeners();
   }
+
+
 }
 
 class BottomNagivation with ChangeNotifier {

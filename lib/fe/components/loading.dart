@@ -4,54 +4,71 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
 
+import '../../be/state_management/Manager.dart';
 import '../../be/state_management/animation.dart';
+import '../screen/display/main_screen.dart';
 
-class Loading extends StatelessWidget {
-  double size;
+class Loading extends StatefulWidget {
 
-  Loading({this.size = 50});
+  @override
+  State<Loading> createState() => _LoadingState();
+}
 
+class _LoadingState extends State<Loading> {
+  bool clickStart = false;
   @override
   Widget build(BuildContext context) {
     InforDevice.WIDTH = MediaQuery.of(context).size.width;
     InforDevice.HEIGHT = MediaQuery.of(context).size.height;
-    dynamic x = InforDevice.WIDTH;
-    dynamic y = InforDevice.HEIGHT;
+
+
     return Scaffold(
       body: Stack(children: [
         Image.asset(
           'assets/image/start_screen.jpg',
-          fit: BoxFit.cover,  
+          fit: BoxFit.cover,
           width: double.infinity,
           height: double.infinity,
         ),
         Positioned(
-            width: 480,
-            height: 600,
-            child: SizedBox(
-                width: 600,
-
-                child: AnimationStart()
-            ),
+            top: 300,
+            left: 100,
+            width: 300,
+            height: 70,
+            child: AnimationStart(),
         ),
         Positioned(
-          width: InforDevice.WIDTH,
-          height: InforDevice.HEIGHT * 2 - 200 ,
-          child: Container(
-            height: size,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(height: size, child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-                )),
-                SizedBox(width: 15,),
-                Text(
-                  'Loading data',
-                  style: TextStyle(fontSize: size / 2),
+          left: InforDevice.WIDTH / 2 - 50,
+          top: InforDevice.HEIGHT - 150 ,
+          child: ElevatedButton(
+              onPressed: () async {
+                  setState(() {
+                    clickStart = true;
+                  });
+                  if (Provider.of<WeatherManager>(context, listen: false).loading == false)
+                  {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => MainScreen())
+                    );
+                  }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: MyColors.BLUE,
+              ),
+              child: clickStart == false? Text(
+                'START',
+                style: GoogleFonts.inter(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: MyColors.WHITE,
+                )
+              ) : Padding(
+                padding: EdgeInsets.all(5),
+                child: CircularProgressIndicator(
+                  color: MyColors.RED,
+                
                 ),
-              ],
-            ),
+              ),
           ),
         ),
       ]),
@@ -65,14 +82,17 @@ class AnimationStart extends StatefulWidget{
   State<AnimationStart> createState() => _AnimationStartState();
 }
 
-class _AnimationStartState extends State<AnimationStart> with SingleTickerProviderStateMixin{
+class _AnimationStartState extends State<AnimationStart> with TickerProviderStateMixin{
+
+  late AnimatedProvider animation;
   @override
   void initState() {
     super.initState();
     // Khởi tạo animation controller thông qua provider
-    Provider.of<AnimatedProvider>(context, listen: false).initAnimation(this,'1 WEATHER  APP');
-  }
+    animation = Provider.of<AnimatedProvider>(context, listen: false);
+    animation.initAnimation(this,'1 WEATHER  APP');
 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +112,8 @@ class _AnimationStartState extends State<AnimationStart> with SingleTickerProvid
 
   @override
   void dispose() {
+    animation.dispose();
     super.dispose();
     // Đảm bảo giải phóng tài nguyên
-    Provider.of<AnimatedProvider>(context, listen: false).dispose();
   }
 }

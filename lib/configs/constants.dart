@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 
 class Constants {
-  static const String apiKeyWeatherBit = '959741e13fc243c1830c92dafe286db9';
+  static const String apiKeyWeatherBit = '935068064a9e4c998a85470ac7583848';
   static const String apiKeyOpenWeatherMap = '9c77ab59ab5de55a944a4a92bb9f35cc';
   static const String NAME_APP = "1WEATHER";
   static const String DEGREES = '\u00B0';

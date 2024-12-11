@@ -32,10 +32,10 @@ class WeatherApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<WeatherManager>(context);
+
     return MaterialApp(
       home: Scaffold(
-        body: provider.loading ? Loading(): MainScreen(),
+        body: Loading(),
       ),
       debugShowCheckedModeBanner: false,
     );
