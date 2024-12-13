@@ -30,6 +30,16 @@ class MyColors {
   static const Color Unhealthy = Color(0xFFECCD07);
   static const Color Very_unhealthy = Color(0xFFE06A6A);
   static const Color Hazardous = Color(0xFFE34242);
+
+  // màu sắc của cột thời tiết
+  static const Color beginColorColumn = Color(0xFFE8C723);
+  static const Color endColorColumn = Color(0xFFFFA500);
+  static const Color vien = Color(0xFF2F2C2C);
+  static const Color background_table = Color(0xA15272D7);
+  static const Color background_theme = Color(0xC2FFFFFF);
+  static const Color background_forecast = Color(0xE56D0ABE);
+
+
 }
 class InforDevice {
   static double WIDTH = 0.0;

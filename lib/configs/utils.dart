@@ -205,5 +205,13 @@ class Utils {
     } else return MyColors.Good;
   }
 
+  static String getBackGround() {
+    DateTime now = DateTime.now();
+    dynamic hour = now.hour;
+    if (hour < 18) {
+      return 'assets/image/background_light2.jpg';
+    } return 'assets/image/background_night2.jpg';
+  }
+
 }
 

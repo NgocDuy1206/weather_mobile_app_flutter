@@ -21,10 +21,12 @@ class WeatherCard extends StatelessWidget {
 
     return Card(
       elevation: 5,
+      color: MyColors.background_table,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10), // Góc bo tròn
       ),
       child: Container(
+
         height: 70,
         padding: EdgeInsets.all(3),
         child: Row(

@@ -22,7 +22,7 @@ class AirQualityTable extends StatelessWidget {
       margin: EdgeInsets.only(top: 10, bottom: 25),
       padding: EdgeInsets.all(10),
       decoration: const BoxDecoration(
-        color: MyColors.GRAY,
+        color: MyColors.background_table,
         borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
       child: Column(

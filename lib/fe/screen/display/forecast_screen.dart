@@ -14,39 +14,37 @@ class Forecast extends StatefulWidget {
 }
 
 class _Forecast extends State<Forecast> {
-
   @override
   Widget build(BuildContext context) {
-
     return DefaultTabController(
       length: 2,
-      child: CustomScrollView(
-        slivers: [
-          const SliverAppBar(
-            toolbarHeight: 0,
-            pinned: true,
-            floating: true,
-            expandedHeight: 110,
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(100),
-              child: CustomAppBar(),
-            ),
-          ),
-          SliverToBoxAdapter(
-
-            child: Container(
-              height: InforDevice.HEIGHT - 140,
-              child: IntrinsicHeight(
-                child: TabBarView(
-                    children: [
-                      HourlyTab(),
-                      DailyTab(),
-                    ]
-                ),
+      child: Container(
+        color: MyColors.background_forecast,
+        child: CustomScrollView(
+          slivers: [
+            const SliverAppBar(
+              toolbarHeight: 0,
+              pinned: true,
+              floating: true,
+              expandedHeight: 110,
+              bottom: PreferredSize(
+                preferredSize: Size.fromHeight(100),
+                child: CustomAppBar(),
               ),
             ),
-          )
-        ],
+            SliverToBoxAdapter(
+              child: Container(
+                height: InforDevice.HEIGHT - 140,
+                child: IntrinsicHeight(
+                  child: TabBarView(children: [
+                    HourlyTab(),
+                    DailyTab(),
+                  ]),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -76,17 +74,13 @@ class CustomAppBar extends StatelessWidget {
 class ForecastTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return Container(
       width: InforDevice.WIDTH - 100,
       height: 30,
       padding: EdgeInsets.all(3),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          width: 1.0
-        )
-      ),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(width: 1.0)),
       child: TabBar(
           indicator: BoxDecoration(
             color: MyColors.BLUE,
