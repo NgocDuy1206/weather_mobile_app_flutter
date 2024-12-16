@@ -1,6 +1,7 @@
 
 class WeatherByDay {
   final DateTime time;
+  final dynamic temperature;
   final dynamic temperatureMax;
   final dynamic temperatureMin;
   final dynamic weatherCode;
@@ -15,6 +16,7 @@ class WeatherByDay {
 
   WeatherByDay({
     required this.time,
+    required this.temperature,
     required this.temperatureMax,
     required this.temperatureMin,
     required this.weatherCode,
@@ -31,6 +33,7 @@ class WeatherByDay {
   factory WeatherByDay.fromJson(Map<String, dynamic> json) {
     return WeatherByDay(
       time: DateTime.parse(json['datetime'].replaceFirst(':', 'T')),
+      temperature: json['temp'],
       temperatureMax: json['max_temp'],
       temperatureMin: json['min_temp'],
       weatherCode: json['weather']['description'],

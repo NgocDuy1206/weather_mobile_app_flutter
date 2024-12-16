@@ -26,7 +26,7 @@ class _TodayState extends State<Today> {
   Widget build(BuildContext context) {
     return Stack(children: [
       Image.asset(
-        'assets/image/background_light2.jpg',
+        Utils.getBackGround(),
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,

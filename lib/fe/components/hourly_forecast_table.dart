@@ -165,7 +165,7 @@ class DrawTemp extends StatelessWidget {
         children: [
           Positioned(
               left: 0,
-              bottom: (hourly.temperature - min) / distance * 90,
+              bottom: (hourly.temperature - min) / distance * 90 + 20,
               child: Column(children: [
                 Text(
                     Utils.getTemp(hourly.temperature, set.tempUnit),

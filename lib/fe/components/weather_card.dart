@@ -5,6 +5,7 @@ import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
 import 'package:weather_mobile_app_flutter/be/state_management/setting_manager.dart';
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
 import 'package:weather_mobile_app_flutter/configs/utils.dart';
+import 'package:weather_mobile_app_flutter/fe/components/weather_detail.dart';
 
 class WeatherCard extends StatelessWidget {
   int index;
@@ -19,26 +20,36 @@ class WeatherCard extends StatelessWidget {
         ? provider.weatherLocation!.hourList[index]
         : provider.weatherLocation!.dayList[index];
 
-    return Card(
-      elevation: 5,
-      color: MyColors.background_table,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10), // Góc bo tròn
-      ),
-      child: Container(
+    return InkWell(
+      onTap: () {
+          showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return WeatherDetail(kind: kind,weather: card);
+              }
+          );
+      },
+      child: Card(
+        elevation: 5,
+        color: MyColors.background_table,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10), // Góc bo tròn
+        ),
+        child: Container(
 
-        height: 70,
-        padding: EdgeInsets.all(3),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // date
-            Expanded(flex: 2,child: Column1(kind: kind, card: card,)),
-            Expanded(flex: 1,child: Column2(card: card,)),
-            Expanded(flex: 3,child: Column3(kind: kind,card: card,)),
-            Expanded(flex: 3,child: Column4(card: card,)),
-          ],
+          height: 70,
+          padding: EdgeInsets.all(3),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // date
+              Expanded(flex: 2,child: Column1(kind: kind, card: card,)),
+              Expanded(flex: 1,child: Column2(card: card,)),
+              Expanded(flex: 3,child: Column3(kind: kind,card: card,)),
+              Expanded(flex: 3,child: Column4(card: card,)),
+            ],
+          ),
         ),
       ),
     );
