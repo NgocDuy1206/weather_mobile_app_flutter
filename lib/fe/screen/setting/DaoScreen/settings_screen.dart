@@ -19,6 +19,7 @@ class _SettingScreenState extends State<SettingsScreen> {
   bool useCurrentLocation = true;
   int refreshInterval = 15;
   String selectedTheme = "Dark"; // Biến lưu trữ chủ đề đã chọn
+  String minutes = Utils.getText('minutes');
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class _SettingScreenState extends State<SettingsScreen> {
     var provider = Provider.of<SettingManager>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings', style: TextStyle(color: Colors.white)),
+        title: Text(Utils.getText('More Settings'), style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: Colors.white),
       ),
@@ -40,7 +41,7 @@ class _SettingScreenState extends State<SettingsScreen> {
           children: [
             ListTile(
               leading: Icon(Icons.notifications, color: textColor),
-              title: Text('Warnings & Alerts', style: TextStyle(color: textColor)),
+              title: Text(Utils.getText('Alerts'), style: TextStyle(color: textColor)),
               trailing: Icon(Icons.arrow_forward_ios, color: textColor),
               onTap: () {
                 // Navigate to Warnings & Alerts screen
@@ -66,7 +67,7 @@ class _SettingScreenState extends State<SettingsScreen> {
             Divider(color: subtitleColor),
             ListTile(
               leading: Icon(Icons.color_lens, color: textColor),
-              title: Text('App Theme', style: TextStyle(color: textColor)),
+              title: Text(Utils.getText('App Theme'), style: TextStyle(color: textColor)),
               trailing: Icon(Icons.arrow_forward_ios, color: textColor),
               onTap: () {
                 // Gọi hàm để hiển thị dialog
@@ -75,11 +76,11 @@ class _SettingScreenState extends State<SettingsScreen> {
             ),
             Divider(color: subtitleColor),
             SizedBox(height: 20),
-            Text('More Settings', style: TextStyle(color: subtitleColor)),
+            Text(Utils.getText('Additional Settings'), style: TextStyle(color: subtitleColor)),
             SwitchListTile(
-              title: Text('Auto-Refresh', style: TextStyle(color: textColor)),
+              title: Text(Utils.getText('Auto-Refresh'), style: TextStyle(color: textColor)),
               subtitle: Text(
-                'Select your interval to automatically refresh notifications',
+                Utils.getText('Select your'),
                 style: TextStyle(color: subtitleColor),
               ),
               value: autoRefresh,
@@ -99,7 +100,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                     return DropdownMenuItem<int>(
                       value: value,
                       child: Text(
-                        '$value minutes',
+                        '$value $minutes',
                         style: TextStyle(color: textColor),
                       ),
                     );
@@ -112,9 +113,9 @@ class _SettingScreenState extends State<SettingsScreen> {
                 ),
               ),
             SwitchListTile(
-              title: Text('Use Current Location', style: TextStyle(color: textColor)),
+              title: Text(Utils.getText('Use Current Location'), style: TextStyle(color: textColor)),
               subtitle: Text(
-                'Get hyperlocal weather updates for your pinpoint location',
+                Utils.getText('Get hyperlocal'),
                 style: TextStyle(color: subtitleColor),
               ),
               value: useCurrentLocation,
@@ -136,12 +137,12 @@ class _SettingScreenState extends State<SettingsScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Select Theme"),
+          title: Text(Utils.getText('Select Theme')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               RadioListTile(
-                title: Text("Light"),
+                title: Text(Utils.getText('Light')),
                 value: "Light",
                 groupValue: selectedTheme,
                 onChanged: (value) {
@@ -152,7 +153,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                 },
               ),
               RadioListTile(
-                title: Text("Dark"),
+                title: Text(Utils.getText('Dark')),
                 value: "Dark",
                 groupValue: selectedTheme,
                 onChanged: (value) {
@@ -169,7 +170,7 @@ class _SettingScreenState extends State<SettingsScreen> {
               onPressed: () {
                 Navigator.of(context).pop(); // Đóng dialog nếu nhấn nút Cancel
               },
-              child: Text("Cancel"),
+              child: Text(Utils.getText('Cancel')),
             ),
           ],
         );
