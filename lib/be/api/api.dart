@@ -65,7 +65,7 @@ class GetApi extends Api {
   @override
   Future<List<Map<String, String>>> searchLocation(String query) async {
     // API endpoint to get search suggestions based on query
-    final url = 'http://api.weatherapi.com/v1/search.json?key=f456b77148c94038b6f173516241111&q=$query';
+    final url = 'http://api.weatherapi.com/v1/search.json?key=af22b90d53f643f7a92162857241712&q=$query';
 
     final response = await http.get(Uri.parse(url));
 
