@@ -3,6 +3,7 @@ import 'dart:convert';  // Đảm bảo có thư viện này để mã hóa/gi�
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Đảm bảo bạn đã cài package này
+import 'package:weather_mobile_app_flutter/fe/components_search/dashed_line_separator.dart';
 import '../../be/api/api.dart';
 import 'history_search.dart';
 
@@ -27,6 +28,63 @@ class _SearchTextFieldState extends State<SearchTextField> {
     super.initState();
     _loadSearchHistory(); // Tải lịch sử tìm kiếm khi mở ứng dụng
   }
+
+  // Ánh xạ các tỉnh thành
+  Map<String, String> provinceMap = {
+    'ha noi': 'Hà Nội',
+    'ho chi minh': 'Hồ Chí Minh',
+    'da nang': 'Đà Nẵng',
+    'hai phong': 'Hải Phòng',
+    'can tho': 'Cần Thơ',
+    'ha giang': 'Hà Giang',
+    'cao bang': 'Cao Bằng',
+    'bac giang': 'Bắc Giang',
+    'bac kan': 'Bắc Kạn',
+    'bao cai': 'Bảo Cái',
+    'bac ninh': 'Bắc Ninh',
+    'ben tre': 'Bến Tre',
+    'binh duong': 'Bình Dương',
+    'binh phuoc': 'Bình Phước',
+    'binh thuan': 'Bình Thuận',
+    'binh dinh': 'Bình Định',
+    'dong nai': 'Đồng Nai',
+    'dong thap': 'Đồng Tháp',
+    'gia lai': 'Gia Lai',
+    'hoa binh': 'Hòa Bình',
+    'lang son': 'Lạng Sơn',
+    'lam dong': 'Lâm Đồng',
+    'long an': 'Long An',
+    'nghe an': 'Nghệ An',
+    'nam dinh': 'Nam Định',
+    'ninh binh': 'Ninh Bình',
+    'phu tho': 'Phú Thọ',
+    'phu yen': 'Phú Yên',
+    'quang binh': 'Quảng Bình',
+    'quang nam': 'Quảng Nam',
+    'quang ngai': 'Quảng Ngãi',
+    'quang ninh': 'Quảng Ninh',
+    'soc son': 'Sóc Sơn',
+    'thanh hoa': 'Thanh Hóa',
+    'thai binh': 'Thái Bình',
+    'tien giang': 'Tiền Giang',
+    'tra vinh': 'Trà Vinh',
+    'tuyen quang': 'Tuyên Quang',
+    'thua thien hue': 'Thừa Thiên Huế',
+    'vinh phuc': 'Vĩnh Phúc',
+    'yen bai': 'Yên Bái',
+    'vung tau': 'Vũng Tàu',
+    'thai nguyen': 'Thái Nguyên',
+    'an giang': 'An Giang',
+    'son la': 'Sơn La',
+    'kien giang': 'Kiên Giang',
+    'ben tre': 'Bến Tre',
+  };
+
+  String getProvinceName(String province) {
+    // Chuyển đổi tên tỉnh không dấu thành tên có dấu nếu có ánh xạ
+    return provinceMap[province.toLowerCase()] ?? province; // Trả lại tên tỉnh gốc nếu không tìm thấy ánh xạ
+  }
+
 
   // Hàm tải lịch sử tìm kiếm từ SharedPreferences
   Future<void> _loadSearchHistory() async {
@@ -182,23 +240,46 @@ class _SearchTextFieldState extends State<SearchTextField> {
             itemCount: _suggestions.length,
             itemBuilder: (context, index) {
               final suggestion = _suggestions[index];
-              return ListTile(
-                title: Text(
-                  suggestion['name']!,
-                  style: TextStyle(color: Colors.white),
-                ),
-                subtitle: Text(
-                  '${suggestion['region']} - ${suggestion['country']}',
-                  style: TextStyle(color: Colors.white70),
-                ),
-                onTap: () {
-                  _addToHistory(suggestion); // Add to history
-                  widget.showResultsNotifier.value = false;
-                },
+              // Áp dụng ánh xạ cho tên tỉnh trong trường 'name'
+              final nameWithAccent = getProvinceName(suggestion['name']!);
+
+              return Column(
+                children: [
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.grey, // Màu nền của vòng tròn
+                      child: Transform.rotate(
+                        angle: 0 * 3.14159 / 180, // Quay icon theo góc
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 0.0), // Dịch icon một chút
+                          child: Icon(Icons.location_on, color: Colors.white), // Biểu tượng là location_on
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      nameWithAccent,  // Hiển thị tên tỉnh đã việt hóa
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    subtitle: Text(
+                      suggestion['region']?.isNotEmpty == true
+                          ? '${suggestion['region']} - ${suggestion['country']}'
+                          : suggestion['country']!,
+                      style: TextStyle(color: Colors.white70),
+                    ),
+                    onTap: () {
+                      _addToHistory(suggestion); // Add to history
+                      widget.showResultsNotifier.value = false;
+                    },
+                  ),
+                  DashedLineSeparator(),
+                ],
               );
             },
           ),
         ],
+
+
+
 
         // Lịch sử tìm kiếm
         // if (_searchHistory.isNotEmpty) ...[

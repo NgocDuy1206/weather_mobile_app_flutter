@@ -18,4 +18,32 @@ class SharedPreferencesHelper {
         .toList();
     return history;
   }
+
+  // Xóa phần tử tìm kiếm dựa trên tên và quốc gia
+  static Future<void> removeSearchHistoryItem(String name, String country) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Lấy danh sách lịch sử tìm kiếm từ SharedPreferences
+    List<String> jsonHistory = prefs.getStringList('search_history') ?? [];
+
+    // Chuyển danh sách các item từ JSON thành danh sách Map
+    List<Map<String, String>> history = jsonHistory
+        .map((item) => Map<String, String>.from(jsonDecode(item)))
+        .toList();
+
+    // Xóa phần tử có tên và quốc gia khớp
+    history.removeWhere((item) => item['name'] == name && item['country'] == country);
+
+    // Nếu còn dữ liệu sau khi xóa, lưu lại vào SharedPreferences
+    if (history.isNotEmpty) {
+      List<String> updatedJsonHistory = history.map((item) => jsonEncode(item)).toList();
+      await prefs.setStringList('search_history', updatedJsonHistory);
+    } else {
+      // Nếu không còn dữ liệu sau khi xóa, xóa toàn bộ lịch sử
+      await prefs.remove('search_history');
+    }
+  }
+
+
+
 }

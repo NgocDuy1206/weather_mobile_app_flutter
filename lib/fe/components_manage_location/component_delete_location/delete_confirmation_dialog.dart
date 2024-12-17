@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class DeleteConfirmationDialog extends StatelessWidget {
   final String label;
-  final VoidCallback onConfirm;
+  final Function(bool) onConfirm; // Thay VoidCallback thành Function(bool)
   final VoidCallback onCancel;
 
   DeleteConfirmationDialog({
@@ -38,7 +38,10 @@ class DeleteConfirmationDialog extends StatelessWidget {
             children: [
               Expanded(
                 child: TextButton(
-                  onPressed: onCancel,
+                  onPressed: () {
+                    onConfirm(false); // Truyền false khi nhấn "No"
+                    Navigator.of(context).pop(); // Đóng hộp thoại
+                  },
                   child: Text('No', style: TextStyle(color: Colors.blue)),
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 12.0), // Increases button height
@@ -50,7 +53,10 @@ class DeleteConfirmationDialog extends StatelessWidget {
               SizedBox(width: 10), // Space between buttons
               Expanded(
                 child: TextButton(
-                  onPressed: onConfirm,
+                  onPressed: () {
+                    onConfirm(true); // Truyền true khi nhấn "Yes"
+                    Navigator.of(context).pop(); // Đóng hộp thoại
+                  },
                   child: Text('Yes', style: TextStyle(color: Colors.blue)),
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 12.0),

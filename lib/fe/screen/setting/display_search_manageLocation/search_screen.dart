@@ -60,6 +60,7 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                       visible: !showResults,
                       child: Column(
                         children: [
+                          SizedBox(height: 2),
                           LocationTile(
                             name: 'Tên Địa Chỉ',
                             address: 'Địa chỉ chi tiết',
@@ -69,53 +70,40 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                             iconAngle: 30,
                           ),
                           SavedLocationsHeader(),
-                          SizedBox(height: 1),
-                          LocationTile(
-                            name: 'Địa điểm 2',
-                            address: 'Địa chỉ chi tiết 2',
-                            temperature: '22°C',
-                            circleColor: Colors.grey,
-                            icon: Icons.place,
-                          ),
-                          DashedLineSeparator(),
-                          LocationTile(
-                            name: 'Địa điểm 3',
-                            address: 'Địa chỉ chi tiết 3',
-                            temperature: '20°C',
-                            circleColor: Colors.grey,
-                            icon: Icons.place,
-                          ),
-                          DashedLineSeparator(),
-
                           // Hiển thị lịch sử tìm kiếm dưới "Địa điểm 3"
                           if (_searchHistory.isNotEmpty) ...[
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Text(
-                                'Lịch sử tìm kiếm',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
                             Column(
                               children: _searchHistory.map((historyItem) {
-                                return ListTile(
-                                  title: Text(
-                                    historyItem['name']!,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  subtitle: Text(
-                                    '${historyItem['region']} - ${historyItem['country']}',
-                                    style: TextStyle(color: Colors.white70),
-                                  ),
-                                  onTap: () {
-                                    // Xử lý khi người dùng nhấn vào lịch sử tìm kiếm
-                                    // Cập nhật lại text vào TextField và ẩn kết quả tìm kiếm
-                                    // _controller.text = historyItem['name']!;
-                                    showResultsNotifier.value = false; // Ẩn kết quả tìm kiếm
-                                  },
+                                return Column(
+                                  children: [
+                                    ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundColor: Colors.grey, // Màu xám cho vòng tròn
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 1.0), // Dịch icon một chút
+                                          child: Icon(Icons.location_on, color: Colors.white), // Biểu tượng location_on
+                                        ),
+                                      ),
+                                      title: Text(
+                                        historyItem['name']!,
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      subtitle: Text(
+                                        historyItem['region']?.isNotEmpty == true
+                                            ? '${historyItem['region']} - ${historyItem['country']}'
+                                            : historyItem['country']!,
+                                        style: TextStyle(color: Colors.white70),
+                                      ),
+                                      onTap: () {
+                                        // Xử lý khi người dùng nhấn vào lịch sử tìm kiếm
+                                        // Cập nhật lại text vào TextField và ẩn kết quả tìm kiếm
+                                        // _controller.text = historyItem['name']!; // Cập nhật text vào TextField
+                                        showResultsNotifier.value = false; // Ẩn kết quả tìm kiếm
+                                      },
+                                    ),
+                                    DashedLineSeparator(), // Thêm dấu đứt đoạn dưới mỗi phần tử lịch sử tìm kiếm
+                                    SizedBox(height: 0), // Thêm khoảng cách đều giữa các phần tử
+                                  ],
                                 );
                               }).toList(),
                             ),
