@@ -38,14 +38,14 @@ class WeatherMap extends StatelessWidget {
       ),
       children: [
         Opacity(
-          opacity: 1,
+          opacity: 0.7,
           child: TileLayer(
             urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             subdomains: ['a', 'b', 'c'],
           ),
         ),
         Opacity(
-          opacity: 0.7,
+          opacity: 0.5,
           child: TileLayer(
             urlTemplate:
                 'https://tile.openweathermap.org/map/{layer}/{z}/{x}/{y}.png?appid={apiKey}',
