@@ -4,19 +4,23 @@ import 'package:flutter/material.dart';
 class DashedLineSeparator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 1,
-      margin: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        children: List.generate(60, (index) {
-          return Expanded(
-            child: Container(
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        const dashWidth = 4.0;
+        const dashSpace = 2.0;
+        final dashCount = (constraints.constrainWidth() / (dashWidth + dashSpace)).floor();
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(dashCount, (_) {
+            return Container(
+              width: dashWidth,
               height: 1,
-              color: index % 2 == 0 ? Colors.grey : Colors.transparent,
-            ),
-          );
-        }),
-      ),
+              color: Colors.grey,
+            );
+          }),
+        );
+      },
     );
   }
 }
