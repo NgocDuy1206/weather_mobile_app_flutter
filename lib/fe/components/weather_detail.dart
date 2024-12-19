@@ -34,7 +34,8 @@ class WeatherDetail extends StatelessWidget {
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
               topRight: Radius.circular(20),
-            )
+            ),
+          color: Color(0xFF1EABD5),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -43,10 +44,9 @@ class WeatherDetail extends StatelessWidget {
             Time(),
             (kind == 'hourly') ? Text(Utils.getHourMinute(weather.time),
               style: TextStyle(fontSize: 30),) : SizedBox(height: 10,),
-            Divider(thickness: 2,color: Colors.grey,),
-            Expanded(flex: 1,child: WeatherIcon(weather: weather,)),
-            
-
+            Divider(thickness: 2,color: Color(0x66000000),),
+            Expanded(flex: 1, child: WeatherIcon(weather: weather,)),
+            Expanded(flex: 1, child: DetailTable(weather: weather, kind: kind,)),
           ],
         )
     );
@@ -81,16 +81,24 @@ class DetailTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SettingManager set = Provider.of<SettingManager>(context);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if(kind == 'hourly') Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Feels like', style: TextStyle(fontSize: 15),),
-            Text('30'),
-          ],
-        ),
+        if(kind == 'hourly')
+          OneRow(name: 'Feels Like', value: Utils.getTemp(weather.temperature, set.tempUnit),),
+        if (kind == 'daily')
+          OneRow(name: 'Temperature Max', value: Utils.getTemp(weather.temperatureMax, set.tempUnit),),
+        if (kind == 'daily')
+          OneRow(name: 'Temperature Min', value: Utils.getTemp(weather.temperatureMin, set.tempUnit),),
+
+        OneRow(name: 'Wind Speed', value: Utils.getSpeed(weather.windSpeed, set.spdUnit),),
+
+        OneRow(name: 'Wind Direction', value: weather.windDirection),
+
+        OneRow(name: 'Precipitation Probability', value: weather.precipitationProbability.toString(),),
+
 
       ],
     );
@@ -115,3 +123,24 @@ class Time extends StatelessWidget {
   }
 }
 
+class OneRow extends StatelessWidget {
+  String name;
+  String value;
+
+  OneRow({this.name = 'Feels like', this.value = '0'});
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(name, style:  TextStyle(fontSize: 20),),
+            Text(value, style: TextStyle(fontSize: 20),),
+          ],
+        ),
+        Divider(thickness: 1,color: Color(0x66000000),),
+      ],
+    );
+  }
+}

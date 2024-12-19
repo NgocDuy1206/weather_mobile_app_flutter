@@ -7,6 +7,7 @@ import 'package:weather_mobile_app_flutter/be/state_management/setting_manager.d
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
 import 'package:weather_mobile_app_flutter/configs/utils.dart';
 import 'package:weather_mobile_app_flutter/fe/components/button_see_more.dart';
+import 'package:weather_mobile_app_flutter/fe/components/weather_detail.dart';
 
 class DailyForecastTable extends StatelessWidget {
   bool showSeeMoreDetail;
@@ -79,77 +80,87 @@ class ColumnDailyForecast extends StatelessWidget {
   Widget build(BuildContext context) {
     var provider = Provider.of<WeatherManager>(context);
     WeatherByDay daily = provider.weatherLocation!.dayList[index];
-    return Container(
-      margin: EdgeInsets.only(top: 10, bottom: 10),
-      padding: EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        border: Border.all(
-            color: MyColors.vien,
-            width: 2
+    return InkWell(
+      onTap: () {
+        showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return WeatherDetail(kind: 'daily',weather: daily);
+            }
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 10, bottom: 10),
+        padding: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          border: Border.all(
+              color: MyColors.vien,
+              width: 2
+          ),
+          color: Colors.blue[100],
+          borderRadius: BorderRadius.circular(16),
         ),
-        color: Colors.blue[100],
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(
-            children: [
-              Text(
-                Utils.getDay(daily.time),
-                style: TextStyle(fontSize: 20),
-              ),
-              SizedBox(width: 5,),
-              Text(
-                Utils.getWeekDay(daily.time),
-                style: TextStyle(fontSize: 20),
-              ),
-            ],
-          ),
-          Container(
-            height: 1,
-            width: 35,
-            child: Divider(
-              color: MyColors.vien,
-              thickness: 1,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Text(
+                  Utils.getDay(daily.time),
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(width: 5,),
+                Text(
+                  Utils.getWeekDay(daily.time),
+                  style: TextStyle(fontSize: 20),
+                ),
+              ],
             ),
-            margin: EdgeInsets.only(top: 3, bottom: 3),
-          ),
-          Image.asset(
-            MyIconWeather.getIconWeather(daily.icon, daily.time),
-            scale: 2.75,
-          ),
-          DrawTemp(index: index, min: min, distance: distance),
-          SizedBox(
-            height: 5,
-          ),
-          Container(
-            height: 1,
-            width: 35,
-            child: Divider(
-              color: MyColors.vien,
-              thickness: 1,
+            Container(
+              height: 1,
+              width: 35,
+              child: Divider(
+                color: MyColors.vien,
+                thickness: 1,
+              ),
+              margin: EdgeInsets.only(top: 3, bottom: 3),
             ),
-            margin: EdgeInsets.only(top: 3, bottom: 10),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/icon/rainy_small.png',
-                scale: 4.0,
+            Image.asset(
+              MyIconWeather.getIconWeather(daily.icon, daily.time),
+              scale: 2.75,
+            ),
+            DrawTemp(index: index, min: min, distance: distance),
+            SizedBox(
+              height: 5,
+            ),
+            Container(
+              height: 1,
+              width: 35,
+              child: Divider(
+                color: MyColors.vien,
+                thickness: 1,
               ),
-              const SizedBox(
-                width: 4,
-              ),
-              Text(
-                daily.precipitationProbability.toString() + '%',
-                style: TextStyle(fontSize: 15),
-              ),
-            ],
-          ),
-        ],
+              margin: EdgeInsets.only(top: 3, bottom: 10),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/icon/rainy_small.png',
+                  scale: 4.0,
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                Text(
+                  daily.precipitationProbability.toString() + '%',
+                  style: TextStyle(fontSize: 15),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
