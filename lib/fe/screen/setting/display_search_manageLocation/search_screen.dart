@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../components_search/dashed_line_separator.dart';
 import '../../../components_search/location_tile.dart';
+import '../../../components_search/notification_history_search.dart';
 import '../../../components_search/saved_locations_header.dart';
 import '../../../components_search/search_text_field.dart';
 
@@ -32,7 +33,18 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
   @override
   void initState() {
     super.initState();
-    _loadSearchHistory(); // Tải lịch sử tìm kiếm khi mở ứng dụng
+    SearchHistoryNotifier.historyUpdatedStream.listen((_) {
+      _loadSearchHistory();  // Cập nhật lại danh sách
+    });
+    // Tải lịch sử tìm kiếm khi mở ứng dụng
+    _loadSearchHistory();
+  }
+
+  @override
+  void dispose() {
+    // Đảm bảo đóng StreamController khi widget bị hủy
+    SearchHistoryNotifier.dispose();
+    super.dispose();
   }
 
   @override

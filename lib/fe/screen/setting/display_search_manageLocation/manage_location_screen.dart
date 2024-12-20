@@ -8,6 +8,7 @@ import '../../../components_manage_location/dashed_separator.dart';
 import '../../../components_manage_location/instruction_text.dart';
 import '../../../components_manage_location/location_item_manage.dart';
 import '../../../components_search/history_search.dart';
+import '../../../components_search/notification_history_search.dart';
 
 class ManageScreen extends StatefulWidget {
   @override
@@ -34,7 +35,18 @@ class _ManageScreenState extends State<ManageScreen> {
   @override
   void initState() {
     super.initState();
-    _loadSearchHistory(); // Tải lịch sử tìm kiếm khi mở ứng dụng
+    SearchHistoryNotifier.historyUpdatedStream.listen((_) {
+      _loadSearchHistory();  // Cập nhật lại danh sách
+    });
+    // Tải lịch sử tìm kiếm khi mở ứng dụng
+    _loadSearchHistory();
+  }
+
+  @override
+  void dispose() {
+    // Đảm bảo đóng StreamController khi widget bị hủy
+    SearchHistoryNotifier.dispose();
+    super.dispose();
   }
 
   // Hàm chuyển đổi lịch sử tìm kiếm thành danh sách các LocationItemManage
@@ -54,20 +66,32 @@ class _ManageScreenState extends State<ManageScreen> {
               onEdit: () {
                 // Xử lý khi nhấn nút chỉnh sửa
               },
-              onDelete: (confirmed) async {
-                if (confirmed) {
-                  // Gọi hàm xóa nếu người dùng chọn "Yes"
-                  await SharedPreferencesHelper.removeSearchHistoryItem(
-                      item['name'] ?? '', // Truyền name
-                      item['country'] ?? ''  // Truyền country
-                  );
+                onDelete: (confirmed) async {
+                  if (confirmed) {
+                    bool success = await SharedPreferencesHelper.removeSearchHistoryItem(
+                        item['name'] ?? '',
+                        item['country'] ?? ''
+                    );
 
-                  // Cập nhật lại giao diện
-                  setState(() {
-                    _searchHistory.remove(item); // Xóa item khỏi danh sách
-                  });
+                    if (success) {
+                      // Hiển thị thông báo xóa thành công
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Item removed successfully'))
+                      );
+                      SearchHistoryNotifier.notifyHistoryUpdated();
+                      // Cập nhật lại danh sách
+                      await _loadSearchHistory();
+                    } else {
+                      // Hiển thị thông báo lỗi nếu không tìm thấy mục cần xóa
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Item not found in history'))
+                      );
+                    }
+                  }
                 }
-              },
+
+
+
             ),
             SizedBox(height: 8),
             DashedLineSeparator(),  // Thêm dòng nét đứt sau mỗi item
