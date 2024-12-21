@@ -78,6 +78,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
     'son la': 'Sơn La',
     'kien giang': 'Kiên Giang',
     'ben tre': 'Bến Tre',
+    'ha nam': 'Hà Nam',
   };
 
   String getProvinceName(String province) {

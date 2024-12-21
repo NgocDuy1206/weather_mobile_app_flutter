@@ -33,6 +33,13 @@ class _ManageScreenState extends State<ManageScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Gọi lại _loadSearchHistory mỗi khi widget cần phải làm mới (kể cả khi quay lại trang)
+    _loadSearchHistory();
+  }
+
+  @override
   void initState() {
     super.initState();
     SearchHistoryNotifier.historyUpdatedStream.listen((_) {
@@ -74,15 +81,22 @@ class _ManageScreenState extends State<ManageScreen> {
                     );
 
                     if (success) {
-                      // Hiển thị thông báo xóa thành công
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Item removed successfully'))
-                      );
-                      SearchHistoryNotifier.notifyHistoryUpdated();
-                      // Cập nhật lại danh sách
                       setState(() {
                         _searchHistory.remove(item);
                       });
+                      // Hiển thị thông báo xóa thành công
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Item removed successfully'),
+                          duration: Duration(seconds: 2),  // Đặt thời gian hiển thị SnackBar là 2 giây
+                        ),
+                      );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => ManageScreen()),  // Thay ManageScreen với màn hình hiện tại của bạn
+                      );
+                      SearchHistoryNotifier.notifyHistoryUpdated();
+
                     } else {
                       // Hiển thị thông báo lỗi nếu không tìm thấy mục cần xóa
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -91,8 +105,6 @@ class _ManageScreenState extends State<ManageScreen> {
                     }
                   }
                 }
-
-
 
             ),
             SizedBox(height: 8),

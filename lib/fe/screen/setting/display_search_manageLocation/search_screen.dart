@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:weather_mobile_app_flutter/fe/screen/setting/display_search_manageLocation/manage_location_screen.dart';
 import '../../../components_search/dashed_line_separator.dart';
 import '../../../components_search/location_tile.dart';
 import '../../../components_search/notification_history_search.dart';
@@ -15,6 +17,7 @@ class SearchScreenModal extends StatefulWidget {
 class _SearchScreenModalState extends State<SearchScreenModal> {
   final ValueNotifier<bool> showResultsNotifier = ValueNotifier(false);
   List<Map<String, String>> _searchHistory = []; // Lịch sử tìm kiếm
+  StreamSubscription<void>? _searchHistorySubscription;
 
   // Hàm tải lịch sử tìm kiếm từ SharedPreferences
   Future<void> _loadSearchHistory() async {
@@ -28,6 +31,13 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
             .toList();
       });
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Gọi lại _loadSearchHistory mỗi khi widget cần phải làm mới (kể cả khi quay lại trang)
+    _loadSearchHistory();
   }
 
   @override
@@ -81,7 +91,29 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                             icon: Icons.navigation,
                             iconAngle: 30,
                           ),
-                          SavedLocationsHeader(),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Saved Locations', style: TextStyle(color: Colors.white, fontSize: 18)),
+                                TextButton(
+                                  onPressed: () async {
+                                    // Điều hướng tới ManageScreen và quay lại khi người dùng bấm 'Back'
+                                    final result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => ManageScreen()),
+                                    );
+                                    if (result == null) {
+                                      // Nếu có dữ liệu trả về (nếu cần) gọi lại _loadSearchHistory
+                                      _loadSearchHistory();
+                                    }
+                                  },
+                                  child: Text('Manage', style: TextStyle(color: Colors.blue, fontSize: 16)),
+                                ),
+                              ],
+                            ),
+                          ),
                           // Hiển thị lịch sử tìm kiếm dưới "Địa điểm 3"
                           if (_searchHistory.isNotEmpty) ...[
                             Column(

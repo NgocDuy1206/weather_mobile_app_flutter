@@ -9,11 +9,16 @@ class SearchHistoryNotifier {
 
   // Hàm này sẽ được gọi khi muốn phát sự kiện cập nhật lịch sử
   static void notifyHistoryUpdated() {
-    _historyUpdatedController.add(null);
+    if (!_historyUpdatedController.isClosed) {
+      _historyUpdatedController.add(null);  // Phát sự kiện nếu controller chưa bị đóng
+    }
   }
 
   // Hàm dispose để đóng StreamController khi không còn cần thiết
   static void dispose() {
-    _historyUpdatedController.close();
+    if (!_historyUpdatedController.isClosed) {
+      _historyUpdatedController.close();  // Đảm bảo gọi close một lần khi không sử dụng
+    }
   }
 }
+

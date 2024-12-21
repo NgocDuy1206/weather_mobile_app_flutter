@@ -38,6 +38,10 @@ class Destination extends StatelessWidget {
 }
 
 class ListDestination extends StatelessWidget {
+  final List<Map<String, String>> searchHistory;
+
+  ListDestination({super.key, required this.searchHistory});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,16 +50,10 @@ class ListDestination extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal, // theo chiều ngang
         children: [
-          Destination(
-            destination: 'add location',
-          ), //
-          Destination(
-            destination: 'hà nội',
-          ),
-          Destination(destination: 'nam định'),
-          Destination(destination: 'thái bình'),
-          Destination(destination: 'hải dương'),
-          Destination(destination: 'quảng ninh'),
+          ...searchHistory.map((item) {
+            // Giả sử bạn muốn hiển thị một trường nào đó từ mỗi Map, ví dụ 'name'
+            return Destination(destination: item['name']);
+          }).toList(),
         ],
       ),
     );
