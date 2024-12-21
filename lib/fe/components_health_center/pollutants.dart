@@ -16,7 +16,7 @@ class Pollutants extends StatelessWidget {
       margin: EdgeInsets.only(top: 40, left: 10, right: 10),
       padding: EdgeInsets.only(top: 10, bottom: 20, left: 10, right: 10),
       decoration: BoxDecoration(
-        color: MyColors.GRAY,
+        color: MyColors.background_table,
         borderRadius: BorderRadius.circular(10),
 
       ),

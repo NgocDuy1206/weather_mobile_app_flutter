@@ -23,8 +23,6 @@ class WeatherManager with ChangeNotifier {
     loading = false;
     notifyListeners();
   }
-
-
 }
 
 class BottomNagivation with ChangeNotifier {
