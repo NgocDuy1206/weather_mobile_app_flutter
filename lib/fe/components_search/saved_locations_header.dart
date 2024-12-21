@@ -8,7 +8,7 @@ class SavedLocationsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0), // Thêm padding cho khoảng cách trên và dưới header
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -28,4 +28,5 @@ class SavedLocationsHeader extends StatelessWidget {
     );
   }
 }
+
 

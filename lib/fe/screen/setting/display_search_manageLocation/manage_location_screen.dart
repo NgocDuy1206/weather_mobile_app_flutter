@@ -1,12 +1,112 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:weather_mobile_app_flutter/fe/components_search/dashed_line_separator.dart';
+import 'dart:convert'; // Để sử dụng jsonDecode
 
+import '../../../components_manage_location/component_delete_location/delete_confirmation_dialog.dart';
 import '../../../components_manage_location/dashed_separator.dart';
 import '../../../components_manage_location/instruction_text.dart';
 import '../../../components_manage_location/location_item_manage.dart';
+import '../../../components_search/history_search.dart';
+import '../../../components_search/notification_history_search.dart';
+
+class ManageScreen extends StatefulWidget {
+  @override
+  _ManageScreenState createState() => _ManageScreenState();
+}
+
+class _ManageScreenState extends State<ManageScreen> {
+  List<Map<String, String>> _searchHistory = []; // Lịch sử tìm kiếm
+
+  // Hàm tải lịch sử tìm kiếm từ SharedPreferences
+  Future<void> _loadSearchHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String>? historyList = prefs.getStringList('searchHistory');
+    if (historyList != null) {
+      setState(() {
+        _searchHistory = historyList
+            .map((e) => Map<String, String>.from(
+            jsonDecode(e) as Map<String, dynamic>)) // Chuyển đổi JSON thành Map
+            .toList();
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    SearchHistoryNotifier.historyUpdatedStream.listen((_) {
+      _loadSearchHistory();  // Cập nhật lại danh sách
+    });
+    // Tải lịch sử tìm kiếm khi mở ứng dụng
+    _loadSearchHistory();
+  }
+
+  @override
+  void dispose() {
+    // Đảm bảo đóng StreamController khi widget bị hủy
+    SearchHistoryNotifier.dispose();
+    super.dispose();
+  }
+
+  // Hàm chuyển đổi lịch sử tìm kiếm thành danh sách các LocationItemManage
+  List<Widget> _buildLocationItems() {
+    return _searchHistory.map((item) {
+      String locationDisplay = item['region'] != null && item['region']!.isNotEmpty
+          ? '${item['region']}, ${item['country']}'
+          : item['country'] ?? 'Unknown Location'; // Nếu không có region thì chỉ hiển thị country
+
+      return Padding(
+        padding: const EdgeInsets.only(right: 0.0), // Dịch sang phải
+        child: Column(
+          children: [
+            LocationItemManage(
+              label: item['name'] ?? 'Unknown Location', // Thay label thành name
+              location: locationDisplay, // Thay location thành region và country
+              onEdit: () {
+                // Xử lý khi nhấn nút chỉnh sửa
+              },
+                onDelete: (confirmed) async {
+                  if (confirmed) {
+                    bool success = await SharedPreferencesHelper.removeSearchHistoryItem(
+                        item['name'] ?? '',
+                        item['country'] ?? ''
+                    );
+
+                    if (success) {
+                      // Hiển thị thông báo xóa thành công
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Item removed successfully'))
+                      );
+                      SearchHistoryNotifier.notifyHistoryUpdated();
+                      // Cập nhật lại danh sách
+                      setState(() {
+                        _searchHistory.remove(item);
+                      });
+                    } else {
+                      // Hiển thị thông báo lỗi nếu không tìm thấy mục cần xóa
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Item not found in history'))
+                      );
+                    }
+                  }
+                }
 
 
-//Màn quản lý vị trí - Manage Location
-class ManageScreen extends StatelessWidget {
+
+            ),
+            SizedBox(height: 8),
+            DashedLineSeparator(),  // Thêm dòng nét đứt sau mỗi item
+          ],
+        ),
+      );
+    }).toList();
+  }
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,8 +117,9 @@ class ManageScreen extends StatelessWidget {
         titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
       ),
       backgroundColor: Color(0xFF1A0A1A),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: _searchHistory.isEmpty
+          ? Center(child: CircularProgressIndicator()) // Chờ dữ liệu khi tải
+          : ListView(
         children: [
           ListTile(
             leading: CircleAvatar(
@@ -44,37 +145,16 @@ class ManageScreen extends StatelessWidget {
           ),
           SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0), // Cách đều mép hai bên
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
               'Click, hold and move the lever to change the position of your locations.',
-              textAlign: TextAlign.left, // Căn trái cho văn bản
+              textAlign: TextAlign.left,
               style: TextStyle(color: Colors.white54, fontSize: 14),
             ),
           ),
-
           SizedBox(height: 10),
-          LocationItemManage(
-            label: 'Hoi An Corner Coffee',
-            location: 'Hoàn Kiếm, Hà Nội, VN',
-            onEdit: () {
-              // Handle edit action
-            },
-            onDelete: () {
-              // Handle delete action
-            },
-          ),
-          DashedSeparator(),
-          LocationItemManage(
-            label: 'Đà Nẵng',
-            location: 'Đà Nẵng, VN',
-            onEdit: () {
-              // Handle edit action
-            },
-            onDelete: () {
-              // Handle delete action
-            },
-          ),
-          DashedSeparator(),
+          // Hiển thị danh sách các LocationItemManage từ lịch sử tìm kiếm
+          ..._buildLocationItems(),
           SizedBox(height: 16),
           InstructionText(
             text: 'Tap on the edit icon to add a label. For e.g., Home, Office.',

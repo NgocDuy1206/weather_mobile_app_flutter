@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'component_delete_location/delete_confirmation_dialog.dart';
-import 'component_edit_location/Location_Modal.dart';
 
 class LocationItemManage extends StatelessWidget {
   final String label;
   final String location;
   final VoidCallback onEdit;
-  final VoidCallback onDelete;
+  final Function(bool) onDelete; // Cập nhật cho nhận tham số bool
 
   LocationItemManage({
     required this.label,
@@ -31,16 +30,7 @@ class LocationItemManage extends StatelessWidget {
             backgroundColor: Colors.black,
             child: IconButton(
               icon: Icon(Icons.edit, color: Colors.white),
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  backgroundColor: Colors.transparent,
-                  isScrollControlled: true,
-                  builder: (BuildContext context) {
-                    return EditLocationModal(location: location, label: label);
-                  },
-                );
-              },
+              onPressed: onEdit, // Gọi onEdit khi nhấn vào edit
             ),
           ),
           SizedBox(width: 8),
@@ -54,8 +44,12 @@ class LocationItemManage extends StatelessWidget {
                   builder: (BuildContext context) {
                     return DeleteConfirmationDialog(
                       label: label,
-                      onConfirm: onDelete, // Use onConfirm for deletion
-                      onCancel: () => Navigator.of(context).pop(), // Close dialog on cancel
+                      onConfirm: (bool confirmed) {
+                        onDelete(confirmed); // Gọi onDelete với giá trị true hoặc false
+                      },
+                      onCancel: () {
+                        Navigator.of(context).pop(); // Đóng hộp thoại nếu người dùng chọn "Cancel"
+                      },
                     );
                   },
                 );
