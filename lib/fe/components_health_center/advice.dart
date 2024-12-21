@@ -10,7 +10,7 @@ class Advice extends StatelessWidget {
       height: 350,
       width: InforDevice.WIDTH,
       decoration: BoxDecoration(
-        color: MyColors.GRAY,
+        color: MyColors.background_table,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(

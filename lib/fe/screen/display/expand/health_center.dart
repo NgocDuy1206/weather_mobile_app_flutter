@@ -26,12 +26,13 @@ class HealthCenter extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // AirQualityIndex(),
-            // SizedBox(height: 10,),
+            AirQualityIndex(),
+            SizedBox(height: 10,),
             Advice(),
             SizedBox(height: 10,),
             Pollutants(),
             SizedBox(height: 10,),
+
             // DataHistory(),
             // SizedBox(height: 10,),
             // Pollen(),
