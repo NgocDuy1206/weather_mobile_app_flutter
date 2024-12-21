@@ -80,7 +80,9 @@ class _ManageScreenState extends State<ManageScreen> {
                       );
                       SearchHistoryNotifier.notifyHistoryUpdated();
                       // Cập nhật lại danh sách
-                      await _loadSearchHistory();
+                      setState(() {
+                        _searchHistory.remove(item);
+                      });
                     } else {
                       // Hiển thị thông báo lỗi nếu không tìm thấy mục cần xóa
                       ScaffoldMessenger.of(context).showSnackBar(
