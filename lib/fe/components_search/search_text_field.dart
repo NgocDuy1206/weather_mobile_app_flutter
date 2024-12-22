@@ -2,9 +2,12 @@ import 'dart:async';
 import 'dart:convert';  // Đảm bảo có thư viện này để mã hóa/giải mã JSON
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Đảm bảo bạn đã cài package này
 import 'package:weather_mobile_app_flutter/fe/components_search/dashed_line_separator.dart';
 import '../../be/api/api.dart';
+import '../../be/state_management/Manager.dart';
+import '../screen/display/main_screen.dart';
 import 'history_search.dart';
 
 class SearchTextField extends StatefulWidget {
@@ -19,8 +22,8 @@ class SearchTextField extends StatefulWidget {
 class _SearchTextFieldState extends State<SearchTextField> {
   final TextEditingController _controller = TextEditingController();
   final GetApi api = GetApi();
-  List<Map<String, String>> _suggestions = []; // Ensure this is initialized as an empty list
-  List<Map<String, String>> _searchHistory = []; // Ensure this is initialized as an empty list
+  List<Map<String, dynamic>> _suggestions = []; // Ensure this is initialized as an empty list
+  List<Map<String, dynamic>> _searchHistory = []; // Ensure this is initialized as an empty list
   Timer? _debounce;
 
   @override
@@ -87,19 +90,30 @@ class _SearchTextFieldState extends State<SearchTextField> {
   }
 
 
+
+
   // Hàm tải lịch sử tìm kiếm từ SharedPreferences
   Future<void> _loadSearchHistory() async {
     final prefs = await SharedPreferences.getInstance();
-    final List<String>? historyList = prefs.getStringList('searchHistory');
+    final List<String>? historyList = prefs.getStringList('search_history');
+
     if (historyList != null) {
       setState(() {
         _searchHistory = historyList
-            .map((e) => Map<String, String>.from(
-            jsonDecode(e) as Map<String, dynamic>))
+            .map((e) {
+          // Chuyển đổi JSON thành Map<String, dynamic>
+          var decoded = jsonDecode(e);
+          if (decoded is Map<String, dynamic>) {
+            return decoded; // Trả về Map nếu là kiểu Map<String, dynamic>
+          } else {
+            return <String, dynamic>{}; // Nếu không phải Map, trả về Map rỗng
+          }
+        })
             .toList();
       });
     }
   }
+
 
   // Hàm lưu lịch sử tìm kiếm vào SharedPreferences
   Future<void> _saveSearchHistory() async {
@@ -107,7 +121,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
     final List<String> historyList = _searchHistory
         .map((e) => jsonEncode(e)) // Chuyển đối tượng thành chuỗi JSON
         .toList();
-    await prefs.setStringList('searchHistory', historyList);
+    await prefs.setStringList('search_history', historyList);
   }
 
   // Helper function to remove diacritical marks from Vietnamese characters
@@ -149,7 +163,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
   // Fetch location suggestions based on input text
   Future<void> _fetchSuggestions(String query) async {
     try {
-      List<Map<String, String>> suggestions = await api.searchLocation(query);
+      List<Map<String, dynamic>> suggestions = await api.searchLocation(query);
       setState(() {
         _suggestions = suggestions;
       });
@@ -160,33 +174,35 @@ class _SearchTextFieldState extends State<SearchTextField> {
   }
 
   // Thêm vị trí đã chọn vào lịch sử
-  void _addToHistory(Map<String, String> suggestion) async {
+  void _addToHistory(Map<String, dynamic> suggestion) async {
     final prefs = await SharedPreferences.getInstance();
-    final List<String> historyList = prefs.getStringList('searchHistory') ?? [];
+    final List<String> historyList = prefs.getStringList('search_history') ?? [];
 
-    // Convert the string list from SharedPreferences into a list of Maps
-    List<Map<String, String>> currentHistory = historyList
-        .map((e) {
-      // Decode each item in historyList and convert it into Map<String, String>
-      var decoded = jsonDecode(e);
-      if (decoded is Map<String, dynamic>) {
-        return Map<String, String>.from(decoded);
+    // Convert the string list from SharedPreferences into a list of Maps<dynamic, dynamic>
+    List<Map<String, dynamic>> currentHistory = historyList.map((e) {
+      try {
+        var decoded = jsonDecode(e);
+        if (decoded is Map<String, dynamic>) {
+          return decoded; // Return the decoded map directly
+        }
+      } catch (error) {
+        print("Error decoding history item: $error");
       }
-      return <String, String>{}; // If it's not a valid map, return an empty map
-    })
-        .toList();
+      return <String, dynamic>{}; // Return an empty map if decoding fails
+    }).toList();
 
-    // Check and add the new suggestion to history if it doesn't already exist
+    // Check if the suggestion already exists in history
     if (!currentHistory.any((item) => item['name'] == suggestion['name'])) {
       currentHistory.insert(0, suggestion); // Add the suggestion to the front of the list
+
       // Limit the history list to the most recent 10 items
       if (currentHistory.length > 10) {
-        currentHistory = currentHistory.sublist(0, 10); // Limit history to 10 items max
+        currentHistory = currentHistory.sublist(0, 10); // Keep only the latest 10 items
       }
 
       // Save the updated history list back to SharedPreferences
       final encodedHistory = currentHistory.map((e) => jsonEncode(e)).toList();
-      await prefs.setStringList('searchHistory', encodedHistory);
+      await prefs.setStringList('search_history', encodedHistory);
     }
 
     // Update the UI with the new history list
@@ -194,6 +210,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
       _searchHistory = currentHistory;
     });
   }
+
 
 
 
@@ -267,9 +284,27 @@ class _SearchTextFieldState extends State<SearchTextField> {
                           : suggestion['country']!,
                       style: TextStyle(color: Colors.white70),
                     ),
-                    onTap: () {
-                      _addToHistory(suggestion); // Add to history
-                      widget.showResultsNotifier.value = false;
+                    onTap: () async {
+                      // widget.showResultsNotifier.value = false;
+                      // Navigator.pop(context); // Đóng modal (bottom sheet)
+                      // Lấy thông tin từ suggestion, ví dụ: tên địa điểm, lat, lon
+                      String locationName = suggestion['name']; // Tên vị trí
+                      double latitude = suggestion['lat'];      // Kinh độ
+                      double longitude = suggestion['lon'];     // Vĩ độ
+
+                      // Lưu vào lịch sử tìm kiếm (nếu cần)
+                      _addToHistory(suggestion);
+                      // Cập nhật vị trí trong WeatherManager
+                      var weatherManager = Provider.of<WeatherManager>(context, listen: false);
+                      weatherManager.updateLocation(latitude, longitude, locationName);
+
+                      // Điều hướng tới màn hình chính
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MainScreen(),  // Hoặc màn hình bạn muốn chuyển đến
+                        ),
+                      );
                     },
                   ),
                   DashedLineSeparator(),

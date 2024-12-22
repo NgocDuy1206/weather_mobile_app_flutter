@@ -1,13 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:weather_mobile_app_flutter/fe/components_search/location_current.dart';
 import 'package:weather_mobile_app_flutter/fe/screen/setting/display_search_manageLocation/manage_location_screen.dart';
+import '../../../../be/state_management/Manager.dart';
+import '../../../components/loading.dart';
 import '../../../components_search/dashed_line_separator.dart';
+import '../../../components_search/history_search.dart';
 import '../../../components_search/location_tile.dart';
 import '../../../components_search/notification_history_search.dart';
 import '../../../components_search/saved_locations_header.dart';
 import '../../../components_search/search_text_field.dart';
+import '../../display/main_screen.dart';
 
 class SearchScreenModal extends StatefulWidget {
   @override
@@ -16,22 +23,35 @@ class SearchScreenModal extends StatefulWidget {
 
 class _SearchScreenModalState extends State<SearchScreenModal> {
   final ValueNotifier<bool> showResultsNotifier = ValueNotifier(false);
-  List<Map<String, String>> _searchHistory = []; // Lịch sử tìm kiếm
-  StreamSubscription<void>? _searchHistorySubscription;
 
-  // Hàm tải lịch sử tìm kiếm từ SharedPreferences
+  StreamSubscription<void>? _searchHistorySubscription;
+  List<Map<String, dynamic>> _searchHistory = []; // Lịch sử tìm kiếm với kiểu dynamic
+  String latitude = '';
+  String longitude = '';
+
+// Hàm tải lịch sử tìm kiếm từ SharedPreferences
   Future<void> _loadSearchHistory() async {
     final prefs = await SharedPreferences.getInstance();
-    final List<String>? historyList = prefs.getStringList('searchHistory');
+    final List<String>? historyList = prefs.getStringList('search_history');
+
     if (historyList != null) {
       setState(() {
         _searchHistory = historyList
-            .map((e) => Map<String, String>.from(
-            jsonDecode(e) as Map<String, dynamic>)) // Chuyển đổi JSON thành Map
+            .map((e) {
+          // Chuyển đổi JSON thành Map<String, dynamic>
+          var decoded = jsonDecode(e);
+          if (decoded is Map<String, dynamic>) {
+            return decoded; // Trả về Map nếu là kiểu Map<String, dynamic>
+          } else {
+            return <String, dynamic>{}; // Nếu không phải Map, trả về Map rỗng
+          }
+        })
             .toList();
       });
     }
   }
+
+
 
   @override
   void didChangeDependencies() {
@@ -83,13 +103,164 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                       child: Column(
                         children: [
                           SizedBox(height: 2),
-                          LocationTile(
-                            name: 'Tên Địa Chỉ',
-                            address: 'Địa chỉ chi tiết',
-                            temperature: '25°C',
-                            circleColor: Colors.blue,
-                            icon: Icons.navigation,
-                            iconAngle: 30,
+                          ListTile(
+                            onTap: () {
+                              // Thêm logic để xử lý khi nhấn vào
+                              // Ví dụ: hiển thị quyền truy cập vị trí
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    backgroundColor: const Color(0xFF1E1E2C),
+                                    title: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.location_on,
+                                          color: Colors.blue,
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          'Quyền truy cập vị trí',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    content: Text(
+                                      'Ứng dụng cần truy cập vị trí của bạn để cung cấp thông tin phù hợp. Bạn có muốn cho phép?',
+                                      style: TextStyle(
+                                        color: Colors.grey[400],
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () async {
+                                          // Gọi hàm getLocation để lấy vị trí
+
+                                          Position? position = await LocationService.getLocation();
+
+                                          if (position != null) {
+                                            // Hiển thị màn hình Loading với CircularProgressIndicator
+                                            // Gọi API để xử lý dữ liệu thời tiết
+                                            String locationName = 'Hiện tại'; // Tên vị trí
+                                            double latitude = position.latitude; // Kinh độ
+                                            double longitude = position.longitude; // Vĩ độ
+
+                                            // Lưu vị trí hiện tại
+                                            await SharedPreferencesHelper.saveCurrentLocation(latitude, longitude);
+
+                                            // Cập nhật vị trí trong WeatherManager
+                                            var weatherManager = Provider.of<WeatherManager>(context, listen: false);
+                                            weatherManager.updateLocation(latitude, longitude, locationName);
+
+                                            // Đóng Loading dialog sau khi hoàn tất
+                                            Navigator.pop(context);
+
+                                            // Điều hướng đến màn hình chính
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => MainScreen(), // Hoặc màn hình bạn muốn chuyển đến
+                                              ),
+                                            );
+
+                                            // Hiển thị vị trí trong SnackBar
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text('Vị trí hiện tại: Kinh độ: $longitude, Vĩ độ: $latitude'),
+                                                duration: Duration(seconds: 5),
+                                              ),
+                                            );
+                                          }
+
+                                          else {
+                                            // Thông báo khi không có quyền truy cập vị trí
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text('Ứng dụng không có quyền truy cập vị trí của bạn.'),
+                                                duration: Duration(seconds: 5),  // Hiển thị trong 5 giây
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        style: TextButton.styleFrom(
+                                          foregroundColor: Colors.white,
+                                          backgroundColor: Colors.blue,
+                                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          'Đồng ý',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        style: TextButton.styleFrom(
+                                          foregroundColor: Colors.grey[400],
+                                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                        ),
+                                        child: Text(
+                                          'Hủy',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+
+                              );
+                            },
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.blue,
+                              child: Transform.rotate(
+                                angle: 30 * 3.14159 / 180, // Xoay góc 30 độ
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 2.0),
+                                  child: Icon(Icons.navigation, color: Colors.white),
+                                ),
+                              ),
+                            ),
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Vị trí hiện tại',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    SizedBox(width: 8),
+
+                                    SizedBox(width: 4),
+                                    Text(
+                                      '',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  'Nhấn để lấy vị trí',
+                                  style: TextStyle(color: Colors.grey[400]),
+                                ),
+                              ],
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0.0),
@@ -138,11 +309,26 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                                             : historyItem['country']!,
                                         style: TextStyle(color: Colors.white70),
                                       ),
-                                      onTap: () {
-                                        // Xử lý khi người dùng nhấn vào lịch sử tìm kiếm
-                                        // Cập nhật lại text vào TextField và ẩn kết quả tìm kiếm
-                                        // _controller.text = historyItem['name']!; // Cập nhật text vào TextField
-                                        showResultsNotifier.value = false; // Ẩn kết quả tìm kiếm
+                                      onTap: () async {
+                                        // Lấy thông tin từ suggestion, ví dụ: tên địa điểm, lat, lon
+                                        String locationName = historyItem['name']; // Tên vị trí
+                                        double latitude = historyItem['lat'];      // Kinh độ
+                                        double longitude = historyItem['lon'];     // Vĩ độ
+
+
+                                        // Cập nhật vị trí trong WeatherManager
+                                        var weatherManager = Provider.of<WeatherManager>(context, listen: false);
+                                        weatherManager.updateLocation(latitude, longitude, locationName);
+
+                                        Navigator.pop(context); // Đóng modal (bottom sheet)
+
+                                        // Điều hướng tới màn hình chính
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => MainScreen(),  // Hoặc màn hình bạn muốn chuyển đến
+                                          ),
+                                        );
                                       },
                                     ),
                                     DashedLineSeparator(), // Thêm dấu đứt đoạn dưới mỗi phần tử lịch sử tìm kiếm

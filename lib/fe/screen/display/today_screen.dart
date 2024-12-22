@@ -27,21 +27,30 @@ class Today extends StatefulWidget {
 
 class _TodayState extends State<Today> {
   final ValueNotifier<bool> showResultsNotifier = ValueNotifier(false);
-  List<Map<String, String>> _searchHistory = []; // Lịch sử tìm kiếm
+  List<Map<String, dynamic>> _searchHistory = []; // Lịch sử tìm kiếm với kiểu dynamic
 
-  // Hàm tải lịch sử tìm kiếm từ SharedPreferences
+// Hàm tải lịch sử tìm kiếm từ SharedPreferences
   Future<void> _loadSearchHistory() async {
     final prefs = await SharedPreferences.getInstance();
-    final List<String>? historyList = prefs.getStringList('searchHistory');
+    final List<String>? historyList = prefs.getStringList('search_history');
+
     if (historyList != null) {
       setState(() {
         _searchHistory = historyList
-            .map((e) => Map<String, String>.from(
-            jsonDecode(e) as Map<String, dynamic>)) // Chuyển đổi JSON thành Map
+            .map((e) {
+          // Chuyển đổi JSON thành Map<String, dynamic>
+          var decoded = jsonDecode(e);
+          if (decoded is Map<String, dynamic>) {
+            return decoded; // Trả về Map nếu là kiểu Map<String, dynamic>
+          } else {
+            return <String, dynamic>{}; // Nếu không phải Map, trả về Map rỗng
+          }
+        })
             .toList();
       });
     }
   }
+
 
   @override
   void didChangeDependencies() {

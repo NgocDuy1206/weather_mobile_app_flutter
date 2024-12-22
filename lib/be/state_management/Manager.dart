@@ -10,6 +10,7 @@ class WeatherManager with ChangeNotifier {
   bool loading = true;
   double lat = 21.0285;
   double lon = 105.8542;
+  String? currentSelected;  // Thêm biến để theo dõi vị trí hiện tại
 
   WeatherManager() {
     loadingData();
@@ -20,6 +21,13 @@ class WeatherManager with ChangeNotifier {
     notifyListeners();
     weatherLocation = await GetApi().getWeatherData(lat, lon);
     loading = false;
+    notifyListeners();
+  }
+  void updateLocation(double latitude, double longitude, String locationName) {
+    lat = latitude;
+    lon = longitude;
+    currentSelected = locationName; // Cập nhật tên vị trí hiện tại
+    loadingData(); // Tải lại dữ liệu thời tiết sau khi cập nhật vị trí
     notifyListeners();
   }
 }
