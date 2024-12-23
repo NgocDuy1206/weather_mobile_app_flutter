@@ -19,6 +19,7 @@ class SavedLocationsHeader extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ManageScreen()),
+
               );
             },
             child: Text('Manage', style: TextStyle(color: Colors.blue, fontSize: 16)), // Increased font size

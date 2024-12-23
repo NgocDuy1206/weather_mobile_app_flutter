@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_mobile_app_flutter/configs/utils.dart';
 import 'package:weather_mobile_app_flutter/fe/screen/setting/DaoScreen/setting_screen.dart';
 
@@ -12,6 +15,7 @@ import '../../components/hourly_forecast_table.dart';
 import '../../components/sun_moon_table.dart';
 import '../../components/weather_now.dart';
 
+import '../../components_search/notification_history_search.dart';
 import '../setting/display_search_manageLocation/search_screen.dart';
 
 class Today extends StatefulWidget {
@@ -22,6 +26,56 @@ class Today extends StatefulWidget {
 }
 
 class _TodayState extends State<Today> {
+  final ValueNotifier<bool> showResultsNotifier = ValueNotifier(false);
+  List<Map<String, dynamic>> _searchHistory = []; // Lịch sử tìm kiếm với kiểu dynamic
+
+// Hàm tải lịch sử tìm kiếm từ SharedPreferences
+  Future<void> _loadSearchHistory() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String>? historyList = prefs.getStringList('search_history');
+
+    if (historyList != null) {
+      setState(() {
+        _searchHistory = historyList
+            .map((e) {
+          // Chuyển đổi JSON thành Map<String, dynamic>
+          var decoded = jsonDecode(e);
+          if (decoded is Map<String, dynamic>) {
+            return decoded; // Trả về Map nếu là kiểu Map<String, dynamic>
+          } else {
+            return <String, dynamic>{}; // Nếu không phải Map, trả về Map rỗng
+          }
+        })
+            .toList();
+      });
+    }
+  }
+
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Gọi lại _loadSearchHistory mỗi khi widget cần phải làm mới (kể cả khi quay lại trang)
+    _loadSearchHistory();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    SearchHistoryNotifier.historyUpdatedStream.listen((_) {
+      _loadSearchHistory();  // Cập nhật lại danh sách
+    });
+    // Tải lịch sử tìm kiếm khi mở ứng dụng
+    _loadSearchHistory();
+  }
+
+  @override
+  void dispose() {
+    // Đảm bảo đóng StreamController khi widget bị hủy
+    SearchHistoryNotifier.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
@@ -49,33 +103,52 @@ class _TodayState extends State<Today> {
               background: Column(
                 children: [
                   SizedBox(height: 90),
-                  ListDestination(),
+                  ListDestination(searchHistory: _searchHistory),
                 ],
               ),
             ),
             actions: [
               IconButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Color(0xFF1A0A1A),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                      ),
-                      builder: (BuildContext context) {
-                        return SearchScreenModal();
-                      },
-                    );
-                  },
-                  icon: Image.asset('assets/icon/search.png')),
+                onPressed: () async {
+                  // Mở modal và đợi kết quả trả về
+                  final result = await showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Color(0xFF1A0A1A),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                    ),
+                    builder: (BuildContext context) {
+                      return SearchScreenModal();  // Modal tìm kiếm
+                    },
+                  );
+
+                  // Kiểm tra nếu có kết quả trả về từ modal
+                  if (result == null) {
+                    // Nếu có kết quả, tải lại lịch sử tìm kiếm
+                    _loadSearchHistory();
+                  }
+                },
+                icon: Image.asset('assets/icon/search.png'),
+              ),
+
               IconButton(
-                onPressed: () {
-                  Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SettingScreen()));
+                onPressed: () async {
+                  // Mở màn hình SettingScreen và đợi kết quả trả về
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SettingScreen()),
+                  );
+
+                  // Kiểm tra nếu có kết quả trả về từ SettingScreen
+                  if (result == null) {
+                    // Nếu có kết quả, tải lại lịch sử tìm kiếm hoặc thực hiện hành động khác
+                    _loadSearchHistory();
+                  }
                 },
                 icon: Image.asset('assets/icon/menu.png'),
-              ),
+              )
+
             ],
           ),
           SliverToBoxAdapter(

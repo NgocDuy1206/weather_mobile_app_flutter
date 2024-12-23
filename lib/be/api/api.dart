@@ -14,7 +14,7 @@ abstract class Api {
   Future<Map<String, dynamic>> getWeather24H(double lat, double lon);
   Future<Map<String, dynamic>> getWeather7Day(double lat, double lon);
   Future<Map<String, dynamic>> getAirQuality(double lat, double lon);
-  Future<List<Map<String, String>>> searchLocation(String query); // Hàm tìm kiếm vị trí
+  Future<List<Map<String, dynamic>>> searchLocation(String query); // Hàm tìm kiếm vị trí
 }
 
 class GetApi extends Api {
@@ -63,7 +63,7 @@ class GetApi extends Api {
   }
 
   @override
-  Future<List<Map<String, String>>> searchLocation(String query) async {
+  Future<List<Map<String, dynamic>>> searchLocation(String query) async {
     // API endpoint to get search suggestions based on query
     final url = 'http://api.weatherapi.com/v1/search.json?key=af22b90d53f643f7a92162857241712&q=$query';
 
@@ -73,10 +73,12 @@ class GetApi extends Api {
       final data = jsonDecode(response.body) as List;
 
       // Extract location names from the response data
-      List<Map<String, String>> locations = data.map((location) => {
-        'name': location['name'] as String,
-        'region': location['region'] as String? ?? '',  // Handle missing region
-        'country': location['country'] as String
+      List<Map<String, dynamic>> locations = data.map((location) => {
+        'name': location['name'],
+        'region': location['region'] ?? '',
+        'country': location['country'],
+        'lat': location['lat'], // Giữ kiểu double
+        'lon': location['lon'],
       }).toList();
 
       return locations;

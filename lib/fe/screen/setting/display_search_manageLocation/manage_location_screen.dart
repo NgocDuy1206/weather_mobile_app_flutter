@@ -16,20 +16,50 @@ class ManageScreen extends StatefulWidget {
 }
 
 class _ManageScreenState extends State<ManageScreen> {
-  List<Map<String, String>> _searchHistory = []; // Lịch sử tìm kiếm
-
+  List<Map<String, dynamic>> _searchHistory = []; // Lịch sử tìm kiếm với kiểu dynamic
+  Map<String, double>? _currentLocation; // Lưu vị trí hiện tại
+// Hàm tải lịch sử tìm kiếm từ SharedPreferences
   // Hàm tải lịch sử tìm kiếm từ SharedPreferences
   Future<void> _loadSearchHistory() async {
     final prefs = await SharedPreferences.getInstance();
-    final List<String>? historyList = prefs.getStringList('searchHistory');
+    final List<String>? historyList = prefs.getStringList('search_history');
+
     if (historyList != null) {
       setState(() {
         _searchHistory = historyList
-            .map((e) => Map<String, String>.from(
-            jsonDecode(e) as Map<String, dynamic>)) // Chuyển đổi JSON thành Map
+            .map((e) {
+          // Giải mã JSON thành Map<String, dynamic> để có thể xử lý các kiểu dữ liệu khác nhau
+          var decoded = jsonDecode(e);
+          if (decoded is Map<String, dynamic>) {
+            return decoded; // Trả về Map nếu là kiểu Map<String, dynamic>
+          } else {
+            return <String, dynamic>{}; // Nếu không phải Map, trả về Map rỗng
+          }
+        })
             .toList();
       });
     }
+  }
+
+  // Hàm lấy vị trí hiện tại
+  Future<void> _loadCurrentLocation() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jsonLocation = prefs.getString('current_location');
+    if (jsonLocation != null) {
+      setState(() {
+        _currentLocation = (jsonDecode(jsonLocation) as Map<String, dynamic>)
+            .map((key, value) => MapEntry(key, value as double));
+      });
+    }
+  }
+
+
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Gọi lại _loadSearchHistory mỗi khi widget cần phải làm mới (kể cả khi quay lại trang)
+    _loadSearchHistory();
   }
 
   @override
@@ -40,6 +70,7 @@ class _ManageScreenState extends State<ManageScreen> {
     });
     // Tải lịch sử tìm kiếm khi mở ứng dụng
     _loadSearchHistory();
+    _loadCurrentLocation();
   }
 
   @override
@@ -74,15 +105,22 @@ class _ManageScreenState extends State<ManageScreen> {
                     );
 
                     if (success) {
-                      // Hiển thị thông báo xóa thành công
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Item removed successfully'))
-                      );
-                      SearchHistoryNotifier.notifyHistoryUpdated();
-                      // Cập nhật lại danh sách
                       setState(() {
                         _searchHistory.remove(item);
                       });
+                      // Hiển thị thông báo xóa thành công
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Item removed successfully'),
+                          duration: Duration(seconds: 2),  // Đặt thời gian hiển thị SnackBar là 2 giây
+                        ),
+                      );
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => ManageScreen()),  // Thay ManageScreen với màn hình hiện tại của bạn
+                      );
+                      SearchHistoryNotifier.notifyHistoryUpdated();
+
                     } else {
                       // Hiển thị thông báo lỗi nếu không tìm thấy mục cần xóa
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -91,8 +129,6 @@ class _ManageScreenState extends State<ManageScreen> {
                     }
                   }
                 }
-
-
 
             ),
             SizedBox(height: 8),
@@ -132,8 +168,8 @@ class _ManageScreenState extends State<ManageScreen> {
                 ),
               ),
             ),
-            title: Text('Cầu Giấy', style: TextStyle(color: Colors.white)),
-            subtitle: Text('Cầu Giấy, Cầu Giấy, VN', style: TextStyle(color: Colors.white54)),
+            title: Text('Vị trí hiện tại', style: TextStyle(color: Colors.white)),
+            subtitle: Text('Kinh độ: ${_currentLocation?['longitude']}, Vĩ độ: ${_currentLocation?['latitude']}', style: TextStyle(color: Colors.white54)),
           ),
           SizedBox(height: 16),
           Padding(
