@@ -13,18 +13,22 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
   bool isNWSAlertsEnabled = true;
   bool isWeatherNewsEnabled = true;
 
-  // Trạng thái của ô tích trong bảng "Current Location"
+  // Trạng thái của ô tích trong hộp thoại "Current Location"
   bool isCurrentLocationSelected = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Utils.getText('Alerts'), style: TextStyle(color: Colors.white)),
-        iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: Colors.black,
+        title: Text(
+          Utils.getText('Alerts'),
+          style: TextStyle(color: Colors.black),
+        ),
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Colors.white, // Màu nền AppBar trắng
+        elevation: 1, // Hiệu ứng bóng nhỏ
       ),
-      backgroundColor: Colors.black, // Màu nền tối
+      backgroundColor: Colors.white, // Màu nền sáng
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
@@ -34,11 +38,11 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
             SwitchListTile(
               title: Text(
                 Utils.getText('Sticky Notifications'),
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.black),
               ),
               subtitle: Text(
                 Utils.getText('Weather alerts'),
-                style: TextStyle(color: Colors.white70),
+                style: TextStyle(color: Colors.black54),
               ),
               value: isStickyNotificationsEnabled,
               onChanged: (bool value) {
@@ -55,7 +59,7 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
               },
               activeColor: Colors.blue,
               inactiveThumbColor: Colors.grey,
-              inactiveTrackColor: Colors.white24,
+              inactiveTrackColor: Colors.black26,
             ),
             SizedBox(height: 16.0),
 
@@ -65,7 +69,7 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
             SizedBox(height: 8.0),
@@ -74,11 +78,11 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
             SwitchListTile(
               title: Text(
                 Utils.getText('Weather Highlights'),
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.black),
               ),
               subtitle: Text(
                 Utils.getText('Get forecasts'),
-                style: TextStyle(color: Colors.white70),
+                style: TextStyle(color: Colors.black54),
               ),
               value: isWeatherHighlightsEnabled,
               onChanged: isStickyNotificationsEnabled
@@ -90,18 +94,18 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
                   : null, // Vô hiệu hóa nếu Sticky Notifications tắt
               activeColor: Colors.blue,
               inactiveThumbColor: Colors.grey,
-              inactiveTrackColor: Colors.white24,
+              inactiveTrackColor: Colors.black26,
             ),
 
             // NWS Alerts Toggle
             SwitchListTile(
               title: Text(
                 Utils.getText('NWS Alerts'),
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.black),
               ),
               subtitle: Text(
                 Utils.getText('Get weather alerts'),
-                style: TextStyle(color: Colors.white70),
+                style: TextStyle(color: Colors.black54),
               ),
               value: isNWSAlertsEnabled,
               onChanged: isStickyNotificationsEnabled
@@ -113,18 +117,18 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
                   : null,
               activeColor: Colors.blue,
               inactiveThumbColor: Colors.grey,
-              inactiveTrackColor: Colors.white24,
+              inactiveTrackColor: Colors.black26,
             ),
 
             // Weather News Toggle
             SwitchListTile(
               title: Text(
                 Utils.getText('Weather News'),
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.black),
               ),
               subtitle: Text(
                 Utils.getText('Get weather news & videos'),
-                style: TextStyle(color: Colors.white70),
+                style: TextStyle(color: Colors.black54),
               ),
               value: isWeatherNewsEnabled,
               onChanged: isStickyNotificationsEnabled
@@ -136,20 +140,20 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
                   : null,
               activeColor: Colors.blue,
               inactiveThumbColor: Colors.grey,
-              inactiveTrackColor: Colors.white24,
+              inactiveTrackColor: Colors.black26,
             ),
 
             // Location Setting
             ListTile(
               title: Text(
                 Utils.getText('Location'),
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.black),
               ),
               subtitle: Text(
                 'Nam Từ Liêm, VN',
-                style: TextStyle(color: Colors.white70),
+                style: TextStyle(color: Colors.black54),
               ),
-              trailing: Icon(Icons.arrow_forward_ios, color: Colors.white),
+              trailing: Icon(Icons.arrow_forward_ios, color: Colors.black),
               onTap: () {
                 // Hiển thị hộp thoại chọn vị trí
                 showDialog(
