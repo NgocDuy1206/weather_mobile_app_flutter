@@ -24,7 +24,7 @@ class AllergyOutlookTable extends StatelessWidget {
           AllergyRateBar(factor: 'Weed'),
           Divider(thickness: 1,color: MyColors.WHITE,),
           AllergyRateBar(factor: 'Tree'),
-          SeeMoreDetail(),
+          SeeMoreDetail(direction: 'health_center',),
         ],
       ),
     );

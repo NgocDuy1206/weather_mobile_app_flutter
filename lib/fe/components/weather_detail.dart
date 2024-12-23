@@ -111,7 +111,7 @@ class Time extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime time = DateTime.now();
     String dayOfWeek = Utils.getWeekDay(time) + 'day, ';
-    String month = Utils.getMonth2(time.month) + time.day.toString();
+    String month = Utils.getMonth2(time.month) + ' ' + time.day.toString();
 
     return Text(
       dayOfWeek + month,

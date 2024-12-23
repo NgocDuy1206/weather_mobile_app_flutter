@@ -3,6 +3,9 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
+import 'package:weather_mobile_app_flutter/configs/utils.dart';
 
 class ArcProgressIndicator extends StatelessWidget {
   final double progress; // Giá trị progress từ 0.0 đến 1.0
@@ -99,19 +102,21 @@ class DrawAqiIndex extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<WeatherManager>(context);
+    dynamic airquality = provider.weatherLocation!.airQualityList[0].airQuality;
     return Container(
       height: 100,
       width: 100,
       child: Stack(alignment: Alignment.center, children: [
         ArcProgressIndicator(
-          progress: 0.7,
+          progress: airquality/500,
           // 70% progress
           strokeWidth: 15,
           startAngle: -3.14 - 3.14 / 4,
           // Góc bắt đầu
           sweepAngle: 3.14 + 3.14 / 2,
           // Góc của hình cung
-          color: Colors.blue,
+          color: Utils.getColorAQI(airquality),
           backgroundColor: Colors.black.withOpacity(0.1),
         ),
         Column(
@@ -122,7 +127,8 @@ class DrawAqiIndex extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     fontSize: 25,
                     color: Colors.black.withOpacity(0.5))),
-            Text('100',
+            Text(
+                airquality.toString(),
                 style:
                 TextStyle(
                     fontWeight: FontWeight.w800,
