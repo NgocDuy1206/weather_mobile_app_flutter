@@ -6,7 +6,6 @@ import 'package:weather_mobile_app_flutter/fe/screen/setting/DaoScreen/warnings_
 import '../../../../configs/utils.dart';
 import 'language_and_units_screen.dart';
 
-
 class SettingsScreen extends StatefulWidget {
   static const routeName = '/settings';
 
@@ -18,7 +17,7 @@ class _SettingScreenState extends State<SettingsScreen> {
   bool autoRefresh = true;
   bool useCurrentLocation = true;
   int refreshInterval = 15;
-  String selectedTheme = "Dark"; // Biến lưu trữ chủ đề đã chọn
+  String selectedTheme = "White"; // Biến lưu trữ chủ đề đã chọn
   String minutes = Utils.getText('minutes');
 
   @override
@@ -27,37 +26,42 @@ class _SettingScreenState extends State<SettingsScreen> {
     Color textColor = selectedTheme == "Dark" ? Colors.white : Colors.black;
     Color subtitleColor = selectedTheme == "Dark" ? Colors.grey : Colors.black54;
     var provider = Provider.of<SettingManager>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(Utils.getText('More Settings'), style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.black,
-        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(
+          Utils.getText('More Settings'),
+          style: TextStyle(color: selectedTheme == "Dark" ? Colors.white : Colors.black),
+        ),
+        backgroundColor: selectedTheme == "Dark" ? Colors.black : Colors.white,
+        iconTheme: IconThemeData(color: selectedTheme == "Dark" ? Colors.white : Colors.black),
       ),
       body: Container(
-        color: selectedTheme == "Dark" ? Colors.black87 : Colors.white, // Thay đổi màu nền theo chủ đề
+        color: selectedTheme == "Dark" ? Colors.black87 : Colors.white,
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Alerts
             ListTile(
               leading: Icon(Icons.notifications, color: textColor),
               title: Text(Utils.getText('Alerts'), style: TextStyle(color: textColor)),
               trailing: Icon(Icons.arrow_forward_ios, color: textColor),
               onTap: () {
-                // Navigate to Warnings & Alerts screen
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => WarningsAlertsScreen()),
+                  context,
+                  MaterialPageRoute(builder: (context) => WarningsAlertsScreen()),
                 );
               },
             ),
             Divider(color: subtitleColor),
+
+            // Language and Units
             ListTile(
               leading: Icon(Icons.language, color: textColor),
               title: Text(Utils.getText('language_unit'), style: TextStyle(color: textColor)),
               trailing: Icon(Icons.arrow_forward_ios, color: textColor),
               onTap: () {
-                // Navigate to Language and Units screen
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => LanguageAndUnitsScreen()),
@@ -65,24 +69,25 @@ class _SettingScreenState extends State<SettingsScreen> {
               },
             ),
             Divider(color: subtitleColor),
+
+            // App Theme
             ListTile(
               leading: Icon(Icons.color_lens, color: textColor),
               title: Text(Utils.getText('App Theme'), style: TextStyle(color: textColor)),
               trailing: Icon(Icons.arrow_forward_ios, color: textColor),
               onTap: () {
-                // Gọi hàm để hiển thị dialog
                 _showThemeDialog();
               },
             ),
             Divider(color: subtitleColor),
+
             SizedBox(height: 20),
             Text(Utils.getText('Additional Settings'), style: TextStyle(color: subtitleColor)),
+
+            // Auto-Refresh
             SwitchListTile(
               title: Text(Utils.getText('Auto-Refresh'), style: TextStyle(color: textColor)),
-              subtitle: Text(
-                Utils.getText('Select your'),
-                style: TextStyle(color: subtitleColor),
-              ),
+              subtitle: Text(Utils.getText('Select your'), style: TextStyle(color: subtitleColor)),
               value: autoRefresh,
               onChanged: (value) {
                 setState(() {
@@ -112,12 +117,11 @@ class _SettingScreenState extends State<SettingsScreen> {
                   },
                 ),
               ),
+
+            // Use Current Location
             SwitchListTile(
               title: Text(Utils.getText('Use Current Location'), style: TextStyle(color: textColor)),
-              subtitle: Text(
-                Utils.getText('Get hyperlocal'),
-                style: TextStyle(color: subtitleColor),
-              ),
+              subtitle: Text(Utils.getText('Get hyperlocal'), style: TextStyle(color: subtitleColor)),
               value: useCurrentLocation,
               onChanged: (value) {
                 setState(() {
@@ -131,7 +135,7 @@ class _SettingScreenState extends State<SettingsScreen> {
     );
   }
 
-  // Hàm hiển thị dialog chọn chủ đề
+  // Hiển thị Dialog chọn chủ đề
   void _showThemeDialog() {
     showDialog(
       context: context,
@@ -149,7 +153,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                   setState(() {
                     selectedTheme = value.toString();
                   });
-                  Navigator.of(context).pop(); // Đóng dialog sau khi chọn
+                  Navigator.of(context).pop();
                 },
               ),
               RadioListTile(
@@ -160,7 +164,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                   setState(() {
                     selectedTheme = value.toString();
                   });
-                  Navigator.of(context).pop(); // Đóng dialog sau khi chọn
+                  Navigator.of(context).pop();
                 },
               ),
             ],
@@ -168,7 +172,7 @@ class _SettingScreenState extends State<SettingsScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Đóng dialog nếu nhấn nút Cancel
+                Navigator.of(context).pop();
               },
               child: Text(Utils.getText('Cancel')),
             ),

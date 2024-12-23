@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_mobile_app_flutter/configs/utils.dart';
 
-
 class NotificationScreen extends StatefulWidget {
   @override
   _NotificationScreenState createState() => _NotificationScreenState();
@@ -29,13 +28,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Utils.getText('Daily Summary Notification'), style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.black,
-        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(Utils.getText('Daily Summary Notification'), style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
         actions: [
           IconButton(
-            icon: Icon(Icons.info_outline, color: Colors.white),
-            onPressed: () {   //thực hiện khi icon info được bấm
+            icon: Icon(Icons.info_outline, color: Colors.black),
+            onPressed: () {
               setState(() {
                 showInfoMessage = true; // Hiển thị thông báo khi nhấn vào icon info
               });
@@ -44,7 +43,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         ],
       ),
       body: Container(
-        color: Colors.black,
+        color: Colors.white,
         padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +55,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 margin: EdgeInsets.only(bottom: 10.0),
                 padding: EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Colors.blue.shade100,
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Row(
@@ -65,11 +64,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     Expanded(
                       child: Text(
                         Utils.getText('Get a daily'),
-                        style: TextStyle(color: Colors.white, fontSize: 14.0),
+                        style: TextStyle(color: Colors.black, fontSize: 14.0),
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.close, color: Colors.white, size: 20.0),
+                      icon: Icon(Icons.close, color: Colors.black, size: 20.0),
                       onPressed: () {
                         setState(() {
                           showInfoMessage = false; // Ẩn thông báo khi nhấn vào icon close
@@ -85,7 +84,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               children: [
                 Text(
                   Utils.getText('Use Current Location'),
-                  style: TextStyle(color: Colors.white, fontSize: 16.0),
+                  style: TextStyle(color: Colors.black, fontSize: 16.0),
                 ),
                 Switch(
                   value: isNotificationEnabled,
@@ -102,23 +101,23 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
             Row(
               children: [
-                Icon(Icons.access_time, color: Colors.white),
+                Icon(Icons.access_time, color: Colors.black),
                 SizedBox(width: 10.0),
                 GestureDetector(
                   onTap: () => _selectTime(context),
                   child: Text(
                     '${selectedTime.format(context)}',
-                    style: TextStyle(color: Colors.white, fontSize: 16.0),
+                    style: TextStyle(color: Colors.black, fontSize: 16.0),
                   ),
                 ),
                 Spacer(),
                 IconButton(
-                  icon: Icon(Icons.edit, color: Colors.white),
+                  icon: Icon(Icons.edit, color: Colors.black),
                   onPressed: () => _selectTime(context),
                 ),
               ],
             ),
-            Divider(color: Colors.grey, thickness: 1.0),
+            Divider(color: Colors.black26, thickness: 1.0),
           ],
         ),
       ),
