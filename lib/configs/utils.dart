@@ -241,7 +241,7 @@ class Utils {
     dynamic hour = now.hour;
     if (hour < 18) {
       return 'assets/image/background_light.jpg';
-    } return 'assets/image/background_night.jpg';
+    } return 'assets/image/background_light.jpg';
   }
 }
 
