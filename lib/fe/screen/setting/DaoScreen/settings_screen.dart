@@ -23,23 +23,28 @@ class _SettingScreenState extends State<SettingsScreen> {
   void initState() {
     super.initState();
     // Lấy giá trị theme từ SettingManager
-    selectedTheme = Provider.of<SettingManager>(context, listen: false).theme;
+    selectedTheme = Provider
+        .of<SettingManager>(context, listen: false)
+        .theme;
   }
 
   @override
   Widget build(BuildContext context) {
     // Đặt màu chữ dựa trên theme
     Color textColor = selectedTheme == "dark" ? Colors.white : Colors.black;
-    Color subtitleColor = selectedTheme == "dark" ? Colors.grey : Colors.black54;
+    Color subtitleColor = selectedTheme == "dark" ? Colors.grey : Colors
+        .black54;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
           Utils.getText('More Settings'),
-          style: TextStyle(color: selectedTheme == "dark" ? Colors.white : Colors.black),
+          style: TextStyle(
+              color: selectedTheme == "dark" ? Colors.white : Colors.black),
         ),
         backgroundColor: selectedTheme == "dark" ? Colors.black : Colors.white,
-        iconTheme: IconThemeData(color: selectedTheme == "dark" ? Colors.white : Colors.black),
+        iconTheme: IconThemeData(
+            color: selectedTheme == "dark" ? Colors.white : Colors.black),
       ),
       body: Container(
         color: selectedTheme == "dark" ? Colors.black87 : Colors.white,
@@ -50,12 +55,14 @@ class _SettingScreenState extends State<SettingsScreen> {
             // Alerts
             ListTile(
               leading: Icon(Icons.notifications, color: textColor),
-              title: Text(Utils.getText('Alerts'), style: TextStyle(color: textColor)),
+              title: Text(
+                  Utils.getText('Alerts'), style: TextStyle(color: textColor)),
               trailing: Icon(Icons.arrow_forward_ios, color: textColor),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => WarningsAlertsScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => WarningsAlertsScreen()),
                 );
               },
             ),
@@ -64,12 +71,14 @@ class _SettingScreenState extends State<SettingsScreen> {
             // Language and Units
             ListTile(
               leading: Icon(Icons.language, color: textColor),
-              title: Text(Utils.getText('language_unit'), style: TextStyle(color: textColor)),
+              title: Text(Utils.getText('language_unit'),
+                  style: TextStyle(color: textColor)),
               trailing: Icon(Icons.arrow_forward_ios, color: textColor),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LanguageAndUnitsScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => LanguageAndUnitsScreen()),
                 );
               },
             ),
@@ -78,7 +87,8 @@ class _SettingScreenState extends State<SettingsScreen> {
             // App Theme
             ListTile(
               leading: Icon(Icons.color_lens, color: textColor),
-              title: Text(Utils.getText('App Theme'), style: TextStyle(color: textColor)),
+              title: Text(Utils.getText('App Theme'),
+                  style: TextStyle(color: textColor)),
               trailing: Icon(Icons.arrow_forward_ios, color: textColor),
               onTap: () {
                 _showThemeDialog();
@@ -87,12 +97,15 @@ class _SettingScreenState extends State<SettingsScreen> {
             Divider(color: subtitleColor),
 
             SizedBox(height: 20),
-            Text(Utils.getText('Additional Settings'), style: TextStyle(color: subtitleColor)),
+            Text(Utils.getText('Additional Settings'),
+                style: TextStyle(color: subtitleColor)),
 
             // Auto-Refresh
             SwitchListTile(
-              title: Text(Utils.getText('Auto-Refresh'), style: TextStyle(color: textColor)),
-              subtitle: Text(Utils.getText('Select your'), style: TextStyle(color: subtitleColor)),
+              title: Text(Utils.getText('Auto-Refresh'),
+                  style: TextStyle(color: textColor)),
+              subtitle: Text(Utils.getText('Select your'),
+                  style: TextStyle(color: subtitleColor)),
               value: autoRefresh,
               onChanged: (value) {
                 setState(() {
@@ -105,7 +118,8 @@ class _SettingScreenState extends State<SettingsScreen> {
                 padding: EdgeInsets.only(left: 16.0),
                 child: DropdownButton<int>(
                   value: refreshInterval,
-                  dropdownColor: selectedTheme == "dark" ? Colors.black : Colors.white,
+                  dropdownColor: selectedTheme == "dark" ? Colors.black : Colors
+                      .white,
                   items: [5, 10, 15, 30, 60].map((int value) {
                     return DropdownMenuItem<int>(
                       value: value,
@@ -125,8 +139,10 @@ class _SettingScreenState extends State<SettingsScreen> {
 
             // Use Current Location
             SwitchListTile(
-              title: Text(Utils.getText('Use Current Location'), style: TextStyle(color: textColor)),
-              subtitle: Text(Utils.getText('Get hyperlocal'), style: TextStyle(color: subtitleColor)),
+              title: Text(Utils.getText('Use Current Location'),
+                  style: TextStyle(color: textColor)),
+              subtitle: Text(Utils.getText('Get hyperlocal'),
+                  style: TextStyle(color: subtitleColor)),
               value: useCurrentLocation,
               onChanged: (value) {
                 setState(() {
@@ -140,18 +156,28 @@ class _SettingScreenState extends State<SettingsScreen> {
     );
   }
 
-  // Hiển thị Dialog chọn chủ đề
   void _showThemeDialog() {
+    Color textColor = selectedTheme == "dark" ? Colors.white : Colors.black;
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        // Lấy theme hiện tại
+        bool isDarkMode = Provider
+            .of<SettingManager>(context)
+            .theme == "dark";
+
         return AlertDialog(
           title: Text(Utils.getText('Select Theme')),
+          backgroundColor: isDarkMode ? Colors.black : Colors.white,
+          // Thay đổi màu nền tùy theo theme
+          titleTextStyle: TextStyle(
+              color: isDarkMode ? Colors.white : Colors.black),
+          // Màu chữ tiêu đề
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               RadioListTile(
-                title: Text(Utils.getText('Light')),
+                title: Text(Utils.getText('Light'), style: TextStyle(color: textColor)),
                 value: "light",
                 groupValue: selectedTheme,
                 onChanged: (value) {
@@ -159,12 +185,13 @@ class _SettingScreenState extends State<SettingsScreen> {
                     selectedTheme = value.toString();
                   });
                   // Cập nhật theme vào SettingManager
-                  Provider.of<SettingManager>(context, listen: false).updateTheme("light");
+                  Provider.of<SettingManager>(context, listen: false)
+                      .updateTheme("light");
                   Navigator.of(context).pop();
                 },
               ),
               RadioListTile(
-                title: Text(Utils.getText('Dark')),
+                title: Text(Utils.getText('Dark'), style: TextStyle(color: textColor)),
                 value: "dark",
                 groupValue: selectedTheme,
                 onChanged: (value) {
@@ -172,7 +199,8 @@ class _SettingScreenState extends State<SettingsScreen> {
                     selectedTheme = value.toString();
                   });
                   // Cập nhật theme vào SettingManager
-                  Provider.of<SettingManager>(context, listen: false).updateTheme("dark");
+                  Provider.of<SettingManager>(context, listen: false)
+                      .updateTheme("dark");
                   Navigator.of(context).pop();
                 },
               ),
@@ -183,7 +211,8 @@ class _SettingScreenState extends State<SettingsScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(Utils.getText('Cancel')),
+              child: Text(Utils.getText('Cancel'), style: TextStyle(
+                  color: isDarkMode ? Colors.white : Colors.black)),
             ),
           ],
         );
