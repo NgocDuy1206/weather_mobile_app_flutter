@@ -16,13 +16,18 @@ class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
       context: context,
       builder: (BuildContext context) {
         var set = Provider.of<SettingManager>(context);
+        // Lấy theme hiện tại
+        bool isDarkMode = set.theme == "dark";
+
         return AlertDialog(
-          title: Text("Select Pressure Unit"),
+          title: Text("Select Pressure Unit", style: TextStyle(color: isDarkMode ? Colors.white : Colors.black)),
+          backgroundColor: isDarkMode ? Colors.black : Colors.white, // Màu nền tùy theo theme
+          titleTextStyle: TextStyle(color: isDarkMode ? Colors.white : Colors.black), // Màu chữ tiêu đề
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               RadioListTile(
-                title: Text('Atmosphere (atm)'),
+                title: Text('Atmosphere (atm)', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black)),
                 value: 'atm',
                 groupValue: set.pressUnit,
                 onChanged: (value) {
@@ -31,7 +36,7 @@ class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
                 },
               ),
               RadioListTile(
-                title: Text('Kilopascal (kPa)'),
+                title: Text('Kilopascal (kPa)', style: TextStyle(color: isDarkMode ? Colors.white : Colors.black)),
                 value: 'kPa',
                 groupValue: set.pressUnit,
                 onChanged: (value) {
@@ -41,10 +46,19 @@ class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
               ),
             ],
           ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel", style: TextStyle(color: isDarkMode ? Colors.white : Colors.black)),
+            ),
+          ],
         );
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
