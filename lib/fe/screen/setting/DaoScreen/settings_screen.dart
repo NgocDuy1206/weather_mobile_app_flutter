@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_mobile_app_flutter/be/state_management/setting_manager.dart';
 import 'package:weather_mobile_app_flutter/fe/screen/setting/DaoScreen/warnings_alerts_screen.dart';
-
 import '../../../../configs/utils.dart';
 import 'language_and_units_screen.dart';
 
@@ -17,27 +16,33 @@ class _SettingScreenState extends State<SettingsScreen> {
   bool autoRefresh = true;
   bool useCurrentLocation = true;
   int refreshInterval = 15;
-  String selectedTheme = "White"; // Biến lưu trữ chủ đề đã chọn
+  late String selectedTheme; // Sử dụng late để chỉ khởi tạo sau
   String minutes = Utils.getText('minutes');
 
   @override
+  void initState() {
+    super.initState();
+    // Lấy giá trị theme từ SettingManager
+    selectedTheme = Provider.of<SettingManager>(context, listen: false).theme;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Đặt màu chữ dựa trên chủ đề
-    Color textColor = selectedTheme == "Dark" ? Colors.white : Colors.black;
-    Color subtitleColor = selectedTheme == "Dark" ? Colors.grey : Colors.black54;
-    var provider = Provider.of<SettingManager>(context);
+    // Đặt màu chữ dựa trên theme
+    Color textColor = selectedTheme == "dark" ? Colors.white : Colors.black;
+    Color subtitleColor = selectedTheme == "dark" ? Colors.grey : Colors.black54;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
           Utils.getText('More Settings'),
-          style: TextStyle(color: selectedTheme == "Dark" ? Colors.white : Colors.black),
+          style: TextStyle(color: selectedTheme == "dark" ? Colors.white : Colors.black),
         ),
-        backgroundColor: selectedTheme == "Dark" ? Colors.black : Colors.white,
-        iconTheme: IconThemeData(color: selectedTheme == "Dark" ? Colors.white : Colors.black),
+        backgroundColor: selectedTheme == "dark" ? Colors.black : Colors.white,
+        iconTheme: IconThemeData(color: selectedTheme == "dark" ? Colors.white : Colors.black),
       ),
       body: Container(
-        color: selectedTheme == "Dark" ? Colors.black87 : Colors.white,
+        color: selectedTheme == "dark" ? Colors.black87 : Colors.white,
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,7 +105,7 @@ class _SettingScreenState extends State<SettingsScreen> {
                 padding: EdgeInsets.only(left: 16.0),
                 child: DropdownButton<int>(
                   value: refreshInterval,
-                  dropdownColor: selectedTheme == "Dark" ? Colors.black : Colors.white,
+                  dropdownColor: selectedTheme == "dark" ? Colors.black : Colors.white,
                   items: [5, 10, 15, 30, 60].map((int value) {
                     return DropdownMenuItem<int>(
                       value: value,
@@ -147,23 +152,27 @@ class _SettingScreenState extends State<SettingsScreen> {
             children: [
               RadioListTile(
                 title: Text(Utils.getText('Light')),
-                value: "Light",
+                value: "light",
                 groupValue: selectedTheme,
                 onChanged: (value) {
                   setState(() {
                     selectedTheme = value.toString();
                   });
+                  // Cập nhật theme vào SettingManager
+                  Provider.of<SettingManager>(context, listen: false).updateTheme("light");
                   Navigator.of(context).pop();
                 },
               ),
               RadioListTile(
                 title: Text(Utils.getText('Dark')),
-                value: "Dark",
+                value: "dark",
                 groupValue: selectedTheme,
                 onChanged: (value) {
                   setState(() {
                     selectedTheme = value.toString();
                   });
+                  // Cập nhật theme vào SettingManager
+                  Provider.of<SettingManager>(context, listen: false).updateTheme("dark");
                   Navigator.of(context).pop();
                 },
               ),

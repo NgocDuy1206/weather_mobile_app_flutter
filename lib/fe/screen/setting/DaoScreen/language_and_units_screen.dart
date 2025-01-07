@@ -25,58 +25,73 @@ class _LanguageAndUnitsScreenState extends State<LanguageAndUnitsScreen> {
   @override
   Widget build(BuildContext context) {
     var set = Provider.of<SettingManager>(context);
+    String theme = set.theme;
+    Color textColor = theme == "dark" ? Colors.white : Colors.black;
+    Color subtitleColor = theme == "dark" ? Colors.grey : Colors.black54;
+    Color backgroundColor = theme == "dark" ? Colors.black87 : Colors.white;
+    Color dividerColor = theme == "dark" ? Colors.white38 : Colors.black26;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(Utils.getText('language_unit'), style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
+        title: Text(
+            Utils.getText('language_unit'), style: TextStyle(color: textColor)),
+        backgroundColor: backgroundColor,
+        iconTheme: IconThemeData(color: textColor),
       ),
       body: Container(
-        color: Colors.white,
+        color: backgroundColor,
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              title: Text(Utils.getText('language'), style: TextStyle(color: Colors.black)),
+              title: Text(Utils.getText('language'),
+                  style: TextStyle(color: textColor)),
               subtitle: Text(
-                SettingManager.language == 'english' ? languages[0] : languages[1],
-                style: TextStyle(color: Colors.black54),
+                SettingManager.language == 'english'
+                    ? languages[0]
+                    : languages[1],
+                style: TextStyle(color: subtitleColor),
               ),
               onTap: () {
                 _showLanguageSelection(set);
               },
             ),
-            Divider(color: Colors.black26),
+            Divider(color: dividerColor),
             SizedBox(height: 10),
-            Text(Utils.getText('Units'), style: TextStyle(color: Colors.black)),
+            Text(Utils.getText('Units'), style: TextStyle(color: textColor)),
             RadioListTile(
-              title: Text('Imperial (°F)', style: TextStyle(color: Colors.black)),
-              subtitle: Text('Fahrenheit, Miles, In (")', style: TextStyle(color: Colors.black54)),
+              title: Text('Imperial (°F)', style: TextStyle(color: textColor)),
+              subtitle: Text('Fahrenheit, Miles, In (")',
+                  style: TextStyle(color: subtitleColor)),
               value: 'F',
               groupValue: set.tempUnit,
               onChanged: (value) {
                 set.updateTempUnit('F');
               },
             ),
-            Divider(color: Colors.black26),
+            Divider(color: dividerColor),
             RadioListTile(
-              title: Text('Metric (°C)', style: TextStyle(color: Colors.black)),
-              subtitle: Text('Celsius, Kilometres, kPa', style: TextStyle(color: Colors.black54)),
+              title: Text('Metric (°C)', style: TextStyle(color: textColor)),
+              subtitle: Text('Celsius, Kilometres, kPa',
+                  style: TextStyle(color: subtitleColor)),
               value: 'C',
               groupValue: set.tempUnit,
               onChanged: (value) {
                 set.updateTempUnit('C');
               },
             ),
-            Divider(color: Colors.black26),
+            Divider(color: dividerColor),
             ListTile(
-              title: Text(Utils.getText('Customize'), style: TextStyle(color: Colors.black)),
-              subtitle: Text(Utils.getText('Off'), style: TextStyle(color: Colors.black54)),
+              title: Text(Utils.getText('Customize'),
+                  style: TextStyle(color: textColor)),
+              subtitle: Text(
+                  Utils.getText('Off'), style: TextStyle(color: subtitleColor)),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CustomizeUnitsScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => CustomizeUnitsScreen()),
                 );
               },
             ),
@@ -90,18 +105,23 @@ class _LanguageAndUnitsScreenState extends State<LanguageAndUnitsScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        // Lấy theme hiện tại
+        String theme = provider.theme;
+        Color textColor = theme == "dark" ? Colors.white : Colors.black;
+
         return AlertDialog(
-          title: Text("Select Language"),
+          title: Text("Select Language", style: TextStyle(color: textColor)),
+          // Thay đổi màu chữ của tiêu đề
           content: SingleChildScrollView(
             child: Column(
               children: languages.map((language) {
                 return ListTile(
-                  title: Text(language, style: TextStyle(color: Colors.black)),
+                  title: Text(language, style: TextStyle(color: textColor)),
+                  // Thay đổi màu chữ của từng ngôn ngữ
                   onTap: () {
                     if (language == 'English (EN)') {
                       if (SettingManager.language != 'english') {
                         provider.updateLanguage('english');
-
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (context) => MainScreen()),

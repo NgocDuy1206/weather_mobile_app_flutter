@@ -49,24 +49,29 @@ class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
   @override
   Widget build(BuildContext context) {
     var set = Provider.of<SettingManager>(context);
+    String theme = set.theme;
+    Color textColor = theme == "dark" ? Colors.white : Colors.black;
+    Color subtitleColor = theme == "dark" ? Colors.grey : Colors.black54;
+    Color backgroundColor = theme == "dark" ? Colors.black87 : Colors.white;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Customize Units', style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
+        title: Text('Customize Units', style: TextStyle(color: textColor)),
+        backgroundColor: backgroundColor,
+        iconTheme: IconThemeData(color: textColor),
       ),
       body: Container(
-        color: Colors.white,
+        color: backgroundColor,
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              title: Text("Temperature", style: TextStyle(color: Colors.black)),
-              subtitle: Text("°C or °F", style: TextStyle(color: Colors.black54)),
+              title: Text("Temperature", style: TextStyle(color: textColor)),
+              subtitle: Text("°C or °F", style: TextStyle(color: subtitleColor)),
             ),
             RadioListTile(
-              title: Text("°C", style: TextStyle(color: Colors.black)),
+              title: Text("°C", style: TextStyle(color: textColor)),
               value: "C",
               groupValue: set.tempUnit,
               onChanged: (value) {
@@ -74,20 +79,20 @@ class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
               },
             ),
             RadioListTile(
-              title: Text("°F", style: TextStyle(color: Colors.black)),
+              title: Text("°F", style: TextStyle(color: textColor)),
               value: "F",
               groupValue: set.tempUnit,
               onChanged: (value) {
                 set.updateTempUnit('F');
               },
             ),
-            Divider(color: Colors.black54),
+            Divider(color: subtitleColor),
             ListTile(
-              title: Text("Wind Units", style: TextStyle(color: Colors.black)),
-              subtitle: Text("Select your preferred wind speed unit", style: TextStyle(color: Colors.black54)),
+              title: Text("Wind Units", style: TextStyle(color: textColor)),
+              subtitle: Text("Select your preferred wind speed unit", style: TextStyle(color: subtitleColor)),
             ),
             RadioListTile(
-              title: Text("mph", style: TextStyle(color: Colors.black)),
+              title: Text("mph", style: TextStyle(color: textColor)),
               value: "mph",
               groupValue: set.spdUnit,
               onChanged: (value) {
@@ -95,7 +100,7 @@ class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
               },
             ),
             RadioListTile(
-              title: Text("km/h", style: TextStyle(color: Colors.black)),
+              title: Text("km/h", style: TextStyle(color: textColor)),
               value: "km/h",
               groupValue: set.spdUnit,
               onChanged: (value) {
@@ -103,20 +108,20 @@ class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
               },
             ),
             RadioListTile(
-              title: Text("m/s", style: TextStyle(color: Colors.black)),
+              title: Text("m/s", style: TextStyle(color: textColor)),
               value: "m/s",
               groupValue: set.spdUnit,
               onChanged: (value) {
                 set.updateSpdUnit('m/s');
               },
             ),
-            Divider(color: Colors.black54),
+            Divider(color: subtitleColor),
             ListTile(
-              title: Text("Distance", style: TextStyle(color: Colors.black)),
-              subtitle: Text("Select your preferred distance unit", style: TextStyle(color: Colors.black54)),
+              title: Text("Distance", style: TextStyle(color: textColor)),
+              subtitle: Text("Select your preferred distance unit", style: TextStyle(color: subtitleColor)),
             ),
             RadioListTile(
-              title: Text("Miles (mi)", style: TextStyle(color: Colors.black)),
+              title: Text("Miles (mi)", style: TextStyle(color: textColor)),
               value: "m",
               groupValue: set.distanceUnit,
               onChanged: (value) {
@@ -124,20 +129,20 @@ class _CustomizeUnitsScreenState extends State<CustomizeUnitsScreen> {
               },
             ),
             RadioListTile(
-              title: Text("Kilometers (km)", style: TextStyle(color: Colors.black)),
+              title: Text("Kilometers (km)", style: TextStyle(color: textColor)),
               value: "km",
               groupValue: set.distanceUnit,
               onChanged: (value) {
                 set.updateDistanceUnit('km');
               },
             ),
-            Divider(color: Colors.black54),
+            Divider(color: subtitleColor),
             ListTile(
-              title: Text("Pressure Units", style: TextStyle(color: Colors.black)),
-              subtitle: Text("Select your preferred pressure unit", style: TextStyle(color: Colors.black54)),
+              title: Text("Pressure Units", style: TextStyle(color: textColor)),
+              subtitle: Text("Select your preferred pressure unit", style: TextStyle(color: subtitleColor)),
               onTap: () => _selectPressureUnit(context), // Gọi hàm chọn đơn vị áp suất
             ),
-            Text("Current Selection: ${set.pressUnit}", style: TextStyle(color: Colors.black)), // Hiển thị đơn vị đã chọn
+            Text("Current Selection: ${set.pressUnit}", style: TextStyle(color: textColor)), // Hiển thị đơn vị đã chọn
           ],
         ),
       ),

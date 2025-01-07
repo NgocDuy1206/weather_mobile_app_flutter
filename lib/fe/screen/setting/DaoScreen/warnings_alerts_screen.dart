@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weather_mobile_app_flutter/configs/utils.dart';
+import 'package:provider/provider.dart';
+import '../../../../be/state_management/setting_manager.dart';
 
 class WarningsAlertsScreen extends StatefulWidget {
   @override
@@ -18,17 +20,26 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Lấy theme hiện tại
+    String selectedTheme = Provider.of<SettingManager>(context).theme;
+    Color textColor = selectedTheme == "dark" ? Colors.white : Colors.black;
+    Color subtitleColor = selectedTheme == "dark" ? Colors.grey : Colors.black54;
+    Color appBarColor = selectedTheme == "dark" ? Colors.black : Colors.white;
+    Color iconColor = selectedTheme == "dark" ? Colors.white : Colors.black;
+    Color bodyColor = selectedTheme == "dark" ? Colors.black87 : Colors.white;
+    Color switchInactiveTrackColor = selectedTheme == "dark" ? Colors.black26 : Colors.black26;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
           Utils.getText('Alerts'),
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: textColor),
         ),
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white, // Màu nền AppBar trắng
-        elevation: 1, // Hiệu ứng bóng nhỏ
+        iconTheme: IconThemeData(color: iconColor),
+        backgroundColor: appBarColor,
+        elevation: 1,
       ),
-      backgroundColor: Colors.white, // Màu nền sáng
+      backgroundColor: bodyColor, // Màu nền của body thay đổi theo theme
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
@@ -38,11 +49,11 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
             SwitchListTile(
               title: Text(
                 Utils.getText('Sticky Notifications'),
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: textColor),
               ),
               subtitle: Text(
                 Utils.getText('Weather alerts'),
-                style: TextStyle(color: Colors.black54),
+                style: TextStyle(color: subtitleColor),
               ),
               value: isStickyNotificationsEnabled,
               onChanged: (bool value) {
@@ -59,7 +70,7 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
               },
               activeColor: Colors.blue,
               inactiveThumbColor: Colors.grey,
-              inactiveTrackColor: Colors.black26,
+              inactiveTrackColor: switchInactiveTrackColor,
             ),
             SizedBox(height: 16.0),
 
@@ -69,7 +80,7 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: textColor,
               ),
             ),
             SizedBox(height: 8.0),
@@ -78,11 +89,11 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
             SwitchListTile(
               title: Text(
                 Utils.getText('Weather Highlights'),
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: textColor),
               ),
               subtitle: Text(
                 Utils.getText('Get forecasts'),
-                style: TextStyle(color: Colors.black54),
+                style: TextStyle(color: subtitleColor),
               ),
               value: isWeatherHighlightsEnabled,
               onChanged: isStickyNotificationsEnabled
@@ -94,18 +105,18 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
                   : null, // Vô hiệu hóa nếu Sticky Notifications tắt
               activeColor: Colors.blue,
               inactiveThumbColor: Colors.grey,
-              inactiveTrackColor: Colors.black26,
+              inactiveTrackColor: switchInactiveTrackColor,
             ),
 
             // NWS Alerts Toggle
             SwitchListTile(
               title: Text(
                 Utils.getText('NWS Alerts'),
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: textColor),
               ),
               subtitle: Text(
                 Utils.getText('Get weather alerts'),
-                style: TextStyle(color: Colors.black54),
+                style: TextStyle(color: subtitleColor),
               ),
               value: isNWSAlertsEnabled,
               onChanged: isStickyNotificationsEnabled
@@ -117,18 +128,18 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
                   : null,
               activeColor: Colors.blue,
               inactiveThumbColor: Colors.grey,
-              inactiveTrackColor: Colors.black26,
+              inactiveTrackColor: switchInactiveTrackColor,
             ),
 
             // Weather News Toggle
             SwitchListTile(
               title: Text(
                 Utils.getText('Weather News'),
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: textColor),
               ),
               subtitle: Text(
                 Utils.getText('Get weather news & videos'),
-                style: TextStyle(color: Colors.black54),
+                style: TextStyle(color: subtitleColor),
               ),
               value: isWeatherNewsEnabled,
               onChanged: isStickyNotificationsEnabled
@@ -140,37 +151,37 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
                   : null,
               activeColor: Colors.blue,
               inactiveThumbColor: Colors.grey,
-              inactiveTrackColor: Colors.black26,
+              inactiveTrackColor: switchInactiveTrackColor,
             ),
 
             // Location Setting
             ListTile(
               title: Text(
                 Utils.getText('Location'),
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: textColor),
               ),
               subtitle: Text(
                 'Nam Từ Liêm, VN',
-                style: TextStyle(color: Colors.black54),
+                style: TextStyle(color: subtitleColor),
               ),
-              trailing: Icon(Icons.arrow_forward_ios, color: Colors.black),
+              trailing: Icon(Icons.arrow_forward_ios, color: iconColor),
               onTap: () {
                 // Hiển thị hộp thoại chọn vị trí
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      backgroundColor: Colors.white,
+                      backgroundColor: bodyColor,
                       title: Text(
                         Utils.getText('Current Location'),
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(color: textColor),
                       ),
                       content: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             Utils.getText('Use Current Location'),
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(color: textColor),
                           ),
                           Checkbox(
                             value: isCurrentLocationSelected,
