@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "990640292533",
+    "project_id": "weather-push-noti-21020897",
+    "storage_bucket": "weather-push-noti-21020897.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990640292533:android:90c47aaccb16938a4b74fc",
+        "android_client_info": {
+          "package_name": "com.example.weather_mobile_app_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiuFtgShNmiP4PuGoJByDxZgPEpKMLJr0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

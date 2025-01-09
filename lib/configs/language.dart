@@ -92,11 +92,11 @@ class Language  {
     'Settings': 'Settings',
     'Manage Locations': 'Manage Locations',
     'Add Widgets': 'Add Widgets',
-    'Daily Summary Notification': 'Daily Summary Notification',
+    "Daily Timer Notification": "Daily Timer Notification",
     'More Settings': 'More Settings',
     'SAVED LOCATIONS': 'SAVED LOCATIONS',
     'Use Current Location': 'Use Current Location',
-    'Get a daily': 'Get a daily brief of your day at a time of your choosing',
+    'Get daily timer notification': 'Get daily timer notification',
     'Select time': 'Select time',
     'Cancel': 'Cancel',
     'OK': 'OK',
@@ -107,8 +107,8 @@ class Language  {
     'Additional Settings': 'Additional Settings',
     'Select your': 'Select your interval to automatically refresh notifications',
     'Get hyperlocal': 'Get hyperlocal weather updates for your pinpoint location',
-    'Sticky Notifications': 'Sticky Notifications',
-    'Weather alerts': 'Weather alerts from the National Weather Service',
+    'Instant Notification': 'Instant Notification',
+    'Weather alerts': 'Weather notification from the National Weather Service',
     'Types of Content': 'Types of Content',
     'Weather Highlights': 'Weather Highlights',
     'Get forecasts': 'Get forecasts and alerts in your area',
@@ -135,6 +135,10 @@ class Language  {
     'Select Theme': 'Select Theme',
     'Light': 'Light',
     'Dark': 'Dark',
+    'Weather Update': 'Weather Update',
+    'Your weather data is updated!': 'Your weather data is updated!',
+    'Notification': 'Notification',
+
     // Text của chiến
   };
   static const Map<String, dynamic> vietnam = {
@@ -229,11 +233,11 @@ class Language  {
     'Settings': 'Cài Đặt',
     'Manage Locations': 'Quản lý Vị Trí',
     'Add Widgets': 'Thêm Tiện Ích',
-    'Daily Summary Notification': 'Thông Báo Tóm Tắt Hàng Ngày',
+    'Daily timer notification': 'Thông Báo Hẹn Giờ Hàng Ngày',
     'More Settings': 'Cài Đặt Khác',
     'SAVED LOCATIONS': 'Vị Trí Đã Lưu',
     'Use Current Location': 'Sử Dụng Vị Trí Hiện Tại',
-    'Get a daily': 'Nhận bản tóm tắt hàng ngày về ngày của bạn vào thời điểm bạn chọn',
+    'Get daily timer notification': 'Nhận thông báo hẹn giờ hàng ngày',
     'Select time': 'Cài đặt giờ',
     'Cancel': 'Hủy bỏ',
     'OK': 'Chọn',
@@ -244,8 +248,8 @@ class Language  {
     'Additional Settings': 'Cài Đặt Thêm',
     'Select your': 'Chọn khoảng thời gian của bạn để tự động làm mới thông báo',
     'Get hyperlocal': 'Nhận thông tin cập nhật về thời tiết địa phương cho vị trí chính xác của bạn',
-    'Sticky Notifications': 'Thông báo cố định',
-    'Weather alerts': 'Cảnh báo thời tiết từ Cơ quan Dịch vụ Thời tiết Quốc gia',
+    'Instant Notification': 'Thông báo tức thì',
+    'Weather alerts': 'Thông báo thời tiết từ Cơ quan Dịch vụ Thời tiết Quốc gia',
     'Types of Content': 'Các loại nội dung',
     'Weather Highlights': 'Điểm nổi bật thời tiết',
     'Get forecasts': 'Nhận dự báo và cảnh báo trong khu vực của bạn',
@@ -272,6 +276,10 @@ class Language  {
     'Select Theme': 'Chọn chủ đề',
     'Light': 'Sáng',
     'Dark': 'Tối',
+    'Weather Update': 'Cập nhật thời tiết',
+    'Your weather data is updated!': 'Thời tiết đã được cập nhật',
+    'Notification': 'Thông Báo',
+    'Daily Timer Notification': 'Thông Báo Hẹn Giờ Hàng Ngày'
 
     // Text của chiến
   };

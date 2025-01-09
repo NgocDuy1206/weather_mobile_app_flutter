@@ -108,16 +108,17 @@ class _LanguageAndUnitsScreenState extends State<LanguageAndUnitsScreen> {
         // Lấy theme hiện tại
         String theme = provider.theme;
         Color textColor = theme == "dark" ? Colors.white : Colors.black;
+        Color backgroundColor = theme == "dark" ? Colors.black87 : Colors.white;  // Thêm màu nền cho dialog
+        Color subtitleColor = theme == "dark" ? Colors.grey : Colors.black54;
 
         return AlertDialog(
+          backgroundColor: backgroundColor, // Đặt màu nền cho dialog
           title: Text("Select Language", style: TextStyle(color: textColor)),
-          // Thay đổi màu chữ của tiêu đề
           content: SingleChildScrollView(
             child: Column(
               children: languages.map((language) {
                 return ListTile(
                   title: Text(language, style: TextStyle(color: textColor)),
-                  // Thay đổi màu chữ của từng ngôn ngữ
                   onTap: () {
                     if (language == 'English (EN)') {
                       if (SettingManager.language != 'english') {

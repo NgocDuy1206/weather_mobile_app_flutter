@@ -1,6 +1,3 @@
-
-
-
 import 'package:weather_mobile_app_flutter/be/data/air_quality.dart';
 import 'package:weather_mobile_app_flutter/be/data/weather_by_day.dart';
 import 'package:weather_mobile_app_flutter/be/data/weather_by_hour.dart';
@@ -48,20 +45,24 @@ class WeatherLocation {
       return AirQuality.fromJson(json);
     }).toList();
     return WeatherLocation(
-        locationName: hourly['city_name'],
-        latitude: latitude,
-        longitude: longitude,
-        current: WeatherCurrent.fromJson(current),
-        hourList: listByHour,
-        dayList: listByDay,
-        airQualityList: listAir,
+      locationName: hourly['city_name'],
+      latitude: latitude,
+      longitude: longitude,
+      current: WeatherCurrent.fromJson(current),
+      hourList: listByHour,
+      dayList: listByDay,
+      airQualityList: listAir,
     );
   }
+
+  // Thêm getter cho mô tả thời tiết và nhiệt độ hiện tại
+  String get currentWeatherDescription => current.weatherCode; // Lấy mô tả thời tiết từ thuộc tính 'weatherCode'
+  double get currentTemperature => current.temperature.toDouble(); // Chuyển đổi nhiệt độ sang double
 
   double getTempMaxByHour() {
     double tempMax = 0;
     for (var x in hourList) {
-      tempMax = (tempMax > x.temperature)? tempMax:  x.temperature.toDouble();
+      tempMax = (tempMax > x.temperature) ? tempMax : x.temperature.toDouble();
     }
     return tempMax;
   }
@@ -69,7 +70,7 @@ class WeatherLocation {
   double getTempMinByHour() {
     double tempMin = 100;
     for (var x in hourList) {
-      tempMin = (tempMin < x.temperature)? tempMin: x.temperature.toDouble();
+      tempMin = (tempMin < x.temperature) ? tempMin : x.temperature.toDouble();
     }
     return tempMin;
   }
@@ -77,7 +78,7 @@ class WeatherLocation {
   double getTempMaxByDay() {
     double temMax = 0;
     for (var x in dayList) {
-      temMax = (temMax > x.temperatureMax) ? temMax: x.temperatureMax.toDouble();
+      temMax = (temMax > x.temperatureMax) ? temMax : x.temperatureMax.toDouble();
     }
     return temMax;
   }
@@ -85,7 +86,7 @@ class WeatherLocation {
   double getTempMinByDay() {
     double tempMin = 100;
     for (var x in dayList) {
-      tempMin = (tempMin < x.temperatureMin) ? tempMin: x.temperatureMin.toDouble();
+      tempMin = (tempMin < x.temperatureMin) ? tempMin : x.temperatureMin.toDouble();
     }
     return tempMin;
   }

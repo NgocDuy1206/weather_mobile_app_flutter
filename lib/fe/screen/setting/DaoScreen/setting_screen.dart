@@ -52,7 +52,7 @@ class SettingScreen extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.notifications, color: iconColor),
-              title: Text(Utils.getText('Daily Summary Notification'), style: TextStyle(color: textColor)),
+              title: Text(Utils.getText('Daily Timer Notification'), style: TextStyle(color: textColor)),
               trailing: Icon(Icons.arrow_forward_ios, color: subtitleColor),
               onTap: () {
                 Navigator.push(
