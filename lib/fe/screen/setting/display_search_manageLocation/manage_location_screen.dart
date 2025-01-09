@@ -4,6 +4,7 @@ import 'package:weather_mobile_app_flutter/fe/components_search/dashed_line_sepa
 import 'dart:convert'; // Để sử dụng jsonDecode
 
 import '../../../components_manage_location/component_delete_location/delete_confirmation_dialog.dart';
+import '../../../components_manage_location/component_edit_location/Location_Modal.dart';
 import '../../../components_manage_location/dashed_separator.dart';
 import '../../../components_manage_location/instruction_text.dart';
 import '../../../components_manage_location/location_item_manage.dart';
@@ -93,16 +94,49 @@ class _ManageScreenState extends State<ManageScreen> {
           children: [
             LocationItemManage(
               label: item['name'] ?? 'Unknown Location', // Thay label thành name
-              location: locationDisplay, // Thay location thành region và country
-              onEdit: () {
-                // Xử lý khi nhấn nút chỉnh sửa
-              },
+              location: locationDisplay,
+              icon: item['icon'],
+              customerName: item['customerName'],
+                // OK
+                onEdit: () async {
+                  final updatedLocationData = await showModalBottomSheet<LabelData>(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (BuildContext context) {
+                      return EditLocationModal(
+                        location: locationDisplay,
+                        label: item['name'] ?? 'Unknown Location',
+                        customerName: item['customerName'],
+                        icon: item['icon'],
+                        // Cung cấp icon mặc định
+
+                      );
+                    },
+                  );
+
+                  // Kiểm tra nếu có giá trị trả về từ modal
+                  if (updatedLocationData != null) {
+                    // Lưu vào SharedPreferences
+                    await SharedPreferencesHelper.updateCustomerSearchHistory(item['name'],updatedLocationData.label, updatedLocationData.icon);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => ManageScreen()),  // Thay ManageScreen với màn hình hiện tại của bạn
+                    );
+                    SearchHistoryNotifier.notifyHistoryUpdated();
+                  }
+                },
+
                 onDelete: (confirmed) async {
                   if (confirmed) {
                     bool success = await SharedPreferencesHelper.removeSearchHistoryItem(
                         item['name'] ?? '',
                         item['country'] ?? ''
                     );
+
+                    // bool suc = await SharedPreferencesHelper.removeSearchHistoryByCustomerName(
+                    //     item['customerName'] ?? '',
+                    // );
 
                     if (success) {
                       setState(() {

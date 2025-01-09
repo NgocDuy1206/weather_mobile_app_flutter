@@ -10,8 +10,22 @@ import '../components_search/history_search.dart';
 
 class Destination extends StatelessWidget {
   final String? destination;
+  final String? iconData; // Thêm biến để nhận iconData
+  final String? customerName;
 
-  Destination({super.key, this.destination});
+  Destination({super.key, this.destination, this.customerName, this.iconData});
+
+  static const Map<String, IconData> iconMap = {
+    'Icons.home': Icons.home,
+    'Icons.school': Icons.school,
+    'Icons.local_hospital': Icons.local_hospital,
+    'Icons.work': Icons.work,
+    'Icons.fitness_center': Icons.fitness_center,
+    'Icons.park': Icons.park,
+    'Icons.directions_bus': Icons.directions_bus,
+    'Icons.favorite': Icons.favorite,
+    'Icons.location_on': Icons.location_on,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +33,9 @@ class Destination extends StatelessWidget {
 
     // Kiểm tra vị trí được chọn
     bool isSelected = weatherManager.currentSelected == destination;
+    // Lấy iconData từ truyền vào hoặc dùng mặc định
+    IconData icon = iconData != null ? iconMap[iconData] ?? Icons.location_on : Icons.location_on;
+    String? displayLabel = customerName?.isEmpty ?? true ? destination : customerName;
 
     return Container(
       child: InkWell(
@@ -49,20 +66,30 @@ class Destination extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(19)),
           ),
           child: Row(
+
             children: [
-              Icon(Icons.location_on, color: Colors.white),
+              Transform.translate(
+                offset: Offset(0, -3), // Dịch lên một chút (giảm giá trị y để di chuyển lên trên)
+                child: Icon(
+                  icon,
+                  color: Colors.white,
+                  size: 25, // Giảm kích thước của icon
+                ),
+              ),
               SizedBox(width: 5),
               Text(
-                destination!,
+                displayLabel!,
                 style: TextStyle(color: Colors.white),
               ),
             ],
           ),
+
         ),
       ),
     );
   }
 }
+
 
 
 class ListDestination extends StatelessWidget {
@@ -82,6 +109,8 @@ class ListDestination extends StatelessWidget {
           destinations.add(
             Destination(
               destination: "Hiện tại",
+              customerName: '',
+              iconData: 'Icons.location_on', // Gán icon mặc định cho "Hiện tại"
             ),
           );
         }
@@ -89,7 +118,11 @@ class ListDestination extends StatelessWidget {
         // Thêm các vị trí từ lịch sử tìm kiếm
         destinations.addAll(
           searchHistory.map((item) {
-            return Destination(destination: item['name']);
+            return Destination(
+              destination: item['name'],
+              customerName: item['customerName'],
+              iconData: item['icon'], // Truyền icon từ lịch sử tìm kiếm
+            );
           }).toList(),
         );
 
@@ -104,4 +137,5 @@ class ListDestination extends StatelessWidget {
     );
   }
 }
+
 

@@ -4,6 +4,7 @@
 
 
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_mobile_app_flutter/be/data/weather_location.dart';
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
@@ -79,6 +80,8 @@ class GetApi extends Api {
         'country': location['country'],
         'lat': location['lat'], // Giữ kiểu double
         'lon': location['lon'],
+        'customerName': '',
+        'icon': 'Icons.location_on',
       }).toList();
 
       return locations;

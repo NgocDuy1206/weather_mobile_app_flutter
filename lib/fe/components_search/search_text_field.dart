@@ -280,7 +280,9 @@ class _SearchTextFieldState extends State<SearchTextField> {
                     ),
                     subtitle: Text(
                       suggestion['region']?.isNotEmpty == true
-                          ? '${suggestion['region']} - ${suggestion['country']}'
+                          ? '${
+
+                          ['region']} - ${suggestion['country']}'
                           : suggestion['country']!,
                       style: TextStyle(color: Colors.white70),
                     ),

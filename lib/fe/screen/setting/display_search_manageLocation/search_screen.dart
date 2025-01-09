@@ -77,8 +77,22 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
     super.dispose();
   }
 
+  static const Map<String, IconData> iconMap = {
+    'Icons.home': Icons.home,
+    'Icons.school': Icons.school,
+    'Icons.local_hospital': Icons.local_hospital,
+    'Icons.work': Icons.work,
+    'Icons.fitness_center': Icons.fitness_center,
+    'Icons.park': Icons.park,
+    'Icons.directions_bus': Icons.directions_bus,
+    'Icons.favorite': Icons.favorite,
+    'Icons.location_on': Icons.location_on,
+  };
+
   @override
   Widget build(BuildContext context) {
+
+
     return DraggableScrollableSheet(
       expand: false,
       initialChildSize: 0.9,
@@ -289,6 +303,14 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                           if (_searchHistory.isNotEmpty) ...[
                             Column(
                               children: _searchHistory.map((historyItem) {
+                                IconData iconData = iconMap[historyItem['icon']] ?? Icons.help;
+                                String displayLabel = historyItem['customerName']?.isEmpty ?? true ? historyItem['name'] : historyItem['customerName']!;
+                                String displayLocation = historyItem['customerName']?.isEmpty ?? true
+                                    ? (historyItem['region']?.isNotEmpty == true
+                                    ? '${historyItem['region']} - ${historyItem['country']}'
+                                    : historyItem['country']!)
+                                    : historyItem['name']!;
+
                                 return Column(
                                   children: [
                                     ListTile(
@@ -296,17 +318,15 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                                         backgroundColor: Colors.grey, // Màu xám cho vòng tròn
                                         child: Padding(
                                           padding: const EdgeInsets.only(left: 1.0), // Dịch icon một chút
-                                          child: Icon(Icons.location_on, color: Colors.white), // Biểu tượng location_on
+                                          child: Icon(iconData, color: Colors.white), // Biểu tượng location_on
                                         ),
                                       ),
                                       title: Text(
-                                        historyItem['name']!,
+                                        displayLabel,
                                         style: TextStyle(color: Colors.white),
                                       ),
                                       subtitle: Text(
-                                        historyItem['region']?.isNotEmpty == true
-                                            ? '${historyItem['region']} - ${historyItem['country']}'
-                                            : historyItem['country']!,
+                                        displayLocation,
                                         style: TextStyle(color: Colors.white70),
                                       ),
                                       onTap: () async {
