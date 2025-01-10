@@ -5,7 +5,8 @@ class AirQuality {
   final dynamic so2;
   final dynamic no2;
   final dynamic co;
-  final dynamic pn25;
+  final dynamic pm25;
+  final dynamic pm10;
 
   AirQuality({
     required this.time,
@@ -14,7 +15,8 @@ class AirQuality {
     required this.so2,
     required this.no2,
     required this.co,
-    required this.pn25,
+    required this.pm25,
+    required this.pm10,
   });
 
   factory AirQuality.fromJson(Map<String, dynamic> json) {
@@ -25,7 +27,8 @@ class AirQuality {
         so2: json['so2'],
         no2: json['no2'],
         co: json['co'],
-        pn25: json['pm25']
+        pm25: json['pm25'],
+        pm10: json['pm10'],
     );
   }
 }

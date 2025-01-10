@@ -9,6 +9,7 @@ class DailyTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: InforDevice.HEIGHT,
+      color: MyColors.background_theme,
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(

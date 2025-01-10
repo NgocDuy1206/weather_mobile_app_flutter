@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
-import 'package:weather_mobile_app_flutter/fe/components/destination.dart';
 import 'package:weather_mobile_app_flutter/fe/screen/display/forecast_screen.dart';
 import 'package:weather_mobile_app_flutter/fe/screen/display/radar_screen.dart';
 import 'package:weather_mobile_app_flutter/fe/screen/display/today_screen.dart';
 import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
-import 'package:weather_mobile_app_flutter/configs/utils.dart';
-import 'package:weather_mobile_app_flutter/configs/utils.dart';
+
 
 import '../../../configs/utils.dart';
 
@@ -25,11 +23,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    InforDevice.WIDTH = MediaQuery.of(context).size.width;
-    InforDevice.HEIGHT = MediaQuery.of(context).size.height;
     var tab = Provider.of<BottomNagivation>(context);
     return Scaffold(
-
       body: tabBottomNavigation[tab.selectedTab],
       bottomNavigationBar: Container(
         height: 120,
@@ -37,15 +32,15 @@ class _MainScreenState extends State<MainScreen> {
             items: <BottomNavigationBarItem> [
               BottomNavigationBarItem(
                   icon: ImageIcon(AssetImage('assets/icon/today.png')),
-                label: 'T',
+                label: Utils.getText('today'),
               ),
               BottomNavigationBarItem(
                 icon: ImageIcon(AssetImage('assets/icon/forecast.png')),
-                label: 'FORECAST',
+                label: Utils.getText('forecast'),
               ),
               BottomNavigationBarItem(
                 icon: ImageIcon(AssetImage('assets/icon/radar.png')),
-                label: 'RADAR',
+                label: Utils.getText('radar'),
               ),
             ],
           onTap: (int index){

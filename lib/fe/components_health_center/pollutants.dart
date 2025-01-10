@@ -1,17 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_mobile_app_flutter/be/data/air_quality.dart';
+import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
+
+import '../../configs/utils.dart';
 
 class Pollutants extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 230,
+      height: 240,
       margin: EdgeInsets.only(top: 40, left: 10, right: 10),
       padding: EdgeInsets.only(top: 10, bottom: 20, left: 10, right: 10),
       decoration: BoxDecoration(
-        color: MyColors.GRAY,
+        color: MyColors.background_table,
         borderRadius: BorderRadius.circular(10),
 
       ),
@@ -23,7 +28,13 @@ class Pollutants extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('POLLUTANTS', style: TextStyle(fontWeight: FontWeight.w800),),
-                Icon(Icons.info_outline_rounded),
+                Tooltip(
+                    message: Utils.getText('information_pollutants'),
+                    decoration: BoxDecoration(
+                      color: MyColors.BLUE,
+                    ),
+                    child: Icon(Icons.info_outline_rounded)
+                ),
               ],
             ),
           ),
@@ -34,11 +45,11 @@ class Pollutants extends StatelessWidget {
                 flex: 5,
                 child: Column(
                   children: [
-                    RowPollutant(),
+                    RowPollutant(factor: 'PM10'),
                     SizedBox(height: 10,),
-                    RowPollutant(),
+                    RowPollutant(factor: 'CO',),
                     SizedBox(height: 10,),
-                    RowPollutant(),
+                    RowPollutant(factor: 'SO2',),
                   ],
                 ),
               ),
@@ -55,11 +66,11 @@ class Pollutants extends StatelessWidget {
                 flex: 5,
                 child: Column(
                   children: [
-                    RowPollutant(),
+                    RowPollutant(factor: 'PM2.5',),
                     SizedBox(height: 10,),
-                    RowPollutant(),
+                    RowPollutant(factor: 'O3',),
                     SizedBox(height: 10,),
-                    RowPollutant(),
+                    RowPollutant(factor: 'NO2',),
                   ],
                 ),
               )
@@ -74,9 +85,14 @@ class Pollutants extends StatelessWidget {
 
 
 class RowPollutant extends StatelessWidget {
+  String factor;
 
+  RowPollutant({this.factor =  'PM10'});
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<WeatherManager>(context);
+    AirQuality aqi = provider.weatherLocation!.airQualityList[0];
+    dynamic value = Utils.getValueAQI(factor, aqi);
     return Row(
       children: [
         Expanded(
@@ -86,7 +102,7 @@ class RowPollutant extends StatelessWidget {
               width: 5,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.green,
+                color: Utils.getColorAQI(value),
               ),
             )
         ),
@@ -95,18 +111,19 @@ class RowPollutant extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('PM10', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),),
-                Text('Unhealthy', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),),
+                Text(factor, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),),
+                Text(Utils.getEvaluateAirQ(value),
+                  style: TextStyle(fontSize: 9, fontWeight: FontWeight.w400),),
               ],
             )
         ),
         Expanded(
-            flex: 3,
+            flex: 1,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text('190', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),),
-                Text('g/m3', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),),
+                Text(value.toStringAsFixed(0), style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),),
+                Text(Utils.getUnitAQI(factor), style: TextStyle(fontSize: 9, fontWeight: FontWeight.w400),),
               ],
             )
         ),

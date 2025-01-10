@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_mobile_app_flutter/be/state_management/Manager.dart';
+import 'package:weather_mobile_app_flutter/be/state_management/setting_manager.dart';
 import 'package:weather_mobile_app_flutter/configs/constants.dart';
 import 'package:weather_mobile_app_flutter/configs/utils.dart';
+import 'package:weather_mobile_app_flutter/fe/components/weather_detail.dart';
 
 class WeatherCard extends StatelessWidget {
   int index;
@@ -18,24 +20,36 @@ class WeatherCard extends StatelessWidget {
         ? provider.weatherLocation!.hourList[index]
         : provider.weatherLocation!.dayList[index];
 
-    return Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10), // Góc bo tròn
-      ),
-      child: Container(
-        height: 70,
-        padding: EdgeInsets.all(3),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // date
-            Expanded(flex: 2,child: Column1(kind: kind, card: card,)),
-            Expanded(flex: 1,child: Column2(card: card,)),
-            Expanded(flex: 3,child: Column3(kind: kind,card: card,)),
-            Expanded(flex: 3,child: Column4(card: card,)),
-          ],
+    return InkWell(
+      onTap: () {
+          showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return WeatherDetail(kind: kind,weather: card);
+              }
+          );
+      },
+      child: Card(
+        elevation: 5,
+        color: MyColors.background_table,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10), // Góc bo tròn
+        ),
+        child: Container(
+
+          height: 70,
+          padding: EdgeInsets.all(3),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // date
+              Expanded(flex: 2,child: Column1(kind: kind, card: card,)),
+              Expanded(flex: 1,child: Column2(card: card,)),
+              Expanded(flex: 3,child: Column3(kind: kind,card: card,)),
+              Expanded(flex: 3,child: Column4(card: card,)),
+            ],
+          ),
         ),
       ),
     );
@@ -83,6 +97,7 @@ class Column3 extends StatelessWidget {
   Column3({this.kind = 'hourly', this.card});
   @override
   Widget build(BuildContext context) {
+    var set = Provider.of<SettingManager>(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -90,31 +105,27 @@ class Column3 extends StatelessWidget {
           children: [
             (kind == 'hourly')
                 ? Text(
-              card.temperature.toString() +
-                  '${Constants.DEGREES}',
+              Utils.getTemp(card.temperature, set.tempUnit),
               style: TextStyle(fontSize: 15),
             )
                 : Text(
-              card.temperatureMax.toString() +
-                  '${Constants.DEGREES}',
+              Utils.getTemp(card.temperatureMax, set.tempUnit),
               style: TextStyle(fontSize: 15),
             ),
-            (kind == 'hourly') ? Text(' Feel like ',style: TextStyle(fontSize: 10),)
+            (kind == 'hourly') ? Text(Utils.getText('feel_like'),style: TextStyle(fontSize: 10),)
                 : Text(' / ', style: TextStyle(fontSize: 10),),
             (kind == 'hourly')
                 ? Text(
-              card.temperatureApparent.toString() +
-                  '${Constants.DEGREES}',
+              Utils.getTemp(card.temperatureApparent, set.tempUnit),
               style: TextStyle(fontSize: 10),
             )
                 : Text(
-              card.temperatureMin.toString() +
-                  '${Constants.DEGREES}',
+              Utils.getTemp(card.temperatureMin, set.tempUnit),
               style: TextStyle(fontSize: 10),
             ),
           ],
         ),
-        Text(card.weatherCode, style: TextStyle(fontSize: 13),),
+        Text(Utils.getText(card.weatherCode), style: TextStyle(fontSize: 13),),
       ],
     );
   }
@@ -125,6 +136,7 @@ class Column4 extends StatelessWidget {
   Column4({this.card});
   @override
   Widget build(BuildContext context) {
+    var set = Provider.of<SettingManager>(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -139,7 +151,7 @@ class Column4 extends StatelessWidget {
             const SizedBox(
               width: 10,
             ),
-            Text(card.windSpeed.toString() + ' m/s', style: TextStyle(fontSize: 12),),
+            Text(Utils.getSpeed(card.windSpeed, set.spdUnit), style: TextStyle(fontSize: 12),),
           ],
         ),
         Row(

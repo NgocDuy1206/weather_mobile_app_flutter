@@ -22,7 +22,7 @@ class AirQualityTable extends StatelessWidget {
       margin: EdgeInsets.only(top: 10, bottom: 25),
       padding: EdgeInsets.all(10),
       decoration: const BoxDecoration(
-        color: MyColors.GRAY,
+        color: MyColors.background_table,
         borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
       child: Column(
@@ -69,12 +69,12 @@ class AirQualityBar extends StatelessWidget{
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Expanded(flex: 1, child: Container(height: 2, color: MyColors.GREEN,)),
-                  Expanded(flex: 1, child: Container(height: 2, color: MyColors.GREEN1,)),
-                  Expanded(flex: 1, child: Container(height: 2, color: MyColors.YELLOW1,)),
-                  Expanded(flex: 1, child: Container(height: 2, color: MyColors.YELLOW,)),
-                  Expanded(flex: 2, child: Container(height: 2, color: MyColors.RED1,)),
-                  Expanded(flex: 4, child: Container(height: 2, color: MyColors.RED,)),
+                  Expanded(flex: 1, child: Container(height: 2, color: MyColors.Good,)),
+                  Expanded(flex: 1, child: Container(height: 2, color: MyColors.Moderate,)),
+                  Expanded(flex: 1, child: Container(height: 2, color: MyColors.Unhealthy_fsg,)),
+                  Expanded(flex: 1, child: Container(height: 2, color: MyColors.Unhealthy,)),
+                  Expanded(flex: 2, child: Container(height: 2, color: MyColors.Very_unhealthy,)),
+                  Expanded(flex: 4, child: Container(height: 2, color: MyColors.Hazardous,)),
                 ],
               ),
             ),
@@ -129,8 +129,8 @@ class DisplayAirQuality extends StatelessWidget{
                   fontSize:20,
                 ),
               ),
-              const Text(
-                  'Air quality between 51 and 100 is not ideal, so keep an eye on it',
+              Text(
+                  Utils.getText('advice'),
                 style: TextStyle(
                   fontSize: 15
                 ),

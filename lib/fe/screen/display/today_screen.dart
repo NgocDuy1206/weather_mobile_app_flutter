@@ -79,7 +79,12 @@ class _TodayState extends State<Today> {
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
-      Image.asset('assets/image/background.jpg',),
+      Image.asset(
+        Utils.getBackGround(),
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+      ),
       CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -156,7 +161,7 @@ class _TodayState extends State<Today> {
                   width: InforDevice.WIDTH,
                   padding: EdgeInsets.only(top: 25, bottom: 10),
                   decoration: const BoxDecoration(
-                    color: MyColors.WHITE,
+                    color: MyColors.background_theme,
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
                   child: Column(
@@ -181,7 +186,6 @@ class _TodayState extends State<Today> {
           ),
         ],
       ),
-      
     ]);
   }
 }

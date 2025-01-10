@@ -6,7 +6,6 @@ import '../../../../configs/utils.dart';
 import '../../display/main_screen.dart';
 import 'customize_units_screen.dart';
 
-
 class LanguageAndUnitsScreen extends StatefulWidget {
   static const routeName = '/language-and-units';
 
@@ -15,7 +14,6 @@ class LanguageAndUnitsScreen extends StatefulWidget {
 }
 
 class _LanguageAndUnitsScreenState extends State<LanguageAndUnitsScreen> {
-
   String selectedUnits = "Metric (°C)";
 
   // Danh sách các ngôn ngữ
@@ -23,64 +21,77 @@ class _LanguageAndUnitsScreenState extends State<LanguageAndUnitsScreen> {
     'English (EN)',
     'Việt Nam (VN)',
   ];
+
   @override
   Widget build(BuildContext context) {
-    var langProvider =  Provider.of<SettingManager>(context);
+    var set = Provider.of<SettingManager>(context);
+    String theme = set.theme;
+    Color textColor = theme == "dark" ? Colors.white : Colors.black;
+    Color subtitleColor = theme == "dark" ? Colors.grey : Colors.black54;
+    Color backgroundColor = theme == "dark" ? Colors.black87 : Colors.white;
+    Color dividerColor = theme == "dark" ? Colors.white38 : Colors.black26;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Language and Units', style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.black,
-        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(
+            Utils.getText('language_unit'), style: TextStyle(color: textColor)),
+        backgroundColor: backgroundColor,
+        iconTheme: IconThemeData(color: textColor),
       ),
       body: Container(
-        color: Colors.black87,
+        color: backgroundColor,
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              title: Text(Utils.getText('language'), style: TextStyle(color: Colors.white)),
+              title: Text(Utils.getText('language'),
+                  style: TextStyle(color: textColor)),
               subtitle: Text(
-                  SettingManager.language == 'english'? languages[0]: languages[1],
-                  style: TextStyle(color: Colors.grey)),
+                SettingManager.language == 'english'
+                    ? languages[0]
+                    : languages[1],
+                style: TextStyle(color: subtitleColor),
+              ),
               onTap: () {
-                _showLanguageSelection(langProvider);
+                _showLanguageSelection(set);
               },
             ),
-            Divider(color: Colors.grey),
+            Divider(color: dividerColor),
             SizedBox(height: 10),
-            Text('Units', style: TextStyle(color: Colors.grey)),
+            Text(Utils.getText('Units'), style: TextStyle(color: textColor)),
             RadioListTile(
-              title: Text('Imperial (°F)', style: TextStyle(color: Colors.white)),
-              subtitle: Text('Fahrenheit, Miles, In (")', style: TextStyle(color: Colors.grey)),
-              value: 'Imperial (°F)',
-              groupValue: selectedUnits,
+              title: Text('Imperial (°F)', style: TextStyle(color: textColor)),
+              subtitle: Text('Fahrenheit, Miles, In (")',
+                  style: TextStyle(color: subtitleColor)),
+              value: 'F',
+              groupValue: set.tempUnit,
               onChanged: (value) {
-                setState(() {
-                  selectedUnits = value.toString();
-                });
+                set.updateTempUnit('F');
               },
             ),
-            Divider(color: Colors.grey),
+            Divider(color: dividerColor),
             RadioListTile(
-              title: Text('Metric (°C)', style: TextStyle(color: Colors.white)),
-              subtitle: Text('Celsius, Kilometres, kPa', style: TextStyle(color: Colors.grey)),
-              value: 'Metric (°C)',
-              groupValue: selectedUnits,
+              title: Text('Metric (°C)', style: TextStyle(color: textColor)),
+              subtitle: Text('Celsius, Kilometres, kPa',
+                  style: TextStyle(color: subtitleColor)),
+              value: 'C',
+              groupValue: set.tempUnit,
               onChanged: (value) {
-                setState(() {
-                  selectedUnits = value.toString();
-                });
+                set.updateTempUnit('C');
               },
             ),
-            Divider(color: Colors.grey),
+            Divider(color: dividerColor),
             ListTile(
-              title: Text('Customize', style: TextStyle(color: Colors.white)),
-              subtitle: Text('Off', style: TextStyle(color: Colors.grey)),
+              title: Text(Utils.getText('Customize'),
+                  style: TextStyle(color: textColor)),
+              subtitle: Text(
+                  Utils.getText('Off'), style: TextStyle(color: subtitleColor)),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CustomizeUnitsScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => CustomizeUnitsScreen()),
                 );
               },
             ),
@@ -90,33 +101,36 @@ class _LanguageAndUnitsScreenState extends State<LanguageAndUnitsScreen> {
     );
   }
 
-  void _showLanguageSelection(
-      SettingManager provider
-      ) {
+  void _showLanguageSelection(SettingManager provider) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        // Lấy theme hiện tại
+        String theme = provider.theme;
+        Color textColor = theme == "dark" ? Colors.white : Colors.black;
+        Color backgroundColor = theme == "dark" ? Colors.black87 : Colors.white;  // Thêm màu nền cho dialog
+        Color subtitleColor = theme == "dark" ? Colors.grey : Colors.black54;
+
         return AlertDialog(
-          title: Text("Select Language"),
+          backgroundColor: backgroundColor, // Đặt màu nền cho dialog
+          title: Text("Select Language", style: TextStyle(color: textColor)),
           content: SingleChildScrollView(
             child: Column(
               children: languages.map((language) {
                 return ListTile(
-                  title: Text(language),
+                  title: Text(language, style: TextStyle(color: textColor)),
                   onTap: () {
                     if (language == 'English (EN)') {
                       if (SettingManager.language != 'english') {
                         provider.updateLanguage('english');
-
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (context) => MainScreen()),
                               (route) => false,
                         );
                       }
-
                     } else if (language == 'Việt Nam (VN)') {
-                      if (SettingManager.language != 'vietnam'){
+                      if (SettingManager.language != 'vietnam') {
                         provider.updateLanguage('vietnam');
                         Navigator.pushAndRemoveUntil(
                           context,
@@ -124,9 +138,7 @@ class _LanguageAndUnitsScreenState extends State<LanguageAndUnitsScreen> {
                               (route) => false,
                         );
                       }
-
                     }
-
                   },
                 );
               }).toList(),
@@ -135,9 +147,5 @@ class _LanguageAndUnitsScreenState extends State<LanguageAndUnitsScreen> {
         );
       },
     );
-  }
-
-  void authorizeConvertLanguage() {
-
   }
 }

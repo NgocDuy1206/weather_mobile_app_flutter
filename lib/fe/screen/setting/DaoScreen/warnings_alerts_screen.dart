@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:weather_mobile_app_flutter/configs/utils.dart';
+import 'package:provider/provider.dart';
+import 'package:geolocator/geolocator.dart';
+import '../../../../be/state_management/setting_manager.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:weather_mobile_app_flutter/fe/screen/setting/DaoScreen/push_notification.dart';
 
 class WarningsAlertsScreen extends StatefulWidget {
   @override
@@ -6,45 +12,61 @@ class WarningsAlertsScreen extends StatefulWidget {
 }
 
 class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
-  // Trạng thái của các công tắc bật/tắt
-  bool isStickyNotificationsEnabled = true;
+  bool isStickyNotificationsEnabled = false;
   bool isWeatherHighlightsEnabled = true;
   bool isNWSAlertsEnabled = true;
   bool isWeatherNewsEnabled = true;
-
-  // Trạng thái của ô tích trong bảng "Current Location"
   bool isCurrentLocationSelected = false;
+  String currentLocation = '';
+  String weatherInfo = ''; // Thông tin thời tiết giả lập
 
   @override
   Widget build(BuildContext context) {
+    String selectedTheme = Provider.of<SettingManager>(context).theme;
+    Color textColor = selectedTheme == "dark" ? Colors.white : Colors.black;
+    Color subtitleColor = selectedTheme == "dark" ? Colors.grey : Colors.black54;
+    Color appBarColor = selectedTheme == "dark" ? Colors.black : Colors.white;
+    Color iconColor = selectedTheme == "dark" ? Colors.white : Colors.black;
+    Color bodyColor = selectedTheme == "dark" ? Colors.black87 : Colors.white;
+    Color switchInactiveTrackColor = selectedTheme == "dark" ? Colors.black26 : Colors.black26;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Warnings & Alerts', style: TextStyle(color: Colors.white)),
-        iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: Colors.black,
+        title: Text(
+          Utils.getText('Notification'),
+          style: TextStyle(color: textColor),
+        ),
+        iconTheme: IconThemeData(color: iconColor),
+        backgroundColor: appBarColor,
+        elevation: 1,
       ),
-      backgroundColor: Colors.black, // Màu nền tối
+      backgroundColor: bodyColor,
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Sticky Notifications Toggle
+            // Các công tắc bật/tắt thông báo
             SwitchListTile(
               title: Text(
-                'Sticky Notifications',
-                style: TextStyle(color: Colors.white),
+                Utils.getText('Instant Notification'),
+                style: TextStyle(color: textColor),
               ),
               subtitle: Text(
-                'Weather alerts from the National Weather Service',
-                style: TextStyle(color: Colors.white70),
+                Utils.getText('Weather alerts'),
+                style: TextStyle(color: subtitleColor),
               ),
               value: isStickyNotificationsEnabled,
               onChanged: (bool value) {
                 setState(() {
                   isStickyNotificationsEnabled = value;
+                  if (value && currentLocation.isNotEmpty) {
+                    // Tách vĩ độ và kinh độ từ currentLocation
+                    double lat = 21.0285; // Lấy vĩ độ từ currentLocation
+                    double lon = 105.8542; // Lấy kinh độ từ currentLocation
 
-                  // Tắt các công tắc khác nếu Sticky Notifications bị tắt
+                    PushNotificationService().sendWeatherNotification(currentLocation, lat, lon); // Truyền đủ 3 đối số
+                  }
                   if (!value) {
                     isWeatherHighlightsEnabled = false;
                     isNWSAlertsEnabled = false;
@@ -54,124 +76,49 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
               },
               activeColor: Colors.blue,
               inactiveThumbColor: Colors.grey,
-              inactiveTrackColor: Colors.white24,
+              inactiveTrackColor: switchInactiveTrackColor,
             ),
             SizedBox(height: 16.0),
 
-            // Types of Content Section Title
-            Text(
-              'Types of Content',
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(height: 8.0),
-
-            // Weather Highlights Toggle
-            SwitchListTile(
-              title: Text(
-                'Weather Highlights',
-                style: TextStyle(color: Colors.white),
-              ),
-              subtitle: Text(
-                'Get forecasts and alerts in your area',
-                style: TextStyle(color: Colors.white70),
-              ),
-              value: isWeatherHighlightsEnabled,
-              onChanged: isStickyNotificationsEnabled
-                  ? (bool value) {
-                setState(() {
-                  isWeatherHighlightsEnabled = value;
-                });
-              }
-                  : null, // Vô hiệu hóa nếu Sticky Notifications tắt
-              activeColor: Colors.blue,
-              inactiveThumbColor: Colors.grey,
-              inactiveTrackColor: Colors.white24,
-            ),
-
-            // NWS Alerts Toggle
-            SwitchListTile(
-              title: Text(
-                'NWS Alerts',
-                style: TextStyle(color: Colors.white),
-              ),
-              subtitle: Text(
-                'Get weather alerts from the National Weather Service',
-                style: TextStyle(color: Colors.white70),
-              ),
-              value: isNWSAlertsEnabled,
-              onChanged: isStickyNotificationsEnabled
-                  ? (bool value) {
-                setState(() {
-                  isNWSAlertsEnabled = value;
-                });
-              }
-                  : null,
-              activeColor: Colors.blue,
-              inactiveThumbColor: Colors.grey,
-              inactiveTrackColor: Colors.white24,
-            ),
-
-            // Weather News Toggle
-            SwitchListTile(
-              title: Text(
-                'Weather News',
-                style: TextStyle(color: Colors.white),
-              ),
-              subtitle: Text(
-                'Get weather news & videos',
-                style: TextStyle(color: Colors.white70),
-              ),
-              value: isWeatherNewsEnabled,
-              onChanged: isStickyNotificationsEnabled
-                  ? (bool value) {
-                setState(() {
-                  isWeatherNewsEnabled = value;
-                });
-              }
-                  : null,
-              activeColor: Colors.blue,
-              inactiveThumbColor: Colors.grey,
-              inactiveTrackColor: Colors.white24,
-            ),
-
-            // Location Setting
+            // Vị trí hiện tại
             ListTile(
               title: Text(
-                'Location',
-                style: TextStyle(color: Colors.white),
+                Utils.getText('Location'),
+                style: TextStyle(color: textColor),
               ),
               subtitle: Text(
-                'Nam Từ Liêm, VN',
-                style: TextStyle(color: Colors.white70),
+                currentLocation, // Hiển thị vị trí hiện tại
+                style: TextStyle(color: subtitleColor),
               ),
-              trailing: Icon(Icons.arrow_forward_ios, color: Colors.white),
+              trailing: Icon(Icons.arrow_forward_ios, color: iconColor),
               onTap: () {
                 // Hiển thị hộp thoại chọn vị trí
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      backgroundColor: Colors.white,
+                      backgroundColor: bodyColor,
                       title: Text(
-                        'Current Location',
-                        style: TextStyle(color: Colors.black),
+                        Utils.getText('Current Location'),
+                        style: TextStyle(color: textColor),
                       ),
                       content: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Use Current Location',
-                            style: TextStyle(color: Colors.black),
+                            Utils.getText('Use Current Location'),
+                            style: TextStyle(color: textColor),
                           ),
                           Checkbox(
                             value: isCurrentLocationSelected,
                             onChanged: (bool? value) {
                               setState(() {
                                 isCurrentLocationSelected = value ?? false;
+                                if (isCurrentLocationSelected) {
+                                  _getCurrentLocation(); // Lấy vị trí hiện tại khi chọn
+                                } else {
+                                  currentLocation = ''; // Vị trí mặc định
+                                }
                               });
                               Navigator.of(context).pop(); // Đóng hộp thoại sau khi chọn
                             },
@@ -189,5 +136,32 @@ class _WarningsAlertsScreenState extends State<WarningsAlertsScreen> {
         ),
       ),
     );
+  }
+
+  // Hàm để lấy vị trí hiện tại của người dùng
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Kiểm tra xem dịch vụ vị trí có bật không
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Dịch vụ vị trí không bật, thông báo cho người dùng
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse && permission != LocationPermission.always) {
+        return;
+      }
+    }
+
+    // Lấy vị trí hiện tại của người dùng
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      currentLocation = 'Lat: ${position.latitude}, Long: ${position.longitude}, Ha Noi'; // Hiển thị vị trí
+    });
   }
 }

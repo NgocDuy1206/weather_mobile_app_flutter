@@ -12,6 +12,7 @@ class WeatherManager with ChangeNotifier {
   double lon = 105.8542;
   String? currentSelected;  // Thêm biến để theo dõi vị trí hiện tại
 
+
   WeatherManager() {
     loadingData();
   }

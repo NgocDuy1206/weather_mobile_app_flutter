@@ -1,3 +1,8 @@
+import 'dart:ui';
+
+import 'package:weather_mobile_app_flutter/be/data/air_quality.dart';
+import 'package:weather_mobile_app_flutter/configs/constants.dart';
+
 import '../be/state_management/setting_manager.dart';
 import 'language.dart';
 
@@ -64,6 +69,37 @@ class Utils {
     }
   }
 
+  static String getMonth2(dynamic t) {
+    switch (t) {
+      case 1:
+        return 'January';
+      case 2:
+        return 'February';
+      case 3:
+        return 'March';
+      case 4:
+        return 'April';
+      case 5:
+        return 'May';
+      case 6:
+        return 'June';
+      case 7:
+        return 'July';
+      case 8:
+        return 'August';
+      case 9:
+        return 'September ';
+      case 10:
+        return 'October ';
+      case 11:
+        return 'November';
+      case 12:
+        return 'December';
+      default:
+        return 'January';
+    }
+  }
+
   static String getMonthDay(DateTime time) {
     return getMonth(time) + ' ' + getDay(time);
   }
@@ -126,6 +162,86 @@ class Utils {
     } else if (SettingManager.language == 'vietnam') {
       return Language.vietnam[codeName];
     } else throw Exception('app không hỗ trợ ngôn ngữ này');
+  }
+
+  static String getTemp(dynamic number, String unit) {
+    number = number.toDouble();
+    if (unit == 'C') {
+      return number.toString() + ' ${Constants.DEGREES}';
+    } return (number * 9 / 5 + 32).toStringAsFixed(1) + ' ${Constants.DEGREES}';
+  }
+
+  static String getSpeed(dynamic number, String unit) {
+    number = number.toDouble();
+    if (unit == 'mph') {
+      return (number * 2.23694).toStringAsFixed(1)+ ' mph';
+    } else if (unit == 'km/h') {
+      return (number * 3.6).toStringAsFixed(1) + ' km/h';
+    } else return number.toStringAsFixed(1) + ' m/s';
+  }
+
+  static String getDistance(dynamic number, String unit) {
+    number = number.toDouble();
+    if (unit == 'm') {
+      return (number * 1000 ).toString() + ' m';
+    } return (number).toStringAsFixed(1) + ' km';
+  }
+
+  static String getPress(dynamic number, String unit) {
+    number = number.toDouble();
+    if (unit == 'kPa') {
+      return (number / 10 ).toStringAsFixed(1) + ' kPa';
+    } return (number / 101.325 / 10).toStringAsFixed(1) + ' atm';
+  }
+
+  static dynamic getValueAQI(String name, AirQuality aqi) {
+    name = name.toLowerCase();
+    switch (name) {
+      case 'pm10': return aqi.pm10;
+      case 'pm2.5': return aqi.pm25;
+      case 'co': return aqi.pm10 * 24.45 / 28.01;
+      case 'so2': return aqi.pm25 * 24.45 / 64.07;
+      case 'o3': return aqi.pm10 * 24.45 / 48;
+      case 'no2': return aqi.pm25 * 24.45 / 46.01;
+      default : return aqi.airQuality;
+    }
+  }
+
+  static String getUnitAQI(String name) {
+    name = name.toLowerCase();
+    switch (name) {
+      case 'pm10': return 'µg/m³';
+      case 'pm2.5': return 'µg/m³';
+      case 'co': return 'ppb';
+      case 'so2': return 'ppb';
+      case 'o3': return 'ppb';
+      case 'no2': return 'ppb';
+      default : return 'ppb';
+    }
+  }
+
+  static Color getColorAQI(dynamic x) {
+    if (x >= 0 && x < 50) {
+      return MyColors.Good;
+    } else if (x >= 50 && x < 100) {
+      return MyColors.Moderate;
+    } else if (x >= 100 && x < 150) {
+      return MyColors.Unhealthy_fsg;
+    } else if (x >= 150 && x < 200) {
+      return MyColors.Unhealthy;
+    } else if (x >= 200 && x < 300) {
+      return MyColors.Very_unhealthy;
+    } else if (x > 300) {
+      return MyColors.Hazardous;
+    } else return MyColors.Good;
+  }
+
+  static String getBackGround() {
+    DateTime now = DateTime.now();
+    dynamic hour = now.hour;
+    if (hour < 18) {
+      return 'assets/image/background_light.jpg';
+    } return 'assets/image/background_light.jpg';
   }
 }
 

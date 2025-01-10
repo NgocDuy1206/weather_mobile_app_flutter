@@ -16,13 +16,12 @@ class SunMoonTable extends StatelessWidget {
       width: (InforDevice.WIDTH - 40),
       padding: EdgeInsets.all(10),
       decoration: const BoxDecoration(
-        color: MyColors.GRAY,
+        color: MyColors.background_table,
         borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-
           RiseAndSet(object: 'SUN'),
           SizedBox(height: 5,),
           Divider(thickness: 1,color: MyColors.WHITE,),

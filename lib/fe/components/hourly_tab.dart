@@ -10,6 +10,7 @@ class HourlyTab extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(5),
       height: InforDevice.HEIGHT,
+      color: MyColors.background_theme,
       child: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
