@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_mobile_app_flutter/fe/components_search/location_current.dart';
 import 'package:weather_mobile_app_flutter/fe/screen/setting/display_search_manageLocation/manage_location_screen.dart';
 import '../../../../be/state_management/Manager.dart';
+import '../../../../configs/utils.dart';
 import '../../../components/loading.dart';
 import '../../../components_search/dashed_line_separator.dart';
 import '../../../components_search/history_search.dart';
@@ -105,6 +106,7 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
+                SizedBox(height: 4),
                 SearchTextField(
                   showResultsNotifier: showResultsNotifier,
                   // Hàm callback để cập nhật lịch sử tìm kiếm sẽ được xử lý ở đây nếu cần
@@ -116,13 +118,14 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                       visible: !showResults,
                       child: Column(
                         children: [
-                          SizedBox(height: 2),
+                          SizedBox(height: 10),
                           ListTile(
                             onTap: () {
                               // Thêm logic để xử lý khi nhấn vào
                               // Ví dụ: hiển thị quyền truy cập vị trí
                               showDialog(
                                 context: context,
+
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     shape: RoundedRectangleBorder(
@@ -137,7 +140,7 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                                         ),
                                         SizedBox(width: 10),
                                         Text(
-                                          'Quyền truy cập vị trí',
+                                          Utils.getText('Location access'),
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18,
@@ -146,13 +149,15 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                                         ),
                                       ],
                                     ),
+
                                     content: Text(
-                                      'Ứng dụng cần truy cập vị trí của bạn để cung cấp thông tin phù hợp. Bạn có muốn cho phép?',
+                                      Utils.getText('The app needs access to your location to provide relevant information. Do you want to allow it?'),
                                       style: TextStyle(
                                         color: Colors.grey[400],
                                         fontSize: 16,
                                       ),
                                     ),
+
                                     actions: [
                                       TextButton(
                                         onPressed: () async {
@@ -163,7 +168,7 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                                           if (position != null) {
                                             // Hiển thị màn hình Loading với CircularProgressIndicator
                                             // Gọi API để xử lý dữ liệu thời tiết
-                                            String locationName = 'Hiện tại'; // Tên vị trí
+                                            String locationName = Utils.getText('Currently'); // Tên vị trí
                                             double latitude = position.latitude; // Kinh độ
                                             double longitude = position.longitude; // Vĩ độ
 
@@ -188,8 +193,10 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                                             // Hiển thị vị trí trong SnackBar
                                             ScaffoldMessenger.of(context).showSnackBar(
                                               SnackBar(
-                                                content: Text('Vị trí hiện tại: Kinh độ: $longitude, Vĩ độ: $latitude'),
-                                                duration: Duration(seconds: 5),
+                                                  content: Text(
+                                                    '${Utils.getText('Current location')}: ${Utils.getText('Long')}: $longitude, ${Utils.getText('Lat')}: $latitude',
+                                                  ),
+                                                  duration: Duration(seconds: 5),
                                               ),
                                             );
                                           }
@@ -198,7 +205,7 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                                             // Thông báo khi không có quyền truy cập vị trí
                                             ScaffoldMessenger.of(context).showSnackBar(
                                               SnackBar(
-                                                content: Text('Ứng dụng không có quyền truy cập vị trí của bạn.'),
+                                                content: Text(Utils.getText('The app does not have access to your location.')),
                                                 duration: Duration(seconds: 5),  // Hiển thị trong 5 giây
                                               ),
                                             );
@@ -213,7 +220,7 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                                           ),
                                         ),
                                         child: Text(
-                                          'Đồng ý',
+                                          Utils.getText('Agree'),
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
@@ -229,7 +236,7 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                                           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                                         ),
                                         child: Text(
-                                          'Hủy',
+                                          Utils.getText('Cancel'),
                                           style: TextStyle(
                                             fontSize: 14,
                                           ),
@@ -243,11 +250,16 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                             },
                             leading: CircleAvatar(
                               backgroundColor: Colors.blue,
+                              radius: 22.3,
                               child: Transform.rotate(
                                 angle: 30 * 3.14159 / 180, // Xoay góc 30 độ
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 2.0),
-                                  child: Icon(Icons.navigation, color: Colors.white),
+                                    child: Icon(
+                                      Icons.navigation,
+                                      color: Colors.white,
+                                      size: 26.5, // Kích thước biểu tượng lớn hơn
+                                    ),
                                 ),
                               ),
                             ),
@@ -257,7 +269,7 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                                 Row(
                                   children: [
                                     Text(
-                                      'Vị trí hiện tại',
+                                      Utils.getText('Current location'),
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     SizedBox(width: 8),
@@ -270,7 +282,7 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                                   ],
                                 ),
                                 Text(
-                                  'Nhấn để lấy vị trí',
+                                  Utils.getText('Click to get location'),
                                   style: TextStyle(color: Colors.grey[400]),
                                 ),
                               ],
@@ -281,7 +293,15 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Saved Locations', style: TextStyle(color: Colors.white, fontSize: 18)),
+                                Text(
+                                  Utils.getText('Saved Locations'),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold, // Đổi kiểu chữ thành in đậm
+                                  ),
+                                ),
+
                                 TextButton(
                                   onPressed: () async {
                                     // Điều hướng tới ManageScreen và quay lại khi người dùng bấm 'Back'
@@ -294,7 +314,7 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                                       _loadSearchHistory();
                                     }
                                   },
-                                  child: Text('Manage', style: TextStyle(color: Colors.blue, fontSize: 16)),
+                                  child: Text(Utils.getText('Manage'), style: TextStyle(color: Colors.blue, fontSize: 16)),
                                 ),
                               ],
                             ),
@@ -315,20 +335,29 @@ class _SearchScreenModalState extends State<SearchScreenModal> {
                                   children: [
                                     ListTile(
                                       leading: CircleAvatar(
+                                        radius: 22.3, // Tăng kích thước vòng tròn
                                         backgroundColor: Colors.grey, // Màu xám cho vòng tròn
                                         child: Padding(
                                           padding: const EdgeInsets.only(left: 1.0), // Dịch icon một chút
                                           child: Icon(iconData, color: Colors.white), // Biểu tượng location_on
                                         ),
                                       ),
+
                                       title: Text(
                                         displayLabel,
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 17.5, // Kích thước chữ cho title
+                                        ),
                                       ),
                                       subtitle: Text(
                                         displayLocation,
-                                        style: TextStyle(color: Colors.white70),
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 15.8, // Kích thước chữ cho subtitle
+                                        ),
                                       ),
+
                                       onTap: () async {
                                         // Lấy thông tin từ suggestion, ví dụ: tên địa điểm, lat, lon
                                         String locationName = historyItem['name']; // Tên vị trí

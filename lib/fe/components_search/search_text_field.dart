@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart'; // Đảm bảo b�
 import 'package:weather_mobile_app_flutter/fe/components_search/dashed_line_separator.dart';
 import '../../be/api/api.dart';
 import '../../be/state_management/Manager.dart';
+import '../../configs/utils.dart';
 import '../screen/display/main_screen.dart';
 import 'history_search.dart';
 
@@ -225,8 +226,12 @@ class _SearchTextFieldState extends State<SearchTextField> {
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.grey,
-            hintText: 'Tìm kiếm thành phố',
-            hintStyle: TextStyle(color: Colors.white),
+            hintText: Utils.getText('Search location'),
+            hintStyle: TextStyle(
+              fontSize: 18, // Kích thước chữ của hintText
+              color: Colors.white, // Màu sắc cho hintText (tuỳ chọn)
+            ),
+
             prefixIcon: Icon(Icons.search, color: Colors.white),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
@@ -280,9 +285,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
                     ),
                     subtitle: Text(
                       suggestion['region']?.isNotEmpty == true
-                          ? '${
-
-                          ['region']} - ${suggestion['country']}'
+                          ? '${suggestion['region']} - ${suggestion['country']}'
                           : suggestion['country']!,
                       style: TextStyle(color: Colors.white70),
                     ),

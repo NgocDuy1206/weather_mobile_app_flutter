@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../be/state_management/Manager.dart';
 import '../../configs/constants.dart';
+import '../../configs/utils.dart';
 import '../components_search/history_search.dart';
 
 class Destination extends StatelessWidget {
@@ -108,7 +109,7 @@ class ListDestination extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done && snapshot.data != null) {
           destinations.add(
             Destination(
-              destination: "Hiện tại",
+              destination: Utils.getText("Currently"),
               customerName: '',
               iconData: 'Icons.location_on', // Gán icon mặc định cho "Hiện tại"
             ),

@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_mobile_app_flutter/fe/components_search/dashed_line_separator.dart';
 import 'dart:convert'; // Để sử dụng jsonDecode
 
+import '../../../../configs/utils.dart';
 import '../../../components_manage_location/component_delete_location/delete_confirmation_dialog.dart';
 import '../../../components_manage_location/component_edit_location/Location_Modal.dart';
 import '../../../components_manage_location/dashed_separator.dart';
@@ -89,7 +90,7 @@ class _ManageScreenState extends State<ManageScreen> {
           : item['country'] ?? 'Unknown Location'; // Nếu không có region thì chỉ hiển thị country
 
       return Padding(
-        padding: const EdgeInsets.only(right: 0.0), // Dịch sang phải
+        padding: const EdgeInsets.only(left: 2.0), // Dịch sang phải
         child: Column(
           children: [
             LocationItemManage(
@@ -145,7 +146,7 @@ class _ManageScreenState extends State<ManageScreen> {
                       // Hiển thị thông báo xóa thành công
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Item removed successfully'),
+                          content: Text(Utils.getText('Item removed successfully')),
                           duration: Duration(seconds: 2),  // Đặt thời gian hiển thị SnackBar là 2 giây
                         ),
                       );
@@ -158,7 +159,7 @@ class _ManageScreenState extends State<ManageScreen> {
                     } else {
                       // Hiển thị thông báo lỗi nếu không tìm thấy mục cần xóa
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Item not found in history'))
+                          SnackBar(content: Text(Utils.getText('Item not found in history')))
                       );
                     }
                   }
@@ -192,43 +193,70 @@ class _ManageScreenState extends State<ManageScreen> {
           : ListView(
         children: [
           ListTile(
+            contentPadding: EdgeInsets.only(left: 24.0), // Dịch toàn bộ cụm sang trái
             leading: CircleAvatar(
               backgroundColor: Colors.blue,
+              radius: 22.5, // Tăng kích thước vòng tròn
               child: Transform.rotate(
-                angle: 30 * 3.14159 / 180,
+                angle: 30 * 3.14159 / 180, // Xoay biểu tượng
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 2.0),
-                  child: Icon(Icons.navigation, color: Colors.white, size: 24),
+                  padding: const EdgeInsets.only(left: 3.0),
+                  child: Icon(
+                    Icons.navigation,
+                    color: Colors.white,
+                    size: 27, // Tăng kích thước biểu tượng bên trong vòng tròn
+                  ),
                 ),
               ),
             ),
-            title: Text('Vị trí hiện tại', style: TextStyle(color: Colors.white)),
-            subtitle: Text('Kinh độ: ${_currentLocation?['longitude']}, Vĩ độ: ${_currentLocation?['latitude']}', style: TextStyle(color: Colors.white54)),
+            title: Text(
+              Utils.getText('Current location'),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 17.2, // Tăng kích thước chữ title
+              ),
+            ),
+            subtitle: Text(
+              '${Utils.getText('Long')}: ${_currentLocation?['longitude']}, ${Utils.getText('Lat')}: ${_currentLocation?['latitude']}',
+              style: TextStyle(
+                color: Colors.white54,
+                fontSize: 14, // Tăng kích thước chữ subtitle
+              ),
+            ),
           ),
+
           SizedBox(height: 16),
           Padding(
-            padding: const EdgeInsets.only(left: 16.0),
+            padding: const EdgeInsets.only(left: 24.0),
             child: Text(
-              'SAVED LOCATIONS',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              Utils.getText('SAVED LOCATIONS'),
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 15.5, // Tăng kích thước chữ
+              ),
             ),
+
           ),
           SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Text(
-              'Click, hold and move the lever to change the position of your locations.',
+              Utils.getText('Click, hold and move the lever to change the position of your locations.'),
               textAlign: TextAlign.left,
-              style: TextStyle(color: Colors.white54, fontSize: 14),
+              style: TextStyle(color: Colors.white54, fontSize: 14.5),
             ),
           ),
           SizedBox(height: 10),
           // Hiển thị danh sách các LocationItemManage từ lịch sử tìm kiếm
           ..._buildLocationItems(),
           SizedBox(height: 16),
-          InstructionText(
-            text: 'Tap on the edit icon to add a label. For e.g., Home, Office.',
-          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0), // Cách mép trái/phải 16px
+            child: InstructionText(
+              text: Utils.getText('Tap on the edit icon to add a label. For e.g., Home, Office...'),
+            ),
+          )
         ],
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../configs/utils.dart';
+
 class DeleteConfirmationDialog extends StatelessWidget {
   final String label;
   final Function(bool) onConfirm; // Thay VoidCallback thành Function(bool)
@@ -17,7 +19,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
       backgroundColor: Color(0xFF232B38), // Dark background color
       title: Center(
         child: Text(
-          'Are you sure?',
+          Utils.getText('Are you sure?'),
           style: TextStyle(color: Colors.white),
           textAlign: TextAlign.center,
         ),
@@ -27,10 +29,10 @@ class DeleteConfirmationDialog extends StatelessWidget {
         children: [
           Center(
             child: Text(
-              'This will remove $label from your list of saved locations.',
+              '${Utils.getText('This will remove')} $label ${Utils.getText('from your list of saved locations.')}',
               style: TextStyle(color: Colors.white54),
               textAlign: TextAlign.center,
-            ),
+            )
           ),
           SizedBox(height: 20), // Space between text and buttons
           Row(
@@ -42,7 +44,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
                     onConfirm(false); // Truyền false khi nhấn "No"
                     Navigator.of(context).pop(); // Đóng hộp thoại
                   },
-                  child: Text('No', style: TextStyle(color: Colors.blue)),
+                  child: Text(Utils.getText('No'), style: TextStyle(color: Colors.blue)),
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 12.0), // Increases button height
                     backgroundColor: Color(0xFF232B38),
@@ -57,7 +59,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
                     onConfirm(true); // Truyền true khi nhấn "Yes"
                     Navigator.of(context).pop(); // Đóng hộp thoại
                   },
-                  child: Text('Yes', style: TextStyle(color: Colors.blue)),
+                  child: Text(Utils.getText('Yes'), style: TextStyle(color: Colors.blue)),
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 12.0),
                     backgroundColor: Color(0xFF232B38),

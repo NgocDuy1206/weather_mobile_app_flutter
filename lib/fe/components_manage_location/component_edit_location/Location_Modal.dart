@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../configs/utils.dart';
 import 'Quick_LabelOptions.dart';
 import 'Save_Edit.dart';
 import 'labelInput.dart'; // Import SaveButton
@@ -153,7 +154,7 @@ class _EditLocationModalState extends State<EditLocationModal> {
             children: [
               // "Add a label" text above the input field
               Text(
-                'Add a label',
+                Utils.getText('Add a label'),
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               SizedBox(height: 6), // Khoảng cách nhỏ giữa Text và TextField
@@ -161,7 +162,7 @@ class _EditLocationModalState extends State<EditLocationModal> {
               TextField(
                 controller: _customerNameController, // Quản lý giá trị
                 decoration: InputDecoration(
-                  hintText: 'e.g Home',
+                  hintText: Utils.getText('e.g. Home'),
                   hintStyle: TextStyle(color: Colors.white54),
                   border: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white),
@@ -193,7 +194,7 @@ class _EditLocationModalState extends State<EditLocationModal> {
             mainAxisAlignment: MainAxisAlignment.start, // Căn chỉnh các mục nhanh về bên trái
             children: [
               QuickLabelOption(
-                label: 'Home',
+                label: Utils.getText('Home'),
                 icon: 'Icons.home',
                 isSelected: selectedIcon == 'Icons.home', // Kiểm tra nếu label này đã được chọn
                 onTap: (label, icon) {  // Truyền callback hợp lệ vào đây
@@ -205,7 +206,7 @@ class _EditLocationModalState extends State<EditLocationModal> {
               ),
               SizedBox(width: 8), // Khoảng cách giữa các mục
               QuickLabelOption(
-                label: 'School',
+                label: Utils.getText('School'),
                 icon: 'Icons.school',
                 isSelected: selectedIcon == 'Icons.school', // Kiểm tra nếu label này đã được chọn
                 onTap: (label, icon) {  // Truyền callback hợp lệ vào đây
@@ -217,7 +218,7 @@ class _EditLocationModalState extends State<EditLocationModal> {
               ),
               SizedBox(width: 8), // Khoảng cách giữa các mục
               QuickLabelOption(
-                label: 'Hospital',  // Tên nhãn cho bệnh viện
+                label: Utils.getText('Hospital'),  // Tên nhãn cho bệnh viện
                 icon: 'Icons.local_hospital',  // Biểu tượng bệnh viện
                 isSelected: selectedIcon == 'Icons.local_hospital', // Kiểm tra nếu label này đã được chọn
                 onTap: (label, icon) {  // Truyền callback hợp lệ vào đây
@@ -234,7 +235,7 @@ class _EditLocationModalState extends State<EditLocationModal> {
             mainAxisAlignment: MainAxisAlignment.start, // Căn chỉnh các mục nhanh về bên trái
             children: [
               QuickLabelOption(
-                label: 'Work',
+                label: Utils.getText('Work'),
                 icon: 'Icons.work',
                 isSelected: selectedIcon == 'Icons.work', // Kiểm tra nếu label này đã được chọn
                 onTap: (label, icon) {  // Truyền callback hợp lệ vào đây
@@ -246,7 +247,7 @@ class _EditLocationModalState extends State<EditLocationModal> {
               ),
               SizedBox(width: 8), // Khoảng cách giữa các mục
               QuickLabelOption(
-                label: 'Gym',
+                label: Utils.getText('Gym'),
                 icon: 'Icons.fitness_center',
                 isSelected: selectedIcon == 'Icons.fitness_center', // Kiểm tra nếu label này đã được chọn
                 onTap: (label, icon) {  // Truyền callback hợp lệ vào đây
@@ -258,7 +259,7 @@ class _EditLocationModalState extends State<EditLocationModal> {
               ),
               SizedBox(width: 8), // Khoảng cách giữa các mục
               QuickLabelOption(
-                label: 'Park',  // Tên nhãn cho công viên
+                label: Utils.getText('Park'),  // Tên nhãn cho công viên
                 icon: 'Icons.park',  // Biểu tượng công viên
                 isSelected: selectedIcon == 'Icons.park', // Kiểm tra nếu label này đã được chọn
                 onTap: (label, icon) {  // Truyền callback hợp lệ vào đây
@@ -276,7 +277,7 @@ class _EditLocationModalState extends State<EditLocationModal> {
             children: [
 
               QuickLabelOption(
-                label: 'Bus',  // Tên nhãn cho xe buýt
+                label: Utils.getText('Bus'),  // Tên nhãn cho xe buýt
                 icon: 'Icons.directions_bus',  // Biểu tượng xe buýt
                 isSelected: selectedIcon == 'Icons.directions_bus', // Kiểm tra nếu label này đã được chọn
                 onTap: (label, icon) {  // Truyền callback hợp lệ vào đây
@@ -288,7 +289,7 @@ class _EditLocationModalState extends State<EditLocationModal> {
               ),
               SizedBox(width: 8), // Khoảng cách giữa các mục
               QuickLabelOption(
-                label: 'Favorite',  // Tên nhãn cho điểm yêu thích
+                label: Utils.getText('Favorite'),  // Tên nhãn cho điểm yêu thích
                 icon: 'Icons.favorite',  // Biểu tượng trái tim
                 isSelected: selectedIcon == 'Icons.favorite', // Kiểm tra nếu label này đã được chọn
                 onTap: (label, icon) {  // Truyền callback hợp lệ vào đây
@@ -300,7 +301,7 @@ class _EditLocationModalState extends State<EditLocationModal> {
               ),
               SizedBox(width: 8), // Khoảng cách giữa các mục
               QuickLabelOption(
-                label: 'Other',  // Tên nhãn cho vị trí khác
+                label: Utils.getText('Other'),  // Tên nhãn cho vị trí khác
                 icon: 'Icons.location_on',  // Biểu tượng vị trí
                 isSelected: selectedIcon == 'Icons.location_on', // Kiểm tra nếu label này đã được chọn
                 onTap: (label, icon) {  // Truyền callback hợp lệ vào đây

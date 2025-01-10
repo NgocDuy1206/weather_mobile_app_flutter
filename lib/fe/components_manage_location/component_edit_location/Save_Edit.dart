@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../configs/utils.dart';
+
 class SaveButton extends StatelessWidget {
   final VoidCallback onPressed;
 
@@ -16,7 +18,7 @@ class SaveButton extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 32, vertical: 15), // Kích thước nút nhỏ hơn
         ),
         child: Text(
-          'SAVE CHANGES',
+          Utils.getText('SAVE CHANGES'),
           style: TextStyle(color: Colors.white),
         ),
       ),

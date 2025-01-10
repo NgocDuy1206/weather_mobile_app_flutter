@@ -40,12 +40,35 @@ class LocationItemManage extends StatelessWidget {
     IconData iconData = iconMap[icon] ?? Icons.help;
 
     return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.grey,
-        child: Icon(iconData, color: Colors.white),
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 6.0), // Điều chỉnh giá trị `left` để lùi sang trái
+        child: CircleAvatar(
+          backgroundColor: Colors.grey,
+          radius: 23, // Tăng kích thước vòng tròn
+          child: Icon(
+            iconData,
+            color: Colors.white,
+            size: 24, // Tăng kích thước biểu tượng nếu cần
+          ),
+        ),
       ),
-      title: Text(displayLabel, style: TextStyle(color: Colors.white)),
-      subtitle: Text(displayLocation, style: TextStyle(color: Colors.white54)),
+
+
+      title: Text(
+        displayLabel,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 17.8, // Tăng kích thước chữ của title
+        ),
+      ),
+      subtitle: Text(
+        displayLocation,
+        style: TextStyle(
+          color: Colors.white54,
+          fontSize: 15.5, // Tăng kích thước chữ của subtitle
+        ),
+      ),
+
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
