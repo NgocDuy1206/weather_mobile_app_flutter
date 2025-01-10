@@ -141,7 +141,7 @@ class Language  {
 
     // Text của chiến
     'Saved Locations': 'Saved Location',
-    'SAVED LOCATIONS' : 'SAVED LOCATIONS',
+
     'Click, hold and move the lever to change the position of your locations.': 'Click, hold and move the lever to change the position of your locations.',
     'Current location': 'Current location',
     'Click to get location': 'Click to get location',
@@ -159,9 +159,9 @@ class Language  {
     "Item not found in history": "Item not found in history",
     "The app does not have access to your location.": "The app does not have access to your location.",
     "Currently": "Currently",
-    "Manage Locations": " Manage Locations",
+
     "Agree": "Agree",
-    "Cancel": "Cancel",
+
     'Location access': 'Location access',
     "Add a label": "Add a label",
     "e.g. Home": "e.g. Home",
@@ -276,7 +276,7 @@ class Language  {
     'Use Current Location': 'Sử Dụng Vị Trí Hiện Tại',
     'Get daily timer notification': 'Nhận thông báo hẹn giờ hàng ngày',
     'Select time': 'Cài đặt giờ',
-    'Cancel': 'Hủy bỏ',
+
     'OK': 'Chọn',
     'Alerts': 'Cảnh Báo',
     'App Theme': 'Màu Nền',
@@ -316,10 +316,10 @@ class Language  {
     'Weather Update': 'Cập nhật thời tiết',
     'Your weather data is updated!': 'Thời tiết đã được cập nhật',
     'Notification': 'Thông Báo',
-    'Daily Timer Notification': 'Thông Báo Hẹn Giờ Hàng Ngày'
+    'Daily Timer Notification': 'Thông Báo Hẹn Giờ Hàng Ngày',
 
     // Text của chiến
-    'SAVED LOCATIONS': 'VỊ TRÍ ĐÃ LƯU',
+
     'Click, hold and move the lever to change the position of your locations.': 'Nhấn, giữ và di chuyển để thay đổi vị trí của các địa điểm của bạn.',
     'Tap on the edit icon to add a label. For e.g., Home, Office...': 'Nhấn vào biểu tượng chỉnh sửa để thêm nhãn. Ví dụ: Nhà, Văn phòng...',
     'Current location': 'Vị trí hiện tại',
@@ -338,7 +338,7 @@ class Language  {
     "Item not found in history": "Không tìm thấy trong lịch sử",
     "The app does not have access to your location.": "Ứng dụng không có quyền truy cập vị trí của bạn.",
     "Currently": "Hiện tại",
-    "Manage Locations": "Quản lý vị trí",
+
     "Agree": "Đồng ý",
     "Cancel": "Hủy",
     'Location access': 'Quyền truy cập vị trí',
